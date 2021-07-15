@@ -1,0 +1,84 @@
+@CHARSET "UTF-8";
+table .mainInformtion {
+    display: block;
+    table-layout: fixed;
+    margin: 0 20px 20px 0;
+    padding-right: 20px;
+    border-collapse: separate;
+    border-spacing: 2px;
+    -webkit-border-horizontal-spacing: 0px;
+    -webkit-border-vertical-spacing: 0px;
+    border-color: grey;
+    width: 100%;
+    box-sizing: border-box;
+}
+.mainInformtion th {
+    background-color: #ebebeb;
+    border-top: 1px solid #ebebeb;
+    border-left: 1px solid #ffffff;
+    border-right: 1px solid #ffffff;
+    border-bottom: 1px solid #dcdcdc;
+    padding: 7px 0px 8px 0px;
+    padding: 5px 0px 5px 0px;
+    font-family: "メイリオ",Tahoma;
+    font-size: 13px;
+    font-weight: normal;
+    color: #262626;
+    vertical-align: middle;
+    text-align: center;
+    line-height: normal;
+    margin: 0px;
+    overflow: hidden;
+    empty-cells: show;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+.mainInformtion th.underRowsCell {
+    font-size: 11px;
+    background: #dedede;
+    overflow-x: auto;
+}
+.thInnerDiv {
+    /*display: block;*/
+    white-space: nowrap;
+}
+.mainInformtion td {
+    vertical-align: middle;
+    text-align: center;
+    padding: 10px 4px;
+}
+.mainInformtion .statusCell {
+    width: 77px;
+    max-width: 130px;
+}
+.mainInformtion .sentenceHeaderCell {
+    width: 200px !important;
+    max-width: 200px;
+    min-width: 200px;
+}
+.mainInformtion .sentenceCell {
+    padding: 0;
+    height: 44px!important;
+    max-height: 44px!important;
+    width: 300px!important;
+    max-width: 300px;
+    min-width: 300px;
+}
+.mainInformtion .sentenceCellInner {
+    text-align: left;
+    display: inline-block;
+    height: 53px!important;
+    max-height: 53px!important;
+    margin-bottom: -7px;
+    width: 100%!important;
+    overflow: auto;
+}
+.mainInformtion .statusSentenceCell {
+    width: 100px!important;
+    max-width: 100px;
+    min-width: 100px;
+}

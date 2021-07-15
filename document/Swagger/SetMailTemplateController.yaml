@@ -1,0 +1,243 @@
+openapi: '3.0.3'
+info:
+  version: 1.4.6
+  title: SetMailTemplateController
+  description: |
+    <h2>Set mail template for send by system.</h2>
+    <h3>As of December 28, 2020, specifications are being confirmed.</h3>
+    <h3>Attention: </h3>
+    <div>In the current implementation, hidden form elements are also submitted for updates.</div>
+    <div>Also, the only language that can be used is Japanese.</div>
+    <div>It can affect the results of "Code ception".</div>
+    <div>Please revert, after update record.</div>
+
+servers:
+  - url: http://localhost:8084
+    description: For real server
+
+tags:
+  - name: Processes
+    description: |
+      <div>When calling with ajax, the request is "POST", except for legacy browsers.</div>
+  - name: Pages
+    description: (and modal pages). Almost 'GET' requests.
+
+paths:
+
+  /set-mail-template/index:
+    get:
+      tags: ["Pages"]
+      description: Index.
+      responses:
+        '200':
+          description: Successful response
+
+  /set-mail-template/execvalidation:
+    post:
+      tags: ["Processes"]
+      description: Validate before insert/update.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/form_elements'
+        required: false
+      responses:
+        '200':
+          description: Successful status and more.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "本当に登録しますか？"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+  
+  /set-mail-template/execregist:
+    post:
+      tags: ["Processes"]
+      description: Insert / Update.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/form_elements'
+        required: false
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "登録が完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+components:
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+
+    form_elements:
+      type: object
+      properties:
+        form[language_id]:
+          description: |
+            <div>Display Message's language_id.</div>
+            <div>01 or 02 etcetc...</div>
+          type: string
+          example: 01
+        word[DEFAULT_FROM]:
+          description: Default sender mail address.
+          type: string
+          example: 'admin@filedefender.jp'
+        word[FIRST_NOTIFICATION_MAIL_FROM]:
+          description: Sender email address for the initial password setting email.
+          type: string
+          example: '[MAIL]'
+        word[FIRST_NOTIFICATION_MAIL_TITLE]:
+          description: Mail title for the initial password setting email.
+          type: string
+          example: File Defender へようこそ１
+        word[FIRST_NOTIFICATION_MAIL_BODY]:
+          description:  Mail body sentence for the initial password setting email.
+          type: string
+          example: |
+            あなたへ File Defender への招待がありました。
+
+            ID：[LOGIN]
+            パスワード：[PASS]
+            URL：[URL]
+
+
+            -------------------------------------------------------
+            ※本メールは送信専用となっておりますので、返信はしないでください。
+        word[PASSWORD_REISSUE_MAIL_FROM]:
+          description: Sender email address for reissue password.
+          type: string
+          example: '[MAIL]'
+        word[PASSWORD_REISSUE_MAIL_TITLE]:
+          description: Mail title for reissue password.
+          type: string
+          example: 【File Defender】パスワード再発行のお知らせ２
+        word[PASSWORD_REISSUE_MAIL_BODY]:
+          description: Mail body sentence for reissue password.
+          type: string
+          example: |
+            パスワード再発行の依頼が行われました。
+            下記URLへアクセスいただく事で、パスワードが再設定されます。
+
+            パスワード再発行用URL：[URL]
+
+            パスワードの再発行URLは、お申し込みから24時間に限り有効です。
+            有効期限を経過しますと無効となりますのでご注意ください。
+
+            -------------------------------------------------------
+            ※本メールは送信専用となっておりますので、返信はしないでください。
+        word[PASSWORD_REISSUE_NOTIFICATION_MAIL_TITLE]:
+          description: Mail title for reissue password.
+          type: string
+          example: 【File Defender】パスワード再発行完了のお知らせ
+        word[PASSWORD_REISSUE_NOTIFICATION_MAIL_BODY]:
+          description: Mail body sentence for reissue password.
+          type: string
+          example: |
+            パスワードが再設定されました。
+
+            初期パスワード：[PASS]
+            URL：[URL]
+
+            -------------------------------------------------------
+            ※本メールは送信専用となっておりますので、返信はしないでください。
+        word[PASSWORD_REISSUE_LDAP_ERROR_MAIL_FROM]:
+          description: Sender email address for reissue ldap password.
+          type: string
+          example: '[MAIL]'
+        word[PASSWORD_REISSUE_LDAP_ERROR_MAIL_TITLE]:
+          description: Mail title for reissue ldap password.
+          type: string
+          example: 【File Defender】パスワードの有効期限が近づいています
+        word[PASSWORD_REISSUE_LDAP_ERROR_MAIL_BODY]:
+          description: Mail body sentence for reissue ldap password.
+          type: string
+          example: |
+            ご依頼のユーザーはLDAP認証を行っていますので、パスワード再発行を受け付けていません。
+            以下のURLからログインしてください。
+            URL：[URL]
+
+            -------------------------------------------------------
+            ※本メールは送信専用となっておりますので、返信はしないでください。
+        word[PASSWORD_EXPIRATION_NOTIFICATION_MAIL_FROM]:
+          description: Sender email address for notifcation of password expiration.
+          type: string
+          example: '[MAIL]'
+        word[PASSWORD_EXPIRATION_NOTIFICATION_MAIL_TITLE]:
+          description: Mail title for notifcation of password expiration.
+          type: string
+          example: 【File Defender】パスワードの有効期限が近づいています
+        word[PASSWORD_EXPIRATION_NOTIFICATION_MAIL_BODY]:
+          description: Mail body sentence for notifcation of password expiration.
+          type: string
+          example: |
+            パスワードの有効期限が近づいています。
+            ユーザー画面のパスワード更新画面からパスワードを変更してください。
+
+            以下のユーザーが対象となります。
+            ユーザー名：[NAME]
+            ID：[LOGIN]
+            企業名：[COMPANY]
+
+            パスワード最終変更日時：[LAST_UPDATE]
+            パスワード有効期限：[DEADLINE]
+
+            -------------------------------------------------------
+            ※本メールは送信専用となっておりますので、返信はしないでください。
+        isUpdate:
+          description: Is update flag.
+          type: string
+          example: '0'
+        successMessage:
+          description: Success message.
+          type: string
+          example: 本当に登録しますか？
+
+      xml:
+        name: form_elements
+
+  parameters:
+    ProjectId:
+      name: ProjectId
+      in: path
+      required: true
+      description: Column projects.project_id
+      schema:
+        type: string
+        example: '000001'
+
+security:
+- basicAuth: []

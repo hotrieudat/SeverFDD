@@ -1,0 +1,158 @@
+openapi: '3.0.3'
+info:
+  version: 1.4.6
+  title: ProjectsAuthorityMemberController
+  description: |
+    <div>This controller has not action method of pages.</div>
+    <div>Only called and processing from project detail.</div>
+    <div>Team's user can't update, because relation data.</div>
+    <div>&nbsp;</div>
+    <div>The table to be processing changes depending on how the user participates in the project.</div>
+    <div>user type:</div>
+    <dl>
+      <dt>1</dt>
+      <dd>projects_authority_groups_projects_users</dd>
+      <dt>2</dt>
+      <dd>projects_authority_groups_user_groups_users</dd>
+      <dt>3</dt>
+      <dd>projects_authority_groups_projects_users</dd>
+      <dd>projects_authority_groups_user_groups_users</dd>
+    </dl>
+
+servers:
+  - url: http://localhost:8084
+    description: For real server
+
+tags:
+  - name: Processes
+    description: |
+      <div>When calling with ajax, the request is "POST", except for legacy browsers.</div>
+  - name: Pages
+    description: (and modal pages). Almost 'GET' requests.
+
+paths:
+
+  /projects-authority-member/register-member:
+    post:
+      tags: ["Processes"]
+      description: |
+        <h2>Assign user to team.</h2>
+        <h3>Attention: It can affect the results of "Code ception".</h3>
+        <div>Please delete, after create record.</div>
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "登録が完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /projects-authority-member/register-member-multiple-groups:
+    post:
+      tags: ["Processes"]
+      description: |
+        <h2>Assign user to multi teams.</h2>
+        <h3>Attention: It can affect the results of "Code ception".</h3>
+        <div>Please delete, after create record.</div>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                parent_code:
+                  description: |
+                    <div>Parent code (projects).</div>
+                    <div>If has not parent project, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: '000001'
+                authority_groups_ids:
+                  description: Authority groups ids joined by ','.
+                  type: string
+                  example: '000003'
+                user_ids:
+                  description: User ids joined by ','.
+                  type: string
+                  example: '006582'
+        required: true
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "登録が完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /projects-authority-member/execdelete/parent_code/{ProjectId}:
+    post:
+      tags: ["Processes"]
+      description: |
+        <h2>Remove user from team.</h2>
+        <h3>Attention: It can affect the results of "Code ception".</h3>
+        <div>Please backup target record, before delete record.</div>
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "削除を完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+    parameters:
+    - $ref: "#/components/parameters/ProjectId"
+
+components:
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  parameters:
+    ProjectId:
+      name: ProjectId
+      in: path
+      required: true
+      description: Column projects.project_id
+      schema:
+        type: string
+        example: '000001'
+
+security:
+- basicAuth: []

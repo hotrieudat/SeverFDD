@@ -1,0 +1,278 @@
+openapi: '3.0.3'
+info:
+  version: 1.4.6
+  title: ServerLogController
+  description: Log that manipulated the browser.
+
+servers:
+  - url: http://localhost:8084
+    description: For real server
+
+tags:
+  - name: Processes
+    description: |
+      <div>When calling with ajax, the request is "POST", except for legacy browsers.</div>
+  - name: Pages
+    description: (and modal pages). Almost 'GET' requests.
+
+paths:
+
+  /server-log/index:
+    get:
+      tags: ["Pages"]
+      description: Index.
+      responses:
+        '200':
+          description: Successful response
+
+  /server-log/list:
+    post:
+      tags: ["Processes"]
+      description: Get log list.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                page:
+                  description: Target page number.
+                  type: integer
+                  example: 0
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/success_xml_list'
+
+  /server-log/searchdialog:
+    get:
+      tags: ["Pages"]
+      description: modal | Dialog for search.
+      responses:
+        '200':
+          description: Successful response
+
+  /server-log/search:
+    post:
+      tags: ["Processes"]
+      description: |
+        <div>Set search parameters for Application server log page.</div>
+        <div>The parameters sent will be registered in the session.</div>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                search[master][regist_date][start]:
+                  description: registerd start date.
+                  type: string
+                  example: '2019/01/01 00:00:00'
+                search[master][regist_date][end]:
+                  description: registerd end date.
+                  type: string
+                  example: '2019/01/01 00:00:00'
+                search[master][company_name][ilike]:
+                  description: company_name.
+                  type: string
+                  example: ''
+                search[master][user_name][ilike]:
+                  description: user_name.
+                  type: string
+                  example: ''
+                search[master][project_name][ilike]:
+                  description: project_name.
+                  type: string
+                  example: ''
+                search[master][operation_id][]:
+                  description: operation_id.
+                  type: string
+                  example: ''
+                search[master][operational_object][ilike]:
+                  description: operational_object.
+                  type: string
+                  example: ''
+        required: false
+      responses:
+        '200':
+          $ref: '#/components/responses/success_json'
+
+  /server-log/sort:
+    post:
+      tags: ["Processes"]
+      description: Set sort parameters for server log.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                order: 
+                  description: Target column.
+                  type: string
+                  example: 'company_name'
+                direction:
+                  description: direction to sort.
+                  type: string
+                  example: 'asc'
+                parent_code:
+                  description: |
+                    <div>Parent code.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: ''
+      responses:
+        '200':
+          $ref: '#/components/responses/success_json'
+
+  /server-log/export-log:
+    get:
+      tags: ["Processes"]
+      description: Export server logs.
+      responses:
+        '200':
+          $ref: '#/components/responses/success_export_log'
+
+components:
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+
+    xmllist_rows_inner:
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+            example: "0000000001"
+            xml:
+              attribute: true
+          row:
+            type: object
+            properties:
+              record_date: # mean name
+                type: string
+                example: 2020/12/11 10:44:51
+                xml:
+                  name: cell
+              company_name: # mean name
+                type: string
+                example: 株式会社プロット
+                xml:
+                  name: cell
+              user_name: # mean name
+                type: string
+                example: プロット 太郎
+                xml:
+                  name: cell
+              process_type: # mean name
+                type: string
+                example: 暗号化
+                xml:
+                  name: cell
+              project_name: # mean name
+                type: string
+                example: テストプロジェクト
+                xml:
+                  name: cell
+              operation_target: # mean name
+                type: string
+                example:  テストユーザー 900002
+                xml:
+                  name: cell
+      xml:
+        name: rows
+
+  # $ref: '#/components/responses/success_json'
+  responses:
+
+    success_json:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              custom_data:
+                type: object
+                properties:
+                  error_code:
+                    description: If the registration failed, the error code is given here. If succeeded, this is empty string.
+                    type: string
+                    example: ''
+                  debug_messages:
+                    type: object
+                  error_messages:
+                    type: object
+                  messages:
+                    description: Message for the success of the registration.
+                    type: string
+                    example: ''
+                  status:
+                    description: Whether the request succeeded or not.
+                    type: boolean
+                    example: true
+
+    success_xml_list:
+      description: Result xml.
+      content:
+        application/xml:
+          schema:
+            type: object
+            xml:
+              name: return_data # <<<
+            properties:
+              rows:
+                type: array
+                items:
+                $ref: "#/components/schemas/xmllist_rows_inner"
+              message:
+                type: string
+                example: ""
+              debug:
+                type: string
+                example: ""
+              status:
+                type: integer
+                example: 1
+              page:
+                type: integer
+                example: 2
+              max:
+                type: integer
+                example: 91
+              limit:
+                type: integer
+                example: 50
+
+    success_export_log:
+      description: OK
+      content:
+        text/csv:
+          schema:
+            type: string
+            example: |
+              登録日時,企業名,ユーザー名,操作名,プロジェクト名,操作対象
+              "2020/12/16 15:24:28",システム管理企業,システム管理者,ユーザーエクスポート,,
+              "2020/12/16 15:18:29",システム管理企業,システム管理者,ログアウト,,システム管理者
+
+  parameters:
+
+    logId:
+      name: logId
+      in: path
+      required: true
+      description: Column log_rec.log_id
+      schema:
+        type: string
+        example: '0000000058'
+
+security:
+- basicAuth: []

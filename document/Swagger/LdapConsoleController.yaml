@@ -1,0 +1,42 @@
+openapi: '3.0.3'
+info:
+  version: 1.4.6
+  title: LdapConsoleController
+  description: |
+    <h2>Attention: You must not try this UI.</h2>
+    <div>If you execute it multiple times, the same data will be registered for that number of times.</div>
+    <div>And "specify language", is exists in this process, but specified language is only japanese.</div>
+    <div>In other words, this process is probably incomplete.</div>
+
+servers:
+  - url: http://localhost:8084
+    description: For real server
+
+tags:
+  - name: Processes
+    description: |
+      <div>When calling with ajax, the request is "POST", except for legacy browsers.</div>
+  - name: Pages
+    description: (and modal pages). Almost 'GET' requests.
+
+paths:
+
+  /ldap-console/exec-import:
+    get:
+      tags: ["Processes"]
+      description: |
+        <div>Import ldap data to user_mst.</div>
+        <div>Call by cron tab (application/controllers/ScheduledExecutionController.php).</div>
+        <div>Only runs on data for which auto-import is specified.</div>
+      responses:
+        '200':
+          description: Not return response.
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+security:
+- basicAuth: []

@@ -1,0 +1,97 @@
+<?xml version="1.0" ?>
+<dataset>
+    <table name="application_control_mst">
+        <column>application_control_id</column>
+        <column>application_original_filename</column>
+        <column>application_file_name</column>
+        <column>application_file_display_name</column>
+        <column>application_description</column>
+        <column>application_product_name</column>
+        <column>is_preset</column>
+        <column>can_encrypt_application</column>
+        <column>application_control_comment</column>
+        <column>regist_user_id</column>
+        <column>update_user_id</column>
+        <row>
+            <value>00001</value>
+            <value>dllhost.exe</value>
+            <value>dllhost.exe</value>
+            <value>Windows フォトビューアー</value>
+            <value>COM Surrogate</value>
+            <value>Microsoft® Windows® Operating System</value>
+            <value>1</value>
+            <value>1</value>
+            <null></null>
+            <value>000001</value>
+            <value>000001</value>
+        </row>
+        <row>
+            <value>00002</value>
+            <value>update.exe</value>
+            <value></value>
+            <value>更新アプリ</value>
+            <value></value>
+            <value></value>
+            <value>0</value>
+            <value>0</value>
+            <null></null>
+            <value>000001</value>
+            <value>000001</value>
+        </row>
+    </table>
+    <table  name="application_size_mst">
+        <column>application_control_id</column>
+        <column>application_size_id</column>
+        <column>application_size</column>
+        <row>
+            <value>00002</value>
+            <value>001</value>
+            <value>100</value>
+        </row>
+        <row>
+            <value>00002</value>
+            <value>002</value>
+            <value>5000</value>
+        </row>
+        <row>
+            <value>00002</value>
+            <value>003</value>
+            <value>600</value>
+        </row>
+        <row>
+            <value>00002</value>
+            <value>004</value>
+            <value>20</value>
+        </row>
+        <row>
+            <value>00002</value>
+            <value>005</value>
+            <null />
+        </row>
+        <row>
+            <value>00002</value>
+            <value>006</value>
+            <value>5</value>
+        </row>
+        <row>
+            <value>00002</value>
+            <value>007</value>
+            <value>5654</value>
+        </row>
+        <row>
+            <value>00002</value>
+            <value>008</value>
+            <value>5</value>
+        </row>
+        <row>
+            <value>00002</value>
+            <value>009</value>
+            <value>8</value>
+        </row>
+        <row>
+            <value>00002</value>
+            <value>010</value>
+            <null />
+        </row>
+    </table>
+</dataset>

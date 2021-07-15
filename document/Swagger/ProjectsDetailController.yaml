@@ -1,0 +1,729 @@
+openapi: '3.0.3'
+info:
+  version: 1.4.6
+  title: ProjectsDetailController
+  description: |
+    <h2>Create, Update, Delete are in other controllers.</h2>
+    <h3>Team</h3>
+    <ul>
+      <li>create: projects-authority-groups/regist</li>
+      <li>update: projects-authority-groups/update/code/{project_id*team_id}/id/{treeObjectId}</li>
+      <li>delete: projects-authority-groups/execdelete</li>
+    </ul>
+    <h3>Team's user</h3>
+    <div>Team's user can't update, because relation data.</div>
+    <ul>
+      <li>delete: projects-authority-member/execdelete/parent_code/{project_id}</li>
+      <li>create: projects-authority-member/register-member</li>
+      <li>create(multiple groups): projects-authority-member/register-member-multiple-groups</li>
+    </ul>
+    <h3>User group</h3>
+    <div>User groups can't create thiscontroller, if you need create user groups then operation "user groups controller".</div>
+    <ul>
+      <li>update: user-groups/update-for-projects-detail/pseudoCode/{project_id*user_groups_id}/id/{treeObjectId}/</li>
+      <li>delete: projects-secession/index/parent_code/{project_id}/doug/1/sug/{user_groups_id}/
+        <dl>
+          <dt>doug</dt>
+          <dd>default open user groups<dd>
+          <dt>sug</dt>
+          <dd>selected user groups</dd>
+        </dl>
+      </li>
+    </ul>
+    <h3>Project user</h3>
+    <ul>
+      <li>create: projects-participant/index/parent_code/{project_id}</li>
+      <li>delete: projects-secession/index/parent_code/{project_id}</li>
+      <li>update(administrator settings): projects-member/update-setting/code/{code}/user_type/{participationMethodType}
+        <dl>
+          <dt>code</dt>
+          <dd>project_id * user_id * is_manager * user_type</dd>
+        </dl>
+      </li>
+    </ul>
+    <h3>file</h3>
+    <ul>
+      <li>update: projects-files/update/code/{project_id*file_id}</li>
+      <li>update(publicgroup): view-project-files-public-groups/index/parent_code/{project_id*file_id}</li>
+    </ul>
+    <div>Not exists sort on tree object, because can't use.</div>
+
+servers:
+  - url: http://localhost:8084
+    description: For real server
+
+tags:
+  - name: Processes
+    description: |
+      <div>When calling with ajax, the request is "POST", except for legacy browsers.</div>
+  - name: Pages
+    description: (and modal pages). Almost 'GET' requests.
+
+paths:
+
+  /projects-detail/index/parent_code/{ProjectId}:
+    get:
+      tags: ["Pages"]
+      description: Index.
+      responses:
+        '200':
+          description: Successful response
+    parameters:
+    - $ref: "#/components/parameters/ProjectId"
+
+  /projects-detail/searchdialog:
+    get:
+      tags: ["Pages"]
+      description: dialog | search for tree.
+      responses:
+        '200':
+          description: Successful response
+
+  /projects-detail/get-groups-users/parent_code/{ProjectId}:
+    post:
+      tags: ["Processes"]
+      description: Get list of teams and groups,and those participant user, for tree object.
+      responses:
+        '200':
+          $ref: '#/components/responses/success_xml_get_groups_users'
+    parameters:
+    - $ref: "#/components/parameters/ProjectId"
+
+  /projects-detail/searchdialog2:
+    get:
+      tags: ["Pages"]
+      description: dialog | search for grid.
+      responses:
+        '200':
+          description: Successful response
+
+  /projects-detail/exec-search-projects-member/parent_code/{ProjectId}/:
+    post:
+      tags: ["Processes"]
+      description: Set search parameters.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                search[um][company_name][ilike]:
+                  description: Company name.
+                  type: string
+                  example: 'PLOTT'
+                search[um][user_name][ilike]:
+                  description: User name.
+                  type: string
+                  example: 'ASEANフロント1'
+                search[master][v_is_manager]:
+                  description: Is manager flag.
+                  type: string
+                  example: '2'
+                search[um][login_code][ilike]:
+                  description: Login code.
+                  type: string
+                  example: '0'
+                search[um][v_has_license]:
+                  description: Has license flag.
+                  type: string
+                  example: '2'
+                parent_code:
+                  description: |
+                    <div>Parent code.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                    <div>Project id. If you try it, then You must not change.</div>
+                  type: string
+                  example: '900001'
+      responses:
+        '200':
+          description: Result.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: ""
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+    parameters:
+    - $ref: "#/components/parameters/ProjectId"
+
+  /projects-detail/sort:
+    post:
+      tags: ["Processes"]
+      description: Reload after set sort parameters, for user grid.
+      requestBody:
+        description: |
+          <div>In to ajax parameters:data.</div>
+          <div>This method changes the sort target according to the contents of the parameters.</div>
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                order:
+                  description: Target column.
+                  type: string
+                  example: company_name
+                direction:
+                  description: direction to sort. asc | desc
+                  type: string
+                  example: 'asc'
+                parent_code:
+                  description: |
+                    <div>Parent code.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: '900001'
+      responses:
+        '200':
+          description: Result.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: ""
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /projects-detail/get-projects-member:
+    post:
+      tags: ["Processes"]
+      description: Get list of participant users for project.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                parent_code:
+                  description: |
+                    <div>Parent code.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: '900001'
+                page:
+                  description: Page number.
+                  type: string
+                  example: '0'
+      responses:
+        '200':
+          $ref: '#/components/responses/success_xml_get_projects_member'
+
+  /projects-detail/searchfile-dialog:
+    get:
+      tags: ["Pages"]
+      description:  dialog | search for fle grid.
+      responses:
+        '200':
+          description: Successful response
+
+  /projects-detail/search-files/parent_code/{ProjectId}/:
+    post:
+      tags: ["Processes"]
+      description: Set search parameters.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                search[master][file_id][ilike]:
+                  description: file id.
+                  type: string
+                  example: ''
+                search[master][file_name][ilike]:
+                  description: file name.
+                  type: string
+                  example: ''
+                search[master][can_open]:
+                  description: Can open file flag.
+                  type: string
+                  example: '2'
+                parent_code:
+                  description: |
+                    <div>Parent code.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                    <div>If you try it, then You must not change.</div>
+                  type: string
+                  example: '900001'
+      responses:
+        '200':
+          description: Result.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: ""
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+    parameters:
+    - $ref: "#/components/parameters/ProjectId"
+
+  /projects-detail/sort-file:
+    post:
+      tags: ["Processes"]
+      description: Reload after set sort parameters, for file grid.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                order: 
+                  description: Target column.
+                  type: string
+                  example: 'file_name'
+                direction:
+                  description: direction to sort. asc | desc
+                  type: string
+                  example: 'asc'
+                isSortRight: 
+                  description: It is using for the purpose of discriminating between the grid of the user tab and the grid of the file tab, on this function.
+                  type: string
+                  example: 1
+                parent_code:
+                  description: |
+                    <div>Parent code.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: '900001'
+      responses:
+        '200':
+          description: Result.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: ""
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /projects-detail/get-projects-files:
+    post:
+      tags: ["Processes"]
+      description: Get list of files registered in the project.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                parent_code:
+                  description: |
+                    <div>Parent code.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: '900001'
+                page:
+                  description: Page number.
+                  type: string
+                  example: '0'
+      responses:
+        '200':
+          $ref: '#/components/responses/success_xml_get_projects_files'
+
+  /projects-detail/set-session-tab-status:
+    post:
+      tags: ["Processes"]
+      description: Select tab to change session value of tab status, and change display content.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                tab: 
+                  description: Tab name.
+                  type: string
+                  example: 'files'
+                parent_code:
+                  description: |
+                    <div>Parent code.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: '900001'
+      responses:
+        '200':
+          description: Result.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: ""
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /projects-detail/get-last-tab:
+    post:
+      tags: ["Processes"]
+      description: Get latest selected tab.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                parent_code:
+                  description: |
+                    <div>Parent code.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: '900001'
+      responses:
+        '200':
+          $ref: '#/components/responses/success_xml_get_last_tab'
+
+components:
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+
+    xmllist_tree_inner:
+      description: ''
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+            example: "006582"
+            xml:
+              attribute: true
+          item:
+            type: object
+            properties:
+              open:
+                type: string
+                example: "1"
+                xml:
+                  attribute: true
+              id:
+                type: string
+                example: "900001*000003*1"
+                xml:
+                  attribute: true
+              child:
+                type: string
+                example: "1" 
+                xml:
+                  attribute: true
+              im0:
+                type: string
+                example: "folderOpen.gif"
+                xml:
+                  attribute: true
+              im1:
+                type: string
+                example: "folderOpen.gif"
+                xml:
+                  attribute: true
+              im2:
+                type: string
+                example: "folderClosed.gif"
+                xml:
+                  attribute: true
+              itemtext:
+                type: string
+                example: |
+                  <![CDATA[
+                      <div style="display:inline-block; margin:0; padding:0; width:100%;">
+                          <span class="group_name" title="グループ append 20201019">append 20201019 </span>
+                          <span class="subInfo_forGroupName">
+                              <img src="/common/image/projects/statuses/can_encrypt__small_off.png" class="js-balloon" alt="暗号化不可" title="暗号化不可">
+                              <img src="/common/image/projects/statuses/can_decrypt__small_off.png" class="js-balloon" alt="復号不可" title="復号不可">
+                              <img src="/common/image/projects/statuses/can_edit__small_off.png" class="js-balloon" alt="編集不可" title="編集不可">
+                              <img src="/common/image/projects/statuses/can_clipboard__small_off.png" class="js-balloon" alt="コピーペースト不可" title="コピーペースト不可">
+                              <img src="/common/image/projects/statuses/can_print__small_off.png" class="js-balloon" alt="印刷不可" title="印刷不可">
+                              <img src="/common/image/projects/statuses/can_screenshot__small_off.png" class="js-balloon" alt="スクリーンショット不可" title="スクリーンショット不可">
+                              <span class="teamEditButtons" style="display:none;">
+                                  <img src="/common/image/projects/btn_team_edit.png" class="editButtonOnTree js-balloon" alt="グループ更新" title="グループ更新" onclick="_uniqueUpdate_forTeamTree('000001*000003*1');">
+                                  <img src="/common/image/projects/btn_team_trash.png" class="editButtonOnTree js-balloon" alt="チーム削除" title="チーム削除" onclick="_uniqueDelete_forTeamTree('000001*000003*1');">
+                              </span>
+                          </span>
+                      </div>
+                  ]]>
+                xml:
+                  name: itemtext
+              item:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "900001*000003*006669*1"
+                    xml:
+                      attribute: true
+                  child:
+                    type: string
+                    example: "2"
+                    xml:
+                      attribute: true
+                  im0:
+                    type: string
+                    example: "leaf.gif"
+                    xml:
+                      attribute: true
+                  im1:
+                    type: string
+                    example: "leaf.gif1"
+                    xml:
+                      attribute: true
+                  im2:
+                    type: string
+                    example: "leaf.gif"
+                    xml:
+                      attribute: true
+                  itemtext:
+                    type: string
+                    example: |
+                      <![CDATA[
+                          <span class="user_name">checkdelete</span>
+                      ]]>
+                    xml:
+                      name: itemtext
+                xml:
+                  name: item
+            xml:
+              name: itemtext
+      xml:
+        name: item
+    xmllist_grid_inner:
+      items:
+        type: object
+        properties:
+          row:
+            type: object
+            properties:
+              id:
+                type: string
+                example: "900001*006582*0*3"
+                xml:
+                  attribute: true
+              check_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+              company_name: # mean name
+                type: string
+                example: PLOTT
+                xml:
+                  name: cell
+              user_name: # mean name
+                type: string
+                example: ASEANフロント1
+                xml:
+                  name: cell
+              login_code: # mean name
+                type: string
+                example: a-front1@plott.local
+                xml:
+                  name: cell
+              license: # mean name
+                type: string
+                example: なし
+                xml:
+                  name: cell
+              participation_method_type: # mean name
+                type: string
+                example: プロジェクトユーザー・ユーザーグループ
+                xml:
+                  name: cell
+              authority_of_the_project_itself: # mean name
+                type: string
+                example:  一般
+                xml:
+                  name: cell
+              operation_authority: # mean name
+                type: string
+                example: '&lt;img src=&quot;/common/image/projects/statuses/can_encrypt__small_off.png&quot; class=&quot;js-balloon&quot; alt=&quot;暗号化不可&quot; title=&quot;暗号化不可&quot; style=&quot;display:inline-block; max-height:27px;&quot;&gt;&amp;nbsp;&lt;img src=&quot;/common/image/projects/statuses/can_decrypt__small_off.png&quot; class=&quot;js-balloon&quot; alt=&quot;復号不可&quot; title=&quot;復号不可&quot; style=&quot;display:inline-block; max-height:27px;&quot;&gt;&amp;nbsp;&lt;img src=&quot;/common/image/projects/statuses/can_edit__small_on.png&quot; class=&quot;js-balloon&quot; alt=&quot;編集可&quot; title=&quot;編集可&quot; style=&quot;display:inline-block; max-height:27px;&quot;&gt;&amp;nbsp;&lt;img src=&quot;/common/image/projects/statuses/can_clipboard__small_on.png&quot; class=&quot;js-balloon&quot; alt=&quot;コピーペースト可&quot; title=&quot;コピーペースト可&quot; style=&quot;display:inline-block; max-height:27px;&quot;&gt;&amp;nbsp;&lt;img src=&quot;/common/image/projects/statuses/can_print__small_on.png&quot; class=&quot;js-balloon&quot; alt=&quot;印刷可&quot; title=&quot;印刷可&quot; style=&quot;display:inline-block; max-height:27px;&quot;&gt;&amp;nbsp;&lt;img src=&quot;/common/image/projects/statuses/can_screenshot__small_on.png&quot; class=&quot;js-balloon&quot; alt=&quot;スクリーンショット可&quot; title=&quot;スクリーンショット可&quot; style=&quot;display:inline-block; max-height:27px;&quot;&gt;'
+                xml:
+                  name: cell
+              spacer_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+      xml:
+        name: rows
+    xmllist_file_grid_inner:
+      items:
+        type: object
+        properties:
+          row:
+            type: object
+            properties:
+              id:
+                type: string
+                example: "900001*0000000008"
+                xml:
+                  attribute: true
+              check_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+              file_name: # mean name
+                type: string
+                example: 20201014.txt
+                xml:
+                  name: cell
+              views: # mean name
+                type: string
+                example:    69回
+                xml:
+                  name: cell
+              validity_span_dates: # mean name
+                type: string
+                example: 2020/10/20 09:52:00～2020/10/21 09:52:00
+                xml:
+                  name: cell
+              availability_of_file: # mean name
+                type: string
+                example: 利用可
+                xml:
+                  name: cell
+              registered_date: # mean name
+                type: string
+                example: 2020/10/14 14:01:55
+                xml:
+                  name: cell
+              spacer_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+      xml:
+        name: rows
+
+  responses:
+
+    success_xml_get_groups_users:
+      description: |
+        <div>Result list of teams and groups,and those participant user.</div>
+        <div>You can see format at 'application/smarty/templates/treexml.tpl'.</div>
+      content:
+        application/xml:
+          schema:
+            type: object
+            xml:
+              name: tree # <<<
+            properties:
+              tree:
+                type: array
+                items:
+                $ref: "#/components/schemas/xmllist_tree_inner"
+
+    success_xml_get_projects_member:
+      description: Result list of participant users for project.
+      content:
+        application/xml:
+          schema:
+            type: object
+            xml:
+              name: return_data # <<<
+            properties:
+              tree:
+                type: array
+                items:
+                $ref: "#/components/schemas/xmllist_grid_inner"
+
+    success_xml_get_projects_files:
+      description: Result list of files registered in the project.
+      content:
+        application/xml:
+          schema:
+            type: object
+            xml:
+              name: return_data # <<<
+            properties:
+              tree:
+                type: array
+                items:
+                $ref: "#/components/schemas/xmllist_file_grid_inner"
+
+    success_xml_get_last_tab:
+      description: Result.
+      content:
+        application/xml:
+          schema:
+            type: object
+            xml:
+              name: result # <<<
+            properties:
+              message:
+                type: string
+                example: "users"
+              debug:
+                type: string
+                example: ""
+              status:
+                type: integer
+                example: 1
+
+  parameters:
+    ProjectId:
+      name: ProjectId
+      in: path
+      required: true
+      description: Column projects.project_id
+      schema:
+        type: string
+        example: '900001'
+
+security:
+- basicAuth: []

@@ -1,0 +1,252 @@
+openapi: '3.0.3'
+info:
+  version: 1.4.6
+  title: SetDesignController
+
+servers:
+  - url: http://localhost:8084
+    description: For real server
+
+tags:
+  - name: Processes
+    description: |
+      <div>When calling with ajax, the request is "POST", except for legacy browsers.</div>
+  - name: Pages
+    description: (and modal pages). Almost 'GET' requests.
+
+paths:
+
+  /set-design/index:
+    get:
+      tags: ["Pages"]
+      description: Index.
+      responses:
+        '200':
+          description: Successful response
+
+  /set-design/default-design:
+    post:
+      tags: ["Processes"]
+      description: Reset to default setting.
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "登録が完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /set-design/execvalidation:
+    post:
+      tags: ["Processes"]
+      description: Validate before update. Not using.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                form[logo_login_ext]:
+                  description: |
+                    Whether it is an image to be used.
+                    <div></div>
+                    <div>"0": 既存 Existing</div>
+                    <div>"1": 新規 New</div>
+                  type: radio
+                  example: '0'
+                logo_login_ext:
+                  description: |
+                    <div>Logo image for login page.</div>
+                    <div>If selected 1 on  element "form[logo_login_ext]", then need this value.</div>
+                  type: file
+                  example: ''
+                form[logo_login_e_ext]:
+                  description: |
+                    Whether it is an image to be used.
+                    <div></div>
+                    <div>"0": 既存 Existing</div>
+                    <div>"1": 新規 New</div>
+                  type: radio
+                  example: '0'
+                logo_login_e_ext:
+                  description: |
+                    <div>Logo image for login page.</div>
+                    <div>If selected 1 on  element "form[logo_login_ext]", then need this value.</div>
+                  type: file
+                  example: ''
+                form[logo_header_ext]:
+                  description: |
+                    Whether it is an image to be used for header.
+                    <div></div>
+                    <div>"0": 既存 Existing</div>
+                    <div>"1": 新規 New</div>
+                  type: radio
+                  example: '0'
+                logo_header_ext:
+                  description: |
+                    <div>Logo image for header.</div>
+                    <div>If selected 1 on  element "form[logo_header_ext]", then need this value.</div>
+                  type: file
+                  example: ''
+                setting_color[login_color_text]:
+                  description: login_color_text
+                  type: color
+                  example: '#ebebeb'
+                setting_color[header_color_text]:
+                  description: header_color_text
+                  type: color
+                  example: '#1d8395'
+                setting_color[global_menu_background_color]:
+                  description: global_menu_color_text
+                  type: color
+                  example: '#1d8395'
+                successMessage:
+                  description: Success message.
+                  type: string
+                  example: 本当に登録しますか？
+        required: false      
+      responses:
+        '200':
+          description: Result.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: ""
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /set-design/register:
+    post:
+      tags: ["Processes"]
+      description: Update.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                form[logo_login_ext]:
+                  description: |
+                    Whether it is an image to be used.
+                    <div></div>
+                    <div>"0": 既存 Existing</div>
+                    <div>"1": 新規 New</div>
+                  type: radio
+                  example: '0'
+                logo_login_ext:
+                  description: |
+                    <div>Logo image for login page.</div>
+                    <div>If selected 1 on  element "form[logo_login_ext]", then need this value.</div>
+                  type: file
+                  example: ''
+                form[logo_header_ext]:
+                  description: |
+                    Whether it is an image to be used for header.
+                    <div></div>
+                    <div>"0": 既存 Existing</div>
+                    <div>"1": 新規 New</div>
+                  type: radio
+                  example: '0'
+                logo_header_ext:
+                  description: |
+                    <div>Logo image for header.</div>
+                    <div>If selected 1 on  element "form[logo_header_ext]", then need this value.</div>
+                  type: file
+                  example: ''
+                setting_color[login_color_text]:
+                  description: login_color_text
+                  type: color
+                  example: '#ebebeb'
+                setting_color[header_color_text]:
+                  description: header_color_text
+                  type: color
+                  example: '#1d8395'
+                setting_color[global_menu_background_color]:
+                  description: global_menu_color_text
+                  type: color
+                  example: '#1d8395'
+        required: false      
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "登録が完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /set-design/get-logo/category/{imageCategoryNumber}:
+    get:
+      tags: ["Processes"]
+      description: Gets the specified image.
+      responses:
+        '200':
+          description: Result image.
+          content:
+            image/png:
+             schema: 
+               type: string
+               format: binary
+               example: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAYEAAAA8CAYAAACAegY7AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAB8hJREFUeNrsnT2IXFUUx9/EYFBEmCCxksCmU4vARGwsBGdFISAWu6VV3AEVwUJ3RBBBxZ06WGxs1HK3UMRuR4yNCGYEG4tARolpNOh0ihgZz8meh49xZt59X7Pv3fv7weHN587ec8+9//v9WtPpNHKh1WpFAADQDB744PM75HK/2DGxX35+/vzfyffjur+FCAAAeFX5n5LLy2LHxX7S+l7stJiKwkURgxuIAACAnwLwsFxeE/tI7Dd7+R+xX8X+FHtLbE+E4Ju47j+O2wAAvBCAe6wHoAIwnPORb8WeEXtdPntNrjf1xWO4DgDAC3pi71nLX/lS7FmxTbEvxB4Re1HsbbEX4i9V0hMQlenKpWNPNxKPCyFdmNac35pm/U6Z329wq2Fa0Z8eiE3s8SXx38TjlpfG9prYtlg75eNj8cUZ6qnK8kLzYGfJR/ri/4HnbjglafxRfHHanl+X558myvsTWufLazfl+d2li4BV/FootgjJoNlOPN6RuJiYMHgjCJImrfh3xbpkN9SIv2aePyax+mF0OOLzlNhVsfdnP3usjAIhdiAPDxAAmEPbWmi/S5zseCAAbYt1BADqxmx9flLsrNg5sfvEdInoCXuvVYoIWHf4GgUCXHsJOiEl1mlwGrShs0ZWQg05MfP8M+l9nxV7UB73xR4Se87eu6uwCJgA7OF3yIhWoFds+LCJvYBtshBqytcSo08veO+qXe+Vzzwq1x8KiYC15BAAKMKeja03CRWuNlkHdURa/J/I5Xx0OAz0vdj1xNs37DXdSHZB7OP4jbwTw7u4HArStobEuYb1YtIYJoxhUlg1r4q9Gx0uxkg21L8Te1PsSbE3RDBuRRdybhaT1puOiXbwNZRAR5f2NWjpXlovYCRpWU8+J4thxb2BP+TyipSrx+X6jlxvRYfHRtwp9pW8/9Lsd/L0BFzHROOlgbdbR/Ljo4oSzXkW1aBLOnsZGwfxmHk7Yzz5IgL7hA3URAwuy+Wyy2cziUBic0wam/JPUCDCCrpL9nBgguA6ZNjWzye+32QmRAI0jawTwy7DQOsIAIIQZRvrZ+wc4IjIOhyUVlh1CGG4ygTU9diHxNEZ2nPKu4luODPG3CQhGIkPdG3yTglxtXIf2wFbWVcv7cr3dovGYtWxY6uyrpWY3TrUqw2/cRkNQFt92C2Y/tqW4ZL8Hx/PUnioPasIpPUEhlHg2FCIVnzBLyXUCV/zR1plqkNCHddg9tXHDU5XJ64bJA2ah708FZMNN29HR7zwpCH5sJ34f4fm83GlIuC4pnscBQrnySzuHWboDYxC9LFn6dIKXDcDrruOCtgmPE3/BvmQi27C55nFN8ucgIsqBjkxZsHDeTKLRaBwL9NXH3scOwcux4MkzmLaIB8KcXvfjfnzSEUgRAGINz1xnswc7ORQl9bJWmg+DiB2XHqAB9HRD//4kg+55i6OZ/yBNPRwsCorlDruCTjyMcwGMHLw0VqAPvY9dro6ubpoWMhOle2QD6WiPapM+264vWSxFkQncts8p6tkKtsw1wBc5oradfLxvBvA2MqfZS2tnut+h7rHjsPNmOKNgWlp0OGVYYH0R1apDZfNMTjcVKZR+TDrfxuu2nBIY2YxQwSKtyCWoUMh5/LO2nvExLFArs3xla8+bnS6bJivbzcN2kkRgXm4VNha4W5W7ING5IP9vq620+tejnK0EO4xnL8X0I7SJ7MGCAA+9jxdaT2fzrxKKkqfgNW0r1fpgybmg+3DKLU3ggjkZ6uEAgJh+tibdFmPYJLWMp15yWUlUG8FtyNtaj6kiUCmCW5EID9pY28Tn2+yjo9JV/L/LTn9oxWdPNDUfCi1Z8KcQH5cdsFOC/5GY4+NmPWFY6tyHIiPQ4+dtPQPyYfVQU+gugCCbL6aBOTjNeJheU+AfFgdZfcEzgQ0EcrmufK63Yu6uG1iJ8j0j8mHpT1mXTJb2j046AlApdgKjLwiAGHCXNoKQQSgaly3sSMCEMMwDSLQCKi0yhWBUUA+ZvPgctrkw+pgdVCxAFrWYhnPO3ogJBzvJRAzDMjHoceOpn/ZEKG+t08+0BOoO6kbNvIc6+qRAGjhcj3LZbRgPbavPg49dtKWgHbJB0TAh4K8ymCumwDojtArGbr1+4H5OPTYSUt/x27tSD4gArVvzaSNbW6F4gyt+PUkR7s3716UbVx3PzAfhx47LunfXUErnDKMCOTHhi/SzhXpLrvxeM3Z0t2SrmYVvw7/ZF3Zsb9ob4mvPg4gdlzSnzbmr3F0xeXuZOQDInCUDFxaEto6tlYyS9/+Tz9QH4ceOy7pj4Vg14YYyYcKYHVQwZaEBMUgSp8AjSdJdzLeec2Xs4MWFsC0Hea++jj02NF8d0z/7UrYKmLygZ5ALYN5EHFkdB60cPRD9nHosWPp3ycfEAEfgrmHEGQWgHV8TOxI+jdrIgTB5gMiUG4Q9fFEKr283WNffRx67JgQ9MkHRMCX7u0ZegVz0cJ10vVG7KH5OPTYqUv6Q8wHJobLDyKd6NQWRU9XE9jLeg1p9/Aw+m9XaOl3ifLVx6HHzoL0Zzl6hHzIQWs6nUYAABAmDAcBACACAACACAAAACIAAACIAAAAIAIAAIAIAAAAIgAAAIgAAAAgAgAAgAgAAAAiAAAAiAAAACACAABQd/4VYACBg4egjformwAAAABJRU5ErkJggg==
+    parameters:
+    - $ref: "#/components/parameters/imageCategoryNumber"
+
+components:
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  parameters:
+
+    imageCategoryNumber:
+      name: imageCategoryNumber
+      in: path
+      required: true
+      description: |
+        <div>Image number. </div>
+        <div>1: For Japanse login page.</div>
+        <div>2: For English login page. (Not implemented)</div>
+        <div>3: For header.</div>
+      schema:
+        type: string
+        example: '1'
+
+security:
+- basicAuth: []

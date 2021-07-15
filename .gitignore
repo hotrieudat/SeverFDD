@@ -1,0 +1,9 @@
+.vscode/settings.json
+.idea/
+*.xml
+*.iml
+library/*
+application/smarty_admin/templates_c/*
+!phpunit.xml
+__pycache__
+*.cache

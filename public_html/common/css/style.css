@@ -1,0 +1,576 @@
+@CHARSET "UTF-8";
+
+/* ----------------------------------------------------------------------------------------------------------------------------
+    text
+----------------------------------------------------------------------------------------------------------------------------*/
+.text_calendar {
+    width: 155px ;
+    background-image: url("/common/image/icon_calendar.png");
+    background-repeat: no-repeat;
+    background-position: calc(100% - 3px) center;
+}
+
+
+/* ----------------------------------------------------------------------------------------------------------------------------
+    pulldown
+----------------------------------------------------------------------------------------------------------------------------*/
+
+.clearfix:before,
+.clearfix:after {
+    content: "";
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+.clearfix {
+    zoom:1;
+}
+
+.menu_item {
+    border: 1px solid #C5C5C5;
+    margin-top: -1px;
+}
+
+.pulldown_item {
+    display: block;
+    height: 35px;
+    width: 111px;
+    line-height: 35px;
+    text-align: left;
+    margin-left: 5px;
+    padding-left: 34px;
+    font-size:13px;
+}
+
+.pulldown_long_item {
+    display: block;
+    height: 35px;
+    width: 140px;
+    line-height: 35px;
+    text-align: left;
+    margin-left: 5px;
+    padding-left: 34px;
+    font-size:13px;
+}
+
+.pulldown_menu {
+    float: left;
+    display: inline-block;
+    position: relative;
+}
+
+.pulldown_icon {
+    background: url('/common/image/iconbar/ico_pulldown_gray.png') no-repeat 90% 50%;
+}
+
+.icon_pulldown {
+    display: inline-block;
+    background: url('/common/image/iconbar/ico_pulldown_white.png') no-repeat center;
+    width: 8px;
+    height: 100%;
+    margin-right: 10px;
+}
+
+.menu_list {
+    display: none;
+    position: absolute;
+    z-index: 100;
+    width: 160px;
+    border: none;
+}
+
+.menu_long_list {
+    display: none;
+    position: absolute;
+    z-index: 100;
+    width: 190px;
+    border: none;
+}
+
+.menu_long2_list {
+    display: none;
+    position: absolute;
+    z-index: 100;
+    width: 220px;
+    border: none;
+}
+
+.menu_long3_list {
+    display: none;
+    position: absolute;
+    z-index: 100;
+    width: 250px;
+    border: none;
+}
+
+.menu_item {
+    border: 1px solid #C5C5C5;
+    margin-top: -1px;
+}
+
+.pulldown_item {
+    display: block;
+    height: 35px;
+    width: 130px;
+    line-height: 35px;
+    text-align: left;
+    margin-left: 5px;
+    padding-left: 34px;
+    font-size:13px;
+}
+
+.pulldown_long_item {
+    display: block;
+    height: 35px;
+    width: 200px;
+    line-height: 35px;
+    text-align: left;
+    margin-left: 5px;
+    padding-left: 34px;
+    font-size:13px;
+}
+
+.pulldown_item:hover {
+    color: #1D9BB4;
+}
+
+.btn_comment {
+    font-size: 12px;
+    padding-top: 5px;
+    margin-left: 190px;
+}
+
+.tab_page_pulldown_item {
+    margin-top: 20px;
+    padding-left: inherit;
+}
+
+/* ----------------------------------------------------------------------------------------------------------------------------
+    table
+----------------------------------------------------------------------------------------------------------------------------*/
+
+.option_table {
+    width: 98%; /* forIE */
+    width: calc(100% - 30px);
+}
+
+
+.formtable_headercell_first {
+    border-top-style: solid !important;
+    border-top-width: 0px !important;
+}
+
+.formtable_headercell_last {
+    border-color: #EBEBEB !important;
+    border-bottom-style: solid !important;
+    border-bottom-width: 1px !important;
+}
+
+/* 200px幅のヘッダーセル 高さは定義しない(trで行うべき) */
+.formtable_headercell {
+    width: 200px;
+    box-sizing:border-box;
+    padding: 0px 20px;
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    font-size: 13px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+/* 195px幅の内容セル(白背景のもの) 高さは定義しない(trで行うべき) */
+.formtable_contentcell, .formatable_contentSingleCell {
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-top-style: solid;
+    border-top-width: 1px;
+    padding: 10px 25px 10px 25px;
+}
+
+.formatable_contentMultiCell {
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-top-style: solid;
+    border-top-width: 1px;
+    padding-top: 0;
+    padding-right: 25px;
+    padding-bottom: 0;
+    padding-left: 25px;
+}
+
+/* 登録フォームの高さ ラベルのみの場合*/
+.formtable_labelrow {
+    height: 35px;
+}
+
+/* 登録フォームの高さ 標準*/
+.formtable_normalrow {
+    height: 45px;
+}
+
+/* 登録フォームの高さ 2行*/
+.formtable_doublerow{
+    height: 65px;
+}
+
+/* 登録フォームの高さ 3行*/
+.formtable_triplerow {
+    height: 85px;
+}
+
+/* 登録フォームの高さ 3行*/
+.formtable_quadruplerow {
+    height: 105px;
+}
+
+/* 登録フォームの高さ 5行*/
+.formtable_quintuplerow {
+    height: 125px;
+}
+
+/* 登録フォームの高さ 8行*/
+.formtable_octuplerow {
+    height: 185px;
+}
+
+/* ----------------------------------------------------------------------------------------------------------------------------
+    multiline in table
+----------------------------------------------------------------------------------------------------------------------------*/
+
+.group_table {
+    margin-right: -15px;
+}
+
+.group_list {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.group_title {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 150px;
+    height: 20px;
+}
+
+.cell_border_bottom {
+    border-bottom-style: dotted;
+    border-bottom-width: 1px;
+    border-bottom-color: #dddddd;
+    margin-left: -25px;
+}
+
+.cell_border_right {
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-right-color: #dddddd;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+.group_right_box {
+    overflow: hidden;
+    width: auto;
+}
+
+.group_data {
+    margin-left: 25px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    height: 20px;
+}
+
+.cell_border_bottom_data {
+    border-bottom-style: dotted;
+    border-bottom-width: 1px;
+    border-bottom-color: #dddddd;
+    padding-left: 25px;
+    padding-right: 15px;
+}
+
+/* ----------------------------------------------------------------------------------------------------------------------------
+    button
+----------------------------------------------------------------------------------------------------------------------------*/
+
+/* MENU */
+.menu_button_wrapper {
+    margin-bottom: 20px;
+}
+
+.button_wrapper {
+    text-align: center;
+    margin: 25px 0px 20px 0px;
+}
+
+.register_button:hover,
+.highlight_hover:hover,
+.search_button:hover {
+    opacity: 0.8;
+}
+
+.button_wrapper,
+.register_button {
+    margin-right: 15px;
+}
+
+.normal_button {
+    width: 55px;
+    height: 30px;
+    vertical-align: middle;
+    border: 1px #C5C5C5 solid;
+    border-left: 0px;
+}
+
+.first_button{
+    border: 1px #C5C5C5 solid;
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+.last_button {
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.separate_button {
+    margin-left: 11px;
+}
+
+/* TODO: 命名が他と違う */
+.longButton {
+    width: 130px;
+    height: 30px;
+}
+
+/* TODO: 命名が他と違う */
+.long_button {
+    width: 150px;
+    height: 30px;
+    vertical-align: middle;
+    border: 1px #C5C5C5 solid;
+}
+
+/* TODO: 命名が他と違う */
+.radiusButton {
+    display: inline-block;
+    border-radius: 5px;
+    margin-right: 10px;
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* TODO: 命名が他と違う */
+.radius_button {
+    display: inline-block;
+    border-radius: 5px;
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+/* TODO: 命名が他と違う */
+.buttonLeftIcon {
+    vertical-align: middle;
+    padding-right: 5px;
+    margin-left: -8px;
+}
+
+/* FIXME: 以下のbutton_executeに置き換える */
+.register_button {
+    font-size: 15px;
+    height: 40px;
+    line-height: 41px;
+    position: relative;
+    width: 200px;
+}
+
+.button_execute {
+    font-size: 14px;
+    height: 35px;
+    line-height: 35px;
+    position: relative;
+    width: 160px;
+}
+
+.button_execute:hover {
+    opacity: 0.8;
+}
+
+.sharper_radius_button {
+    -moz-user-select: none;
+    border-radius: 3px;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+}
+
+/* TODO: 命名が逆なので修正する */
+.button_text_icon {
+    display: inline-block;
+    font-size: 11px;
+    left: 10px;
+    position: absolute;
+}
+
+/* Search Dialog */
+.search_button_wrapper {
+    text-align: center;
+    margin: 25px 0 0;
+}
+
+.button_search {
+    font-size: 14px;
+    height: 35px;
+    line-height: 35px;
+    position: relative;
+    width: 160px;
+}
+
+.button_reset {
+    font-size: 14px;
+    height: 35px;
+    line-height: 35px;
+    position: relative;
+    width: 160px;
+}
+
+.button_close {
+    font-size: 14px;
+    height: 35px;
+    line-height: 35px;
+    position: relative;
+    width: 160px;
+}
+
+.button_search:hover,
+.button_reset:hover,
+.button_close:hover {
+    opacity: 0.8;
+}
+
+/* ----------------------------------------------------------------------------------------------------------------------------
+    textbox
+----------------------------------------------------------------------------------------------------------------------------*/
+
+/*
+ * 使用可能変数
+ */
+
+.var_name {
+    padding-left: 10px;
+    height: 30px;
+}
+
+.vars_title {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.triangle_left {
+    width: 0;
+    height: 0;
+    border: 20px solid transparent;
+    border-right: 20px solid #EBEBEB;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -40px;
+    margin:auto;
+}
+
+/* 大見出し */
+.content_header {
+    font-size: 18px;
+    font-weight: 600;
+    height: 35px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    position: relative;
+    padding-left: 10px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    /* レイアウト修正のため上書き */
+    color: #1D9BB4;
+    border-color: #1D9BB4;
+    margin: 20px 20px 26px 0;
+
+}
+
+.content_header_blue_skin {
+    color: #1D9BB4;
+    border-color: #1D9BB4;
+}
+
+.content_header span {
+    position: absolute;
+    bottom: 0;
+}
+
+/* 小見出し */
+.small_header {
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+}
+
+
+/* ----------------------------------------------------------------------------------------------------------------------------
+    tab
+----------------------------------------------------------------------------------------------------------------------------*/
+
+.tab_wrapper {
+    border-bottom: #D0D0D0 solid 1px;
+    padding-left: 15px;
+    padding-right: 40px;
+}
+
+.tab_item a {
+    display: block;
+}
+
+.tab_item {
+    height: 30px;
+    border: #D0D0D0 solid 1px;
+    margin: 0px 10px -1px 0px;
+    padding: 5px 23px 0px 23px;
+    text-align: center;
+    font-size: 14px;
+    color: #595959;
+    font-weight: bold;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.selected_tab {
+    border-bottom-color: #FFFFFF;
+    color: #1D9BB4;
+}
+
+.tab_item_six_chars {
+    width: 125px;
+}
+
+.tab_item_seven_chars {
+    width: 135px;
+}
+
+.tab_item_nine_chars {
+    width: 165px;
+}
+
+.tab_item_ten_chars {
+    width: 175px;
+}

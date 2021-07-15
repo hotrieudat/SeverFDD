@@ -1,0 +1,62 @@
+@charset "UTF-8";
+
+.padding_tbl_contents {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+/**
+  主にユーザー画面の一覧表示時に利用
+ */
+.negation_relative {
+    position: static ;
+    min-width: 530px;
+}
+
+/**
+  パスワード再発行画面
+ */
+.reissue_wrapper{
+    width: 90%;
+    margin: 20px auto 0;
+}
+
+/* 非グリッド画面用表示幅指定 */
+.system_view_min_width {
+    min-width: 550px;
+}
+
+/* 拡張子判定パターン */
+#file_suffix {
+    min-width: 50px;
+    width: 50px;
+}
+
+/* ダッシュボード用リンク文字 */
+.blue_text {
+    color: #0E73BB;
+    text-decoration: none;
+}
+
+.blue_text:hover {
+    color: #0E73BB;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.content li {
+    padding:20px;
+}
+
+.hidden_list {
+    display:none;
+}
+
+.auth_select_box {
+    width: 280px;
+}
+
+/* クライアント用ログ画面のクラス */
+.client_log_grid {
+    padding: 10px
+}

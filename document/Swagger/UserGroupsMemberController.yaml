@@ -1,0 +1,584 @@
+openapi: '3.0.3'
+info:
+  version: 1.4.6
+  title: UserGroupsMemberController
+  description: |
+    <h2>Manage participate users of user groups.</h2>
+    <div>This page has two grid.</div>
+    <div>If the user information is output to one of the left and right, it is not output to the other.</div>
+
+servers:
+  - url: http://localhost:8084
+    description: For real server
+
+tags:
+    - name: Processes
+      description: |
+        <div>When calling with ajax, the request is "POST", except for legacy browsers.</div>
+    - name: Pages
+      description: (and modal pages). Almost 'GET' requests.
+    - name: OnLeftGrid
+      description: ''
+    - name: OnRightGrid
+      description: ''
+
+paths:
+  
+  /user-groups-member/sort:
+    post:
+      tags: ["Processes", "OnLeftGrid", "OnRightGrid"]
+      description: Reload after set sort parameters.
+      requestBody:
+        description: |
+          <div>In to ajax parameters:data.</div>
+          <div>This method changes the sort target according to the contents of the parameters.</div>
+          <h3>Attention: If call by left grid then remove isSortRight param.</h3>
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                order: 
+                  description: Target column.
+                  type: string
+                  example: 'company_name'
+                direction:
+                  description: direction to sort. asc | desc
+                  type: string
+                  example: 'asc'
+                isSortRight:
+                  description: | 
+                    <div>Is right sort. false:0 | true:1</div>
+                    <h4>Attention: If call by left grid then remove isSortRight param.</h4>
+                  type: string
+                  example: '0'
+                parent_code:
+                  description: |
+                    <div>Parent code(user_groups_users.user_groups_id).</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: '000001'
+      responses:
+        '200':
+          description: Result.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: ""
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /user-groups-member/index/parent_code/{UserGroupsId}:
+    get:
+      tags: ["Pages"]
+      description: Index.
+      responses:
+        '200':
+          description: Successful response
+    parameters:
+    - $ref: "#/components/parameters/UserGroupsId"
+
+  /user-groups-member/list:
+    post:
+      tags: ["Processes", "OnLeftGrid"]
+      description: Get list of participated user on user groups.
+      responses:
+        '200':
+          $ref: '#/components/responses/success_xml_list_for_list'
+
+  /user-groups-member/searchdialog/parent_code/{UserGroupsId}/:
+    get:
+      tags: ["Pages", "OnLeftGrid"]
+      description: modal | Search participated user in user groups.
+      responses:
+        '200':
+          description: Successful response
+    parameters:
+    - $ref: "#/components/parameters/UserGroupsId"
+
+  /user-groups-member/search/parent_code/{UserGroupsId}/:
+    post:
+      tags: ["Processes", "OnLeftGrid"]
+      description: Execute search participated user in user groups.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                search[um][company_name][ilike]: 
+                  description: Company name.
+                  type: string
+                  example: 'PLOTT'
+                search[um][user_name][ilike]:
+                  description: User name.
+                  type: string
+                  example: ''
+                search[um][login_code][ilike]: 
+                  description: Login code.
+                  type: string
+                  example: ''
+                search[auth][auth_id]:
+                  description: |
+                    <h4>auth.auth_id</h4>
+                    <dl>
+                      <dt>&nbsp;</dt>
+                      <dd>選択してください。</dd>
+                      <dt>001</dt>
+                      <dd>システム管理者用権限</dd>
+                      <dt>003</dt>
+                      <dd>機能管理者</dd>
+                      <dt>004</dt>
+                      <dd>プロジェクト管理者</dd>
+                      <dt>005</dt>
+                      <dd>一般ユーザー</dd>
+                      <dt>006</dt>
+                      <dd>監視ユーザー</dd>
+                    </dl>
+                  type: string
+                  example: ''
+                parent_code:
+                  description: |
+                    <div>Parent code.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: '000001'
+      responses:
+        '200':
+          description: Result.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: ""
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+    parameters:
+    - $ref: "#/components/parameters/UserGroupsId"
+
+  /user-groups-member/user-list:
+    post:
+      tags: ["Processes", "OnRightGrid"]
+      description: Get list of not participated user on user groups.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                page: 
+                  description: Page number.
+                  type: integer
+                  example: 0
+                parent_code:
+                  description: |
+                    <div>Parent code.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: '000001'
+      responses:
+        '200':
+          $ref: '#/components/responses/success_xml_list_for_user_list'
+
+  /user-groups-member/search-user/parent_code/{UserGroupsId}:
+    get:
+      tags: ["Pages", "OnRightGrid"]
+      description: modal | Search not participated user in user groups.
+      responses:
+        '200':
+          description: Successful response
+    parameters:
+    - $ref: "#/components/parameters/UserGroupsId"
+
+  /user-groups-member/exec-search-user:
+    post:
+      tags: ["Processes", "OnRightGrid"]
+      description: Execute search not participated user in user groups.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                search[um][company_name][ilike]: 
+                  description: Company name.
+                  type: string
+                  example: 'PLOTT'
+                search[um][user_name][ilike]:
+                  description: User name.
+                  type: string
+                  example: ''
+                search[um][login_code][ilike]: 
+                  description: Login code.
+                  type: string
+                  example: ''
+                search[auth][auth_id]:
+                  description: |
+                    <h4>auth.auth_id</h4>
+                    <dl>
+                      <dt>&nbsp;</dt>
+                      <dd>選択してください。</dd>
+                      <dt>001</dt>
+                      <dd>システム管理者用権限</dd>
+                      <dt>003</dt>
+                      <dd>機能管理者</dd>
+                      <dt>004</dt>
+                      <dd>プロジェクト管理者</dd>
+                      <dt>005</dt>
+                      <dd>一般ユーザー</dd>
+                      <dt>006</dt>
+                      <dd>監視ユーザー</dd>
+                    </dl>
+                  type: string
+                  example: ''
+                parent_code:
+                  description: |
+                    <div>Parent code.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: '000001'
+      responses:
+        '200':
+          description: Result.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: ""
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+    parameters:
+    - $ref: "#/components/parameters/UserGroupsId"
+
+  /user-groups-member/register-member/parent_code/{UserGroupsId}:
+    post:
+      tags: ["Processes", "OnRightGrid"]
+      description: Participate user to user groups.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                form[user_id]: 
+                  description: User id.
+                  type: string
+                  example: '006677'
+                form[user_groups_id]:
+                  description: User groups id.
+                  type: string
+                  example: '000001'
+                parent_code:
+                  description: |
+                    <div>Parent code.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: '000001'
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "登録が完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+    parameters:
+    - $ref: "#/components/parameters/UserGroupsId"
+
+  /user-groups-member/execdelete:
+    post:
+      tags: ["Processes", "OnLeftGrid"]
+      description: Delete participate user of user groups.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                code: 
+                  description: User groups id * User id.
+                  type: string
+                  example: '000001*006677'
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "削除を完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+components:
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+
+    xmllist_rows_inner_for_list:
+      items:
+        type: object
+        properties:
+          row:
+            type: object
+            properties:
+              id:
+                type: string
+                example: "000001*006673"
+                xml:
+                  attribute: true
+              check_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+              company_name: # mean name
+                type: string
+                example: 'PLOTT'
+                xml:
+                  name: cell
+              user_name: # mean name
+                type: string
+                example: 'crypt_user1'
+                xml:
+                  name: cell
+              login_code: # mean name
+                type: string
+                example: 'crypt_user1'
+                xml:
+                  name: cell
+              authority_group_name: # mean name
+                type: integer
+                example: 'システム管理者用権限'
+                xml:
+                  name: cell
+              spacer_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+      xml:
+        name: rows
+
+    xmllist_rows_inner_for_user_list:
+      items:
+        type: object
+        properties:
+          row:
+            type: object
+            properties:
+              id:
+                type: string
+                example: "006582"
+                xml:
+                  attribute: true
+              check_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+              company_name: # mean name
+                type: string
+                example: 'PLOTT'
+                xml:
+                  name: cell
+              user_name: # mean name
+                type: string
+                example: 'crypt_user1'
+                xml:
+                  name: cell
+              login_code: # mean name
+                type: string
+                example: 'crypt_user1'
+                xml:
+                  name: cell
+              authority_group_name: # mean name
+                type: integer
+                example: 'システム管理者用権限'
+                xml:
+                  name: cell
+              login_restrictions: # mean name
+                type: string
+                example: '無効'
+                xml:
+                  name: cell
+              authentication_destination: # mean name
+                type: string
+                example: 'PLOTT'
+                xml:
+                  name: cell
+              last_login_date: # mean name
+                type: string
+                example: '2020/09/09 11:07:51'
+                xml:
+                  name: cell
+              spacer_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+      xml:
+        name: rows
+
+  # $ref: '#/components/responses/success_json'
+  responses:
+    success_json:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              custom_data:
+                type: object
+                properties:
+                  error_code:
+                    description: If the registration failed, the error code is given here. If succeeded, this is empty string.
+                    type: string
+                    example: ''
+                  debug_messages:
+                    type: object
+                  error_messages:
+                    type: object
+                  messages:
+                    description: Message for the success of the registration.
+                    type: string
+                    example: ''
+                  status:
+                    description: Whether the request succeeded or not.
+                    type: boolean
+                    example: true
+
+    success_xml_list_for_list:
+      description: Result xml.
+      content:
+        application/xml:
+          schema:
+            type: object
+            xml:
+              name: return_data # <<<
+            properties:
+              rows:
+                type: array
+                items:
+                $ref: "#/components/schemas/xmllist_rows_inner_for_list"
+              message:
+                type: string
+                example: ""
+              debug:
+                type: string
+                example: ""
+              status:
+                type: integer
+                example: 1
+              page:
+                type: integer
+                example: 0
+              max:
+                type: integer
+                example: 4
+              limit:
+                type: integer
+                example: 50
+
+    success_xml_list_for_user_list:
+      description: Result xml.
+      content:
+        application/xml:
+          schema:
+            type: object
+            xml:
+              name: return_data # <<<
+            properties:
+              rows:
+                type: array
+                items:
+                $ref: "#/components/schemas/xmllist_rows_inner_for_user_list"
+              message:
+                type: string
+                example: ""
+              debug:
+                type: string
+                example: ""
+              status:
+                type: integer
+                example: 1
+              page:
+                type: integer
+                example: 0
+              max:
+                type: integer
+                example: 255
+              limit:
+                type: integer
+                example: 50
+  parameters:
+
+    UserGroupsId:
+      name: UserGroupsId
+      in: path
+      required: true
+      description: Column user_groups.user_groups_id
+      schema:
+        type: string
+        example: '900001'
+
+security:
+- basicAuth: []

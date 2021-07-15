@@ -1,0 +1,1 @@
+sudo mkdir -p /var/www/versionup/backup/ver0.0.1/var/www/application/test

@@ -1,0 +1,318 @@
+<?php
+/**
+ * アプリケーション詳細設定コントローラー
+ *
+ * @package   controller
+ * @since     2017/12/22
+ * @copyright Plott Corporation.
+ * @version   1.0.0
+ * @author    Takuma Kobayashi
+ */
+
+class ApplicationDetailController extends ExtController
+{
+    protected $local_session;
+    private $model_name = 'WhiteList';
+    protected $search_param = [];
+    protected $form_param = [];
+    protected $sequence;
+    protected $order;
+    protected $model;
+    protected $next_controller = [];
+
+    /**
+     *初期化
+     */
+    public function init()
+    {
+        $this->model = new WhiteList();
+        $this->local_session = new Zend_Session_Namespace($this->model_name);
+        parent::init();
+        // 初期設定
+        $this->sequence = $this->model->getSequenceField();
+        $this->login_user_id = $this->session->login->user_id;
+        $this->regist_user_id = $this->model->getRegistUserId();
+        $this->update_user_id = $this->model->getUpdateUserId();
+        $this->search_param = $this->model->getSearchParam();
+        $this->form_param = $this->model->getFormParam();
+        $this->order = $this->model->getDefaultOrder();
+        // 検索・入力フォーム取得
+        $application_control = new ApplicationControl();
+        $application_control_list = $application_control->GetList();
+        $list_application_control_id = $this->createSmartySelectArr($application_control_list, 'application_control_name', 'application_control_id');
+        $this->view->assign('list_application_control_id', $list_application_control_id);
+        $list_application_control_id = ['' => $this->arr_word['##COMMON_NOT_SELECTED##']] + $list_application_control_id;
+        $this->view->assign('list_search_application_control_id', $list_application_control_id);
+        $next_controller = $this->model->getNextController();
+        foreach ($next_controller as $key => $val) {
+            $this->next_controller[$key] = $this->arr_word[$val];
+        }
+        $this->view->assign('parent_controller', "application-control");
+        // サイドメニューの設定
+        $this->view->assign('subheader_icon', 'ico_heading_appli');
+        $this->view->assign("selected_menu", "application-control");
+    }
+
+    /**
+     *一覧/検索画面
+     */
+    public function indexAction()
+    {
+        if (!$this->isExistsRecord(new ApplicationControl())) {
+            throw new Exception();
+            exit;
+        }
+        parent::indexAction();
+        // タイトルタグの設定
+        $this->view->assign('common_title', PloWord::getMessage("##P_APPLICATIONDETAIL_009##"));
+        $this->view->assign('htmlTitle', PloWord::getMessage("##P_APPLICATIONDETAIL_009##"));
+    }
+
+    /**
+     *一覧取得
+     */
+    public function listAction()
+    {
+        $this->targetGridModel = $this->model;
+        parent::listAction();
+    }
+
+    /**
+     *検索条件設定
+     */
+    public function searchAction()
+    {
+        parent::searchAction();
+    }
+
+    /**
+     *ソート設定
+     */
+    public function sortAction()
+    {
+        $this->sortTargetControllerName = $this->_request->getControllerName();
+        parent::sortAction();
+    }
+
+    /**
+     * 登録画面
+     */
+    public function registAction()
+    {
+        parent::registAction();
+        // タイトルタグの設定
+        $this->view->assign('common_title', PloWord::getMessage("##P_APPLICATIONDETAIL_001##"));
+        $this->view->assign('htmlTitle', PloWord::getMessage("##P_APPLICATIONDETAIL_001##"));
+    }
+
+    /**
+     * 登録実行
+     *  POSTデータがすべてからの場合はエラーとする
+     *  注意：拡張子のピリオドを登録するタイミングで付与しております
+     */
+    public function execregistAction()
+    {
+        $param = $this->_getParams();
+        if (empty($param['form']['file_name']) && empty($param['form']['file_suffix']) && empty($param['form']['folder_path'])) {
+            $this->_putXml(PloWord::GetWordUnit("##W_WHITE_LIST_001##"), 0);
+            exit;
+        }
+        $status = 1;
+        $message = PloWord::GetWordUnit("##COMMON_COMPLETE_INSERT##");
+        $param = $this->_getParams();
+        $parent_id = "";
+        if (isset($param['parent_code'])) {
+            $parent_id = $param['parent_code'] . $this->config->code_splitter;
+            $parent_codes = $this->model->SplitParentCode($param['parent_code']);
+            $param['form'] = array_merge( $param['form'] , $parent_codes);
+        }
+        if ($this->model->IsSequence()) {
+            $new_id = $this->model->GetNewSequence();
+            $param['form'][$this->sequence] = $new_id;
+            $id = $parent_id . $new_id;
+        } else {
+            $id = $parent_id . $param['form'][$this->sequence];
+        }
+        $validate = $this->model->setOneValidate($id, $param['form'], 1);
+        if (isset($this->regist_user_id)) {
+            $param['form'][$this->regist_user_id] = $this->login_user_id;
+            $param['form'][$this->update_user_id] = $this->login_user_id;
+        }
+        $app_ctrl_model = new ApplicationControl();
+        $app_ctrl_model->setWhere('application_control_id', $param['parent_code']);
+        $app_ctrl_data = $app_ctrl_model->getOne();
+        if (!$app_ctrl_data) {
+            $status = 0;
+            $message = PloWord::GetWordUnit("##COMMON_ERROR##");
+        } else {
+            if (!PloError::IsError()) {
+                $this->model->begin();
+                $this->model->RegistData($param['form']);
+            }
+            if (PloError::IsError()) {
+                $status = 0;
+                $message = PloError::GetErrorMessage();
+                $this->model->rollback();
+            } else {
+                $this->model->commit();
+                // ホワイトリストの情報がログで確認されると抜け穴を作られる可能性があるためログは記録しない
+            }
+        }
+        $this->_putXml($message, $status);
+    }
+
+    /**
+     * 更新画面
+     *  注意：拡張子のピリオドをテンプレートで削除しております
+     */
+    public function updateAction()
+    {
+        parent::updateAction();
+        // タイトルタグの設定
+        $this->view->assign('common_title', PloWord::getMessage("##P_APPLICATIONDETAIL_002##"));
+        $this->view->assign('htmlTitle', PloWord::getMessage("##P_APPLICATIONDETAIL_002##"));
+    }
+
+    /**
+     * 更新実行
+     *  注意：拡張子のピリオドを登録するタイミングで付与しております
+     */
+    public function execupdateAction()
+    {
+        $status = 1;
+        $message = PloWord::GetWordUnit("##COMMON_COMPLETE_UPDATE##");
+        $param = $this->_getParams();
+        $ids = explode('*', $param['code']);
+        $app_ctrl_id = reset($ids);
+        $white_list_id = end($ids);
+        $white_data = (new WhiteList())->getRow_byApplicationControlId_andWhiteListId($app_ctrl_id, $white_list_id);
+        $isPreset = false;
+        if (isset($white_data['is_preset']) && $white_data['is_preset'] === '1') {
+            $isPreset = true;
+        }
+        $app_ctrl_data = (new ApplicationControl())->getRow_byApplicationControlId($app_ctrl_id);
+        // プリセットデータの詳細データは削除させない
+        if ($isPreset) {
+            $status = 0;
+            $message  = PloService_EditableWord::getMessage("##R_COMMON_33##");
+        } elseif (!$app_ctrl_data) {
+            $status = 0;
+            $message  = PloWord::GetWordUnit("##COMMON_ERROR##");
+        } else {
+            if (empty($param['form']['file_name'])
+                && empty($param['form']['file_suffix'])
+                && empty($param['form']['folder_path'])
+            ) {
+                $status = 0;
+                $message  = PloWord::GetWordUnit("##W_WHITE_LIST_001##");
+            } else {
+                $this->model->validate($param['form'], 1);
+                if (!PloError::IsError()) {
+                    $this->model->begin();
+                    $this->model->UpdateOne($param['form']);
+                }
+                if (PloError::IsError()) {
+                    $this->model->rollback();
+                    $status = 0;
+                    $message = PloError::GetErrorMessage();
+                } else {
+                    $this->model->commit();
+                    // ホワイトリストの情報がログで確認されると抜け穴を作られる可能性があるためログは記録しない
+                }
+            }
+        }
+        $this->_putXml($message, $status);
+    }
+
+    /**
+     * 削除実行
+     * @NOTE ホワイトリストの情報がログで確認されると抜け穴を作られる可能性があるためログは記録しない
+     */
+    public function execdeleteAction()
+    {
+        $status = 1;
+        $message = PloWord::GetWordUnit("##COMMON_COMPLETE_DELETE##");
+        $param = $this->_getParams();
+        $arrCodes = $this->_generateArrayBySeparateCharacterFromString($param['code'], ',');
+        $arrIsPreset = $this->_generateArrayBySeparateCharacterFromString($param['is_preset'], ',');
+        $parent_code = (isset($param['parent_code'])) ? $param['parent_code'] : '';
+        $purposeErrorMessage = PloWord::GetWordUnit("##COMMON_ERROR##");
+        $presetErrorMessage = $this->obj_word->convertMessage(
+            $this->arr_word['R_COMMON_026'], [$this->arr_word['P_APPLICATIONDETAIL_004']]
+        );
+        $this->model->begin();
+        try {
+            // Validation
+            // 削除対象が渡されていない
+            if (empty($arrCodes)) {
+                throw new PloException($purposeErrorMessage);
+            }
+            // is_preset の配列も渡しており、
+            if (!empty($arrIsPreset)) {
+                // code と is_preset で要素の数が違う
+                if (count($arrCodes) != count($arrIsPreset)) {
+                    throw new PloException($purposeErrorMessage);
+                }
+                // is_preset に true が一つ以上ある
+                if (in_array('1', $arrIsPreset) !== false) {
+                    throw new PloException($presetErrorMessage);
+                }
+            }
+            $objWhiteList = new WhiteList();
+            $app_ctrl_model = new ApplicationControl();
+            foreach ($arrCodes as $code) {
+                $splitCodes = $this->model->splitCode($code);
+                // parent_code が渡されており、parent_code と application_control_id が相違している
+                if (!empty($parent_code) && $parent_code != $splitCodes['application_control_id']) {
+                    throw new PloException($purposeErrorMessage);
+                }
+                // 削除対象の application_control_id, white_list_id に数字以外の文字列が含まれている
+                if (!is_numeric($splitCodes['application_control_id']) || !is_numeric($splitCodes['white_list_id'])) {
+                    throw new PloException($purposeErrorMessage);
+                }
+                $app_ctrl_id = $splitCodes['application_control_id'];
+                $white_list_id = $splitCodes['white_list_id'];
+                $app_ctrl_data = $objWhiteList->getRow_byApplicationControlId_andWhiteListId($app_ctrl_id, $white_list_id);
+                // 取得できなかった
+                if (!$app_ctrl_data || empty($app_ctrl_data)) {
+                    throw new PloException($purposeErrorMessage);
+                    break;
+                }
+                // テーブルの値も一応見ておく / プリセットデータなら削除させない
+                if ($app_ctrl_data['is_preset'] == 1) {
+                    throw new PloException($presetErrorMessage);
+                    break;
+                }
+                $app_ctrl_data = $app_ctrl_model->getRow_byApplicationControlId($app_ctrl_id);
+                if (!$app_ctrl_data) {
+                    throw new PloException($purposeErrorMessage);
+                }
+                $is_deleted = $this->model->deleteRow_byApplicationControlId_andWhiteListId($app_ctrl_id, $white_list_id);
+                if (!$is_deleted) {
+                    throw new PloException(
+                        PloService_EditableWord::getMessage("##R_COMMON_22##", ["##1##" => "##P_APPLICATIONDETAIL_003##"])
+                    );
+                }
+            }
+        } catch (PloException $e) {
+            $this->model->rollback();
+            PloError::SetError();
+            PloError::SetErrorMessage([$e->getMessage()]);
+            $status = 0;
+            $message = $e->getMessage();
+        }
+        if (!PloError::IsError()) {
+            $this->model->commit();
+            // ホワイトリストの情報がログで確認されると抜け穴を作られる可能性があるためログは記録しない
+        }
+        $this->_putXml($message, $status);
+    }
+
+//    /**
+//     * アイコン
+//     */
+//    public function iconAction()
+//    {
+//        parent::iconAction();
+//    }
+}

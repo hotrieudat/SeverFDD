@@ -1,0 +1,75 @@
+@CHARSET "UTF-8";
+
+/* ページタイトル及びアイコンバーを表示させる部分 */
+
+.subheader {
+    height: 45px;
+    width: 100%;
+    z-index: 10;
+    position: relative;
+}
+
+.subheader_inner{
+    height: 24px;
+    box-sizing:border-box;
+    min-width: 600px;
+}
+
+/* ページタイトル右のアイコン */
+.icon_heading {
+    width: 52px;
+    height: 24px;
+    border-right: 1px #adadad dotted;
+    display: inline-block;
+    margin-top:-7px;
+    margin-left: 20px;
+    margin-right: 10px;
+    text-align:center;
+    vertical-align:middle;
+}
+
+.icon_heading img {
+    margin-top: -3px;
+}
+
+.page_title {
+    font-size: 18px;
+    display: inline-block;
+    padding-top:10px;
+    font-weight:600;
+}
+
+.iconmenu_wrapper {
+    display: inline-block;
+    height: 24px;
+    float:right;
+    vertical-align:middle;
+    padding-top:10px;
+}
+
+.iconmenu_leftside {
+    width: 40px;
+    border-left-width: 1px;
+    border-left-style: solid;
+    display: inline-block;
+    vertical-align:middle;
+    text-align:center;
+}
+
+.iconmenu_middle {
+    width: 55px;
+    border-left-width: 1px;
+    border-left-style: solid;
+    display: inline-block;
+    vertical-align:middle;
+    text-align:center;
+}
+
+.iconmenu_rightside {
+    width: 77px;
+    border-left-width: 1px;
+    border-left-style: solid;
+    display: inline-block;
+    vertical-align:middle;
+    text-align:center;
+}

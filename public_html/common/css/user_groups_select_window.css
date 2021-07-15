@@ -1,0 +1,63 @@
+@charset "UTF-8";
+
+#search_area {
+    padding: 10px 0 0 20px;
+}
+
+#search_title {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.button_wrapper, .register_button {
+    margin-right: 15px;
+    margin-top: 10px;
+}
+
+#gridbox, #address_select_gridbox {
+    height:400px!important;
+    width:43%!important;
+    padding-left: 16px;
+    float:left!important;
+}
+
+#user_groups_table {
+    width: 200px;
+    height: 38px;
+    line-height: 38px;
+    font-weight:600;
+    font-size:15px;
+    margin-right:20px;
+    position:relative;
+    color:white;
+}
+
+div#template_move_field,
+div#address_move_field
+{
+    text-align: center;
+}
+
+div#template_move_field img,
+div#address_move_field img
+{
+    cursor: pointer;
+}
+
+.template_right_button,
+.to_right_button
+{
+    margin-top: 150px;
+    padding-left: 16px;
+}
+
+.template_left_button,
+.to_left_button
+{
+    margin-top: 15px;
+    padding-left: 16px;
+}
+
+#address_select_gridbox {
+    /*margin-left: 16px;*/
+}

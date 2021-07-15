@@ -1,0 +1,2 @@
+sudo cp -f /var/www/versionup/ver0.0.2/program/var/www/application/test/TestController.php /var/www/application/test/TestController.php
+sudo cp -f /var/www/versionup/ver0.0.2/program/var/www/application/test/TestController2.php /var/www/application/test/TestController2.php

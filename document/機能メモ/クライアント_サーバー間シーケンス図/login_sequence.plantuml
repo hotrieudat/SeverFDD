@@ -1,0 +1,12 @@
+@startuml
+
+activate クライアントアプリ
+activate サーバーアプリ
+
+title ログイン処理のシーケンス
+
+クライアントアプリ -> サーバーアプリ : {"login_id": "xxxx", "password":"xxxx", "ldap_id":"yyyy", "language_id", "yy" }
+note left : URL 未定
+サーバーアプリ -> クライアントアプリ : 成功 {status: true , custom_message{{"encryption_available_type":"y"}}} \n失敗 {status: false , message:"xxxx"}
+
+@enduml

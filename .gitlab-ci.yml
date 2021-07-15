@@ -1,0 +1,78 @@
+before_script:
+- "chcp 65001 || :"
+
+stages:
+- test
+- deploy
+# - testcc
+variables:
+    GIT_DEPTH: 3
+
+test:db:
+    stage: test
+    tags:
+    - docker
+    services:
+    - postgres:9.3-alpine
+    variables:
+        POSTGRES_DB: filedefender
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: ""
+    image: postgres:9.3-alpine
+    script:
+    - until psql -h postgres -U "postgres" -c '\l' filedefender; do>&2 echo "Postgres is unavailable - sleeping";sleep 1;done
+    - psql -h postgres -U "postgres" --set ON_ERROR_STOP=on -f database/set_up_sql/plott_framework_create.sql filedefender
+    - psql -h postgres -U "postgres" --set ON_ERROR_STOP=on -f database/set_up_sql/create.sql filedefender
+    - psql -h postgres -U "postgres" --set ON_ERROR_STOP=on -f database/set_up_sql/word_mst.sql filedefender
+    - psql -h postgres -U "postgres" --set ON_ERROR_STOP=on -f database/set_up_sql/insert_data.sql filedefender
+    - cd database/Update
+    - for f in `ls -1 | sort -t. -k1,1n -k2,2n -k3,3n`; do psql -h postgres -U "postgres" --set ON_ERROR_STOP=on -f $f filedefender;done
+
+test:phpunit:
+    stage: test
+    tags:
+    - fd-phpunit
+    script:
+    - cd /var/www
+    - sudo git fetch origin
+    - sudo git checkout -f -B $CI_BUILD_REF_NAME origin/$CI_BUILD_REF_NAME
+    - cd database/
+    - sudo phinx migrate -e development
+    - cd ..
+    - sudo phpunit --test-suffix=.php
+
+deploy_server:
+    stage: deploy
+    only:
+    - develop
+    tags:
+    - fd-develop-deploy
+    script:
+    - cd /var/www
+    - sudo git checkout -f develop
+    - sudo git pull
+    - cd database/
+    - sudo phinx migrate -e development
+    - |-
+      if test -e "/dev/shm/fd_dumps/option_mst.dump"; then
+        sudo chmod 777 /dev/shm/fd_dumps/option_mst.dump
+        sudo rm -rf /dev/shm/fd_dumps/option_mst.dump
+        echo "Dump file removed.";
+      else
+        echo 'Dump file is not exists.';
+      fi
+#    - if test -e "/dev/shm/fd_dumps/option_mst.dump"; then
+#    - sudo chmod 777 /dev/shm/fd_dumps/option_mst.dump
+#    - sudo rm -rf /dev/shm/fd_dumps/option_mst.dump
+#    - else echo 'Dump file is not exists.';
+#    - fi
+
+# deploy_server:code_ception:
+#     stage: testcc
+#     only:
+#     - develop
+#     tags:
+#     - fd-develop-deploy
+#     script:
+#     - cd /var/www
+#     - sudo php ./vendor/bin/codecept run acceptance --steps --verbose

@@ -1,0 +1,6 @@
+
+    - name: Processes
+      description: |
+        <div>When calling with ajax, the request is "POST", except for legacy browsers.</div>
+    - name: Pages
+      description: (and modal pages). Almost 'GET' requests.

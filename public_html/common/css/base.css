@@ -1,0 +1,653 @@
+@CHARSET "UTF-8";
+/*
+ フォームなどのための汎用構造 こちらを基本的には用いること 色味は定義されていないのでskins.cssを参照すること
+ */
+
+/* ----------------------------------------------------------------------------------------------------------------------------
+    contents_inner
+----------------------------------------------------------------------------------------------------------------------------*/
+/*div.contents_inner form#form {*/
+    /*margin-right: 20px;*/
+/*}*/
+
+div.contents_inner table.create {
+    width: 100%;
+}
+
+div.contents_inner table.create tr.item {
+    height: 35px;
+}
+
+div.contents_inner table.create tr.item_double {
+    height: 65px;
+}
+
+div.contents_inner table.create tr.item_triple {
+    height: 85px;
+}
+
+div.contents_inner table.create tr.item_force {
+    height: 115px;
+}
+
+div.contents_inner table.create tr td.item_top {
+    border-top: 2px #EBEBEB solid;
+}
+
+div.contents_inner table.create tr td.item_name {
+    background-color: #EBEBEB;
+}
+
+div.contents_inner table.create tr td.item_name {
+    width: 195px;
+    padding: 0px 10px;
+    border-top: 1px #FBFBFB solid;
+    border-bottom: 1px #FBFBFB solid;
+}
+
+div.contents_inner table.create tr.button {
+    height: 50px;
+}
+
+div.contents_inner table.create tr input[type="button"],
+div.contents_inner table.create tr input[type="reset"] {
+    padding: 1px 6px;
+}
+
+div.contents_inner table.create tr td.entry {
+    padding-left: 20px;
+    border-top: 1px #EBEBEB solid;
+    border-bottom: 1px #EBEBEB solid;
+}
+
+div.contents_inner table.create tr td.entry .entry_free {
+    width: 300px;
+}
+
+div.contents_inner table.create tr td.entry .entry_num {
+    width: 50px;
+}
+
+div.contents_inner table.create tr td.entry .entry_date {
+    width: 130px;
+}
+
+div.contents_inner table.create tr td.entry .entry_box {
+    width:300px;
+    height:80px;
+}
+
+div.contents_inner table.create tr td.entry .entry_word {
+    width: 300px;
+}
+
+div.contents_inner table.create tr td.entry span {
+    padding-left: 10px;
+}
+
+div.contents_inner table.create tr td.entry li {
+    padding:2px 0;
+}
+
+div.contents_inner table.create tr td.entry label {
+    padding: 2px 0;
+}
+
+/* TODO: ネットワーク設定独自すぎるので修正する */
+.category {
+    padding: 25px 0 0;
+    height: 25px;
+}
+
+/* TODO: ネットワーク設定独自すぎるので修正する */
+div.contents_inner form#network-setting1,
+div.contents_inner form#network-setting2,
+div.contents_inner form#ntp-server-setting,
+div.contents_inner form#mail-server-setting {
+    margin-right: 20px;
+}
+
+
+/* ----------------------------------------------------------------------------------------------------------------------------
+    fixed size css series
+----------------------------------------------------------------------------------------------------------------------------*/
+
+/* margin */
+.margin_top_5 {
+    margin-top: 5px;
+}
+
+.margin_top_10 {
+    margin-top: 10px;
+}
+
+.margin_top_20 {
+    margin-top: 20px;
+}
+
+.margin_top_30 {
+    margin-top: 30px;
+}
+
+.margin_top_40 {
+    margin-top: 40px;
+}
+
+.margin_left_10 {
+    margin-left: 10px;
+}
+
+.margin_right_10 {
+    margin-right: 10px;
+}
+
+.margin_bottom_2 {
+    margin-bottom: 2px;
+}
+
+.margin_bottom_10 {
+    margin-bottom: 10px;
+}
+
+.margin_bottom_20 {
+    margin-bottom: 20px;
+}
+
+.margin_bottom_30 {
+    margin-bottom: 30px;
+}
+
+.margin_bottom_40 {
+    margin-bottom: 40px;
+}
+
+/* padding */
+.padding_15 {
+    padding: 15px;
+}
+
+.padding_20 {
+    padding: 20px;
+}
+
+.padding_top_100 {
+    padding-top: 100px;
+}
+
+/* height */
+.height_150 {
+    height: 150px;
+}
+
+/* width */
+.width_20 {
+    width: 20px !important;
+}
+
+.width_50 {
+    width: 50px !important;
+}
+
+.width_110 {
+    width: 110px !important;
+}
+
+.width_130 {
+    width: 130px !important;
+}
+
+.width_150 {
+    width: 150px !important;
+}
+
+.width_170 {
+    width: 170px !important;
+}
+
+.width_200 {
+    width: 200px !important;
+}
+
+.width_300 {
+    width: 300px !important;
+}
+
+/* ----------------------------------------------------------------------------------------------------------------------------
+    button background images
+----------------------------------------------------------------------------------------------------------------------------*/
+
+/* プロジェクトファイル */
+.file_menu {
+    background: url('/common/image/iconbar/file_off.png') no-repeat center;
+}
+
+.file_menu:hover {
+    background: url('/common/image/iconbar/file_on.png') no-repeat center;
+}
+
+.file_log_menu {
+    background: url('/common/image/iconbar/history_off.png') no-repeat center;
+}
+
+.file_log_menu:hover {
+    background: url('/common/image/iconbar/history_on.png') no-repeat center;
+}
+
+.file_member_menu {
+    background: url('/common/image/iconbar/ico_member_off.png') no-repeat center;
+}
+
+.file_member_menu:hover {
+    background: url('/common/image/iconbar/ico_member_on.png') no-repeat center;
+}
+
+.file_member_del {
+    background: url('/common/image/iconbar/member_del_off.png') no-repeat center;
+}
+
+.file_member_del:hover {
+    background: url('/common/image/iconbar/member_del_on.png') no-repeat center;
+}
+
+.file_member_add {
+    background: url('/common/image/iconbar/member_add_off.png') no-repeat center;
+}
+
+.file_member_add:hover {
+    background: url('/common/image/iconbar/member_add_on.png') no-repeat center;
+}
+
+/* グループ登録 */
+.add_file_publishing_group {
+    background: url('/common/image/iconbar/ico_group_plus_off.png') no-repeat center;
+}
+
+.add_file_publishing_group:hover {
+    background: url('/common/image/iconbar/ico_group_plus_on.png') no-repeat center;
+}
+
+/* 公開グループ削除 */
+.delete_file_publishing_group {
+    background: url('/common/image/iconbar/ico_group_del_off.png') no-repeat center;
+}
+
+.delete_file_publishing_group:hover {
+    background: url('/common/image/iconbar/ico_group_del_on.png') no-repeat center;
+}
+
+.file_mailto {
+    background: url('/common/image/iconbar/mailto_off.png') no-repeat center;
+}
+
+.file_mailto:hover {
+    background: url('/common/image/iconbar/mailto_on.png') no-repeat center;
+}
+
+.file_default_setting {
+    background: url('/common/image/iconbar/default_setting_off.png') no-repeat center;
+}
+
+.file_default_setting:hover {
+    background: url('/common/image/iconbar/default_setting_on.png') no-repeat center;
+}
+
+.file_setting {
+    background: url('/common/image/iconbar/setting_off.png') no-repeat center;
+}
+
+.file_setting:hover {
+    background: url('/common/image/iconbar/setting_on.png') no-repeat center;
+}
+
+.file_user_search {
+    background: url('/common/image/iconbar/search_off.png') no-repeat center;
+}
+
+.file_user_search:hover {
+    background: url('/common/image/iconbar/search_on.png') no-repeat center;
+}
+
+/* ファイル利用可否 */
+.file_select_usable_icon {
+    background: url('/common/image/iconbar/ico_availability_off.png') no-repeat center;
+}
+
+.file_select_usable_icon:hover {
+    background: url('/common/image/iconbar/ico_availability_on.png') no-repeat center;
+}
+
+/* ファイル利用可 */
+.file_edit_available_icon {
+    background: url('/common/image/iconbar/available_off.png') no-repeat center left;
+}
+
+.file_edit_available_icon:hover {
+    background: url('/common/image/iconbar/available_on.png') no-repeat center left;
+}
+
+/* ファイル利用不可 */
+.file_edit_unusable_icon {
+    background: url('/common/image/iconbar/unusable_off.png') no-repeat center left;
+}
+
+.file_edit_unusable_icon:hover {
+    background: url('/common/image/iconbar/unusable_on.png') no-repeat center left;
+}
+
+/* プルダウンメニュー */
+.setting_icon {
+    background: url('/common/image/file_pulldown/ico_pulldown_setting_off.png') no-repeat -2px center;
+}
+
+.setting_icon:hover {
+    background: url('/common/image/file_pulldown/ico_pulldown_setting_on.png') no-repeat -2px center;
+}
+
+.all_settings_icon {
+    background: url('/common/image/file_pulldown/ico_pulldown_all_settings_off.png') no-repeat 0px center;
+}
+
+.all_settings_icon:hover {
+    background: url('/common/image/file_pulldown/ico_pulldown_all_settings_on.png') no-repeat 0px center;
+}
+
+/* ユーザー管理 */
+.user_menu {
+    background: url('/common/image/iconbar/ico_user_off.png') no-repeat center;
+}
+
+.user_menu:hover {
+    background: url('/common/image/iconbar/ico_user_on.png') no-repeat center;
+}
+
+.user_lock_menu {
+    background: url('/common/image/iconbar/ico_login_limit_off.png') no-repeat center;
+}
+
+.user_lock_menu:hover {
+    background: url('/common/image/iconbar/ico_login_limit_on.png') no-repeat center;
+}
+
+.user_import_menu {
+    background: url('/common/image/iconbar/user_import_off.png') no-repeat 8px center;
+}
+
+.user_import_menu:hover {
+    background: url('/common/image/iconbar/user_import_on.png') no-repeat 8px center;
+}
+
+.password_edit_icon {
+    background: url('/common/image/iconbar/limit_off.png') no-repeat center left;
+}
+
+.password_edit_icon:hover {
+    background: url('/common/image/iconbar/limit_on.png') no-repeat center left;
+}
+
+.user_lock_icon {
+    background: url('/common/image/iconbar/limit_off.png') no-repeat center left;
+}
+
+.user_lock_icon:hover {
+    background: url('/common/image/iconbar/limit_on.png') no-repeat center left;
+}
+
+.user_unlock_icon {
+    background: url('/common/image/iconbar/limitless_off.png') no-repeat center left;
+}
+
+.user_unlock_icon:hover {
+    background: url('/common/image/iconbar/limitless_on.png') no-repeat center left;
+}
+
+.user_import_icon {
+    background: url('/common/image/iconbar/import_off.png') no-repeat center left;
+}
+
+.user_import_icon:hover {
+    background: url('/common/image/iconbar/import_on.png') no-repeat center left;
+}
+
+.user_export_icon {
+    background: url('/common/image/iconbar/format_off.png') no-repeat center left;
+}
+
+.user_export_icon:hover {
+    background: url('/common/image/iconbar/format_on.png') no-repeat center left;
+}
+
+/* ユーザーグループ */
+.user_group_member_menu {
+    background: url('/common/image/iconbar/ico_member_plus_off.png') no-repeat center;
+}
+
+.user_group_member_menu:hover {
+    background: url('/common/image/iconbar/ico_member_plus_on.png') no-repeat center;
+}
+
+.user_group_menu {
+    background: url('/common/image/iconbar/ico_user_group_off.png') no-repeat center;
+}
+
+.user_group_menu:hover {
+    background: url('/common/image/iconbar/ico_user_group_on.png') no-repeat center;
+}
+
+/* プロジェクト管理 */
+.group_menu {
+    background: url('/common/image/iconbar/ico_group_off.png') no-repeat center;
+}
+
+.group_menu:hover {
+    background: url('/common/image/iconbar/ico_group_on.png') no-repeat center;
+}
+
+.file_in_group_menu {
+    background: url('/common/image/iconbar/ico_group_file_list_off.png') no-repeat center;
+}
+
+.file_in_group_menu:hover {
+    background: url('/common/image/iconbar/ico_group_file_list_on.png') no-repeat center;
+}
+
+/* プロジェクト */
+.project_file_list_menu {
+    background: url('/common/image/iconbar/ico_file_list_off.png') no-repeat center;
+}
+
+.project_file_list_menu:hover {
+    background: url('/common/image/iconbar/ico_file_list_on.png') no-repeat center;
+}
+
+.project_user_list_menu {
+    background: url('/common/image/iconbar/ico_user_list_off.png') no-repeat center;
+}
+
+.project_user_list_menu:hover {
+    background: url('/common/image/iconbar/ico_user_list_on.png') no-repeat center;
+}
+
+.project_auth_group_list_menu {
+    background: url('/common/image/iconbar/ico_auth_group_list_off.png') no-repeat center;
+}
+
+.project_auth_group_list_menu:hover {
+    background: url('/common/image/iconbar/ico_auth_group_list_on.png') no-repeat center;
+}
+
+.project_user_group_list_menu, .user_group_list_menu {
+    background: url('/common/image/iconbar/ico_usergroup_list_off.png') no-repeat center;
+}
+
+.project_user_group_list_menu:hover, .user_group_list_menu:hover {
+    background: url('/common/image/iconbar/ico_usergroup_list_on.png') no-repeat center;
+}
+
+.project_auth_group_menu {
+    background: url('/common/image/iconbar/ico_auth_group_off.png') no-repeat center;
+}
+
+.project_auth_group_menu:hover {
+    background: url('/common/image/iconbar/ico_auth_group_on.png') no-repeat center;
+}
+
+.project_auth_group_member_list_menu {
+    background: url('/common/image/iconbar/ico_usergroup_list_off.png') no-repeat center;
+}
+
+.project_auth_group_member_list_menu:hover {
+    background: url('/common/image/iconbar/ico_usergroup_list_on.png') no-repeat center;
+}
+
+/* ファイル操作ログ */
+.log_menu {
+    background: url('/common/image/iconbar/ico_log_off.png') no-repeat center;
+}
+
+.log_menu:hover {
+    background: url('/common/image/iconbar/ico_log_on.png') no-repeat center;
+}
+
+.log_detail_menu {
+    background: url('/common/image/iconbar/ico_detail_off.png') no-repeat center;
+}
+
+.log_detail_menu:hover {
+    background: url('/common/image/iconbar/ico_detail_on.png') no-repeat center;
+}
+
+.log_analyze_menu {
+    background: url('/common/image/iconbar/graph_window_off.png') no-repeat center;
+}
+
+.log_analyze_menu:hover {
+    background: url('/common/image/iconbar/graph_window_on.png') no-repeat center;
+}
+
+/* サーバー操作ログ */
+.svr_log_menu {
+    background: url('/common/image/iconbar/ico_log_svr_off.png') no-repeat center;
+}
+
+.svr_log_menu:hover {
+    background: url('/common/image/iconbar/ico_log_svr_on.png') no-repeat center;
+}
+
+/* アプリケーション管理 */
+.appli_menu {
+    background: url('/common/image/iconbar/ico_appli_off.png') no-repeat 8px center;
+}
+
+.appli_menu:hover {
+    background: url('/common/image/iconbar/ico_appli_on.png') no-repeat 8px center;
+}
+
+/* アプリケーション共通設定管理 */
+.appli_common_menu {
+    background: url('/common/image/iconbar/appli_common_set_off.png') no-repeat 8px center;
+}
+
+.appli_common_menu:hover {
+    background: url('/common/image/iconbar/appli_common_set_on.png') no-repeat 8px center;
+}
+
+/* システム設定 */
+.ldap_menu {
+    background: url('/common/image/iconbar/ico_ldap_off.png') no-repeat 8px center;
+}
+
+.ldap_menu:hover {
+    background: url('/common/image/iconbar/ico_ldap_on.png') no-repeat 8px center;
+}
+
+.ldap_test_menu {
+    background: url('/common/image/iconbar/ico_test_off.png') no-repeat center;
+}
+
+.ldap_test_menu:hover {
+    background: url('/common/image/iconbar/ico_test_on.png') no-repeat center;
+}
+
+.ldap_import_menu {
+    background: url('/common/image/iconbar/user_ldap_import_off.png') no-repeat center;
+}
+
+.ldap_import_menu:hover {
+    background: url('/common/image/iconbar/user_ldap_import_on.png') no-repeat center;
+}
+
+/**********  ボタン背景 汎用 **********/
+
+/* 検索 */
+.search_icon {
+    background: url('/common/image/ico_search_pulldown_off.png') no-repeat -2px center;
+}
+
+.search_icon:hover {
+    background: url('/common/image/ico_search_pulldown_on.png') no-repeat -2px center;
+}
+
+/* 作成 */
+.create_icon {
+background: url('/common/image/iconbar/create_off.png') no-repeat center left;
+}
+
+.create_icon:hover {
+background: url('/common/image/iconbar/create_on.png') no-repeat center left;
+}
+
+/* 編集 */
+.edit_icon {
+    background: url('/common/image/iconbar/edit_off.png') no-repeat left;
+}
+
+.edit_icon:hover {
+    background: url('/common/image/iconbar/edit_on.png') no-repeat left;
+}
+
+/* 削除 */
+.delete_icon {
+    background: url('/common/image/iconbar/delete_off.png') no-repeat center left;
+}
+
+.delete_icon:hover {
+    background: url('/common/image/iconbar/delete_on.png') no-repeat center left;
+}
+
+/* フォルダ */
+.folder_icon {
+    background: url('/common/image/iconbar/ico_file_pulldown_off.png') no-repeat center left;
+}
+
+.folder_icon:hover {
+    background: url('/common/image/iconbar/ico_file_pulldown_on.png') no-repeat center left;
+}
+
+/* ユーザー */
+.user_icon {
+    background: url('/common/image/iconbar/ico_user_pulldown_off.png') no-repeat center left;
+}
+
+.user_icon:hover {
+    background: url('/common/image/iconbar/ico_user_pulldown_on.png') no-repeat center left;
+}
+
+/* 企業 */
+.company_icon {
+    background: url('/common/image/iconbar/ico_company_pulldown_off.png') no-repeat center left;
+}
+
+.company_icon:hover {
+    background: url('/common/image/iconbar/ico_company_pulldown_on.png') no-repeat center left;
+}
+
+/* 戻る */
+.return_icon {
+    background: url('/common/image/iconbar/ico_cancel_off.png') no-repeat center;
+    cursor:pointer;
+}
+
+.return_icon:hover {
+    background: url('/common/image/iconbar/ico_cancel_on.png') no-repeat center;
+    cursor:pointer;
+}

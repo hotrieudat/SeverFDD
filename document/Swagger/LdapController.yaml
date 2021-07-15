@@ -1,0 +1,605 @@
+openapi: '3.0.3'
+info:
+  version: 1.4.6
+  title: LdapController
+  description: |
+    <h2>Manage ldap cooperation destination information.</h2>
+
+servers:
+  - url: http://localhost:8084
+    description: For real server
+
+tags:
+  - name: Processes
+    description: |
+      <div>When calling with ajax, the request is "POST", except for legacy browsers.</div>
+  - name: Pages
+    description: (and modal pages). Almost 'GET' requests.
+
+paths:
+
+  /ldap/index:
+    get:
+      tags: ["Pages"]
+      description: Index.
+      responses:
+        '200':
+          description: Successful response
+
+  /ldap/list:
+    post:
+      tags: ["Processes"]
+      description: Get list of projects for index page.
+      responses:
+        '200':
+          $ref: '#/components/responses/success_xml_list'
+
+  /ldap/sort:
+    post:
+      tags: ["Processes"]
+      description: Reload after set sort parameters.
+      requestBody:
+        description: |
+          <div>In to ajax parameters:data.</div>
+          <div>This method changes the sort target according to the contents of the parameters.</div>
+          <h3>Attention: If call by left grid then remove isSortRight param.</h3>
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                order:
+                  description: Target column.
+                  type: string
+                  example: ldap_name
+                direction:
+                  description: direction to sort. asc | desc
+                  type: string
+                  example: 'asc'
+                parent_code:
+                  description: |
+                    <div>Parent code.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: ''
+      responses:
+        '200':
+          $ref: '#/components/responses/success_json'
+
+  /ldap/regist:
+    get:
+      tags: ["Pages"]
+      description: Create ldap cooperation destination information.
+      responses:
+        '200':
+          description: Successful response
+
+  /ldap/execregist:
+    post:
+      tags: ["Processes"]
+      description: |
+        <div>Execute create ldap cooperation destination information.</div>
+        <h3>Attention: It can affect the results of "Code ception".</h3>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                form[ldap_type]:
+                  description: ldap_type
+                  type: string
+                  example: '1'
+                form[ldap_name]:
+                  description: ldap_name
+                  type: string
+                  example: dummy
+                form[host_name]:
+                  description: host_name
+                  type: string
+                  example: ''
+                form[upn_suffix]:
+                  description: upn_suffix
+                  type: string
+                  example: ''
+                form[filter]:
+                  description: filter
+                  type: string
+                  example: ''
+                form[port]:
+                  description: port
+                  type: string
+                  example: 389
+                form[protocol_version]:
+                  description: protocol_version
+                  type: string
+                  example: '3'
+                form[base_dn]:
+                  description: base_dn
+                  type: string
+                  example: ''
+                form[get_name_attribute]:
+                  description: get_name_attribute
+                  type: string
+                  example: sn/givenname
+                form[get_mail_attribute]:
+                  description: get_mail_attribute
+                  type: string
+                  example: mail
+                form[get_kana_attribute]:
+                  description: get_kana_attribute
+                  type: string
+                  example: ''
+                form[auto_user_code]:
+                  description: auto_user_code
+                  type: string
+                  example: ''
+                form[auto_password]:
+                  description: auto_password
+                  type: string
+                  example: ''
+                form[logincode_type]:
+                  description: logincode_type
+                  type: string
+                  example: '1'
+                form[auth_id]:
+                  description: auth_id
+                  type: string
+                  example: '011'
+                selectedForeigners:
+                  description: selectedForeigners
+                  type: string
+                  example: ''
+                form[auto_userconfirm_flag]:
+                  description: auto_userconfirm_flag
+                  type: string
+                  example: '1'
+                isUpdate:
+                  description: isUpdate
+                  type: string
+                  example: ''
+                successMessage:
+                  description: Confirm message.
+                  type: string
+                  example: '本当に登録しますか？'
+        required: false
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "登録が完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /ldap/update/code/{LdapId}:
+    get:
+      tags: ["Pages"]
+      description: Update ldap cooperation destination information.
+      responses:
+        '200':
+          description: Successful response
+    parameters:
+    - $ref: "#/components/parameters/LdapId"
+
+  /ldap/execupdate/code/{LdapId}:
+    post:
+      tags: ["Processes"]
+      description: |
+        <div>Execute update ldap cooperation destination information.</div>
+        <h3>Attention: It can affect the results of "Code ception".</h3>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                form[ldap_type]:
+                  description: ldap_type
+                  type: string
+                  example: '1'
+                form[ldap_name]:
+                  description: ldap_name
+                  type: string
+                  example: dummy
+                form[host_name]:
+                  description: host_name
+                  type: string
+                  example: ''
+                form[upn_suffix]:
+                  description: upn_suffix
+                  type: string
+                  example: ''
+                form[filter]:
+                  description: filter
+                  type: string
+                  example: ''
+                form[port]:
+                  description: port
+                  type: string
+                  example: 389
+                form[protocol_version]:
+                  description: protocol_version
+                  type: string
+                  example: '3'
+                form[base_dn]:
+                  description: base_dn
+                  type: string
+                  example: ''
+                form[get_name_attribute]:
+                  description: get_name_attribute
+                  type: string
+                  example: sn/givenname
+                form[get_mail_attribute]:
+                  description: get_mail_attribute
+                  type: string
+                  example: mail
+                form[get_kana_attribute]:
+                  description: get_kana_attribute
+                  type: string
+                  example: ''
+                form[auto_user_code]:
+                  description: auto_user_code
+                  type: string
+                  example: ''
+                form[auto_password]:
+                  description: auto_password
+                  type: string
+                  example: ''
+                form[logincode_type]:
+                  description: logincode_type
+                  type: string
+                  example: '1'
+                form[auth_id]:
+                  description: auth_id
+                  type: string
+                  example: '011'
+                selectedForeigners:
+                  description: selectedForeigners
+                  type: string
+                  example: ''
+                form[auto_userconfirm_flag]:
+                  description: auto_userconfirm_flag
+                  type: string
+                  example: '1'
+                isUpdate:
+                  description: isUpdate
+                  type: string
+                  example: ''
+                successMessage:
+                  description: Confirm message.
+                  type: string
+                  example: '登録情報を更新しますか？'
+        required: false
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "更新を完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+    parameters:
+    - $ref: "#/components/parameters/LdapId"
+
+  /ldap/execdelete/code/{LdapId}:
+    post:
+      tags: ["Processes"]
+      description: |
+        <div>Execute delete.</div>
+        <h3>Attention: It can affect the results of "Code ception".</h3>
+        生きているユーザー情報のエラーチェックがある。
+        user_mst.ldap_id に Cascade Delete になってるけど本当にこれでよいのだろうか？
+        最近話題になった(操作)権限グループと同じ問題を抱えているような気がする。
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "削除を完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+    parameters:
+    - $ref: "#/components/parameters/LdapId"
+
+  /ldap/connection:
+    get:
+      tags: ["Pages"]
+      description: Connection test.
+      responses:
+        '200':
+          description: Successful response
+
+  /ldap/exec-test:
+    post:
+      tags: ["Processes"]
+      description: |
+        <div>If the connection is attempted and successful, the LDAP information of the user who used the connection is printed.</div>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+#          application/ajax:
+            schema:
+              type: object
+              properties:
+                form[user_id]: 
+                  description: User Id.
+                  type: string
+                  example: 'sample_taro'
+                form[user_password]:
+                  description: User password.
+                  type: string
+                  example: 'Sampleuser1'
+                form[ldap_id]:
+                  description: Ldap Id.
+                  type: string
+                  example: '0002'
+      responses:
+        '200':
+          $ref: '#/components/responses/success_json_on_connnection_test'
+
+  /ldap/import/ldap_id/{LdapId}:
+    get:
+      tags: ["Pages"]
+      description: |
+        <div>Import ldap user to user_mst.</div>
+      responses:
+        '200':
+          description: Successful response
+    parameters:
+    - $ref: "#/components/parameters/LdapId"
+
+  /ldap/exec-import:
+    get:
+      tags: ["Processes"]
+      description: |
+        <div>Execute import ldap user to user_mst.</div>
+        <h3>Attention: It can affect the results of "Code ception".</h3>
+        <div>If executed this method then recreate user data after delete exists users.</div>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                ldap_id: 
+                  description: User Id.
+                  type: string
+                  example: '0002'
+      responses:
+        '200':
+          $ref: '#/components/responses/success_json_on_exec_import'
+
+components:
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+
+    xmllist_rows_inner:
+      items:
+        type: object
+        properties:
+          row:
+            type: object
+            properties:
+              id:
+                type: string
+                example: "0001"
+                xml:
+                  attribute: true
+              check_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+              cooperation_name: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+              cooperation_destination_type: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+              host_name: # mean name
+                type: string
+                example: 進行中
+                xml:
+                  name: cell
+              number_of_registered_users: # mean name
+                type: string
+                example: 3
+                xml:
+                  name: cell
+              spacer_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+      xml:
+        name: rows
+
+  responses:
+
+    success_json:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              custom_data:
+                type: object
+                properties:
+                  error_code:
+                    description: If the registration failed, the error code is given here. If succeeded, this is empty string.
+                    type: string
+                    example: ''
+                  debug_messages:
+                    type: object
+                  error_messages:
+                    type: object
+                  messages:
+                    description: Message for the success of the registration.
+                    type: string
+                    example: ''
+                  status:
+                    description: Whether the request succeeded or not.
+                    type: boolean
+                    example: true
+
+    success_json_on_connnection_test:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              custom_data:
+                type: object
+                properties:
+                  ldap_user:
+                    description: If the registration failed, the error code is given here. If succeeded, this is empty string.
+                    type: object
+                    properties:
+                      dn:
+                        description: ''
+                        example: 'CN=\u30b5\u30f3\u30d7\u30eb \u592a\u90ce s.,OU=test_users,DC=kyoto,DC=local'
+                        type: string
+                      user_name:
+                        description: ''
+                        example: '\u30b5\u30f3\u30d7\u30eb \u592a\u90ce'
+                        type: string
+                      user_kana:
+                        description: ''
+                        example: 'sample_taro'
+                        type: string
+                      user_mail:
+                        description: ''
+                        example: 'test@plott.co.jp'
+                        type: string
+              debug_messages:
+                type: object
+              error_messages:
+                type: object
+              messages:
+                type: string
+                example: '\u30e6\u30fc\u30b6\u30fc\u60c5\u5831\u306e\u53d6\u5f97\u306b\u6210\u529f\u3057\u307e\u3057\u305f\u3002'
+              status:
+                description: Whether the request succeeded or not.
+                type: boolean
+                example: true
+
+    success_json_on_exec_import:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              custom_data:
+                type: array
+                items:
+                  properties:
+                    invalidUserLoginCodes:
+                      description: ''
+                      type: string
+                      example: ''
+              debug_messages:
+                type: object
+              error_messages:
+                type: object
+              messages:
+                type: string
+                example: '選択されたLDAPユーザーのインポートに成功しました。'
+              status:
+                description: Whether the request succeeded or not.
+                type: boolean
+                example: true
+
+    success_xml_list:
+      description: Result xml.
+      content:
+        application/xml:
+          schema:
+            type: object
+            xml:
+              name: return_data # <<<
+            properties:
+              rows:
+                type: array
+                items:
+                $ref: "#/components/schemas/xmllist_rows_inner"
+              message:
+                type: string
+                example: ""
+              debug:
+                type: string
+                example: ""
+              status:
+                type: integer
+                example: 1
+              page:
+                type: integer
+                example: 0
+              max:
+                type: integer
+                example: 5
+              limit:
+                type: integer
+                example: 50
+
+  parameters:
+    LdapId:
+      name: LdapId
+      in: path
+      required: true
+      description: Column ldap_mst.ldap_id
+      schema:
+        type: string
+        example: '0001'
+
+security:
+- basicAuth: []

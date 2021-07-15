@@ -1,0 +1,89 @@
+@CHARSET "UTF-8";
+
+div#autotraining_wrapper,
+div#autotraining_wrapper2 {
+	height: 100%;
+}
+
+
+div#autotraining_address_title {
+	margin-top: 10px;
+	margin-left: 20px;
+	font-size: 18px;
+	font-weight: bold;
+	width: 500px;
+}
+
+div#autotraining_address_search {
+	margin-left: 20px;
+	margin-bottom: -10px;
+	width: 500px;
+}
+
+select.address_search_select {
+	width: 100px;
+}
+
+input.address_search_freeword[type="text"] {
+	width: 140px;
+}
+
+div#autotraining_content {
+	margin-top: 15px;
+	margin-left: 10px;
+	margin-right: 10px;
+	overflow-x: hidden;
+}
+
+div#file_grid_box {
+	top: 0;
+	height: 95%;
+	width: 45%;
+
+	position: absolute !important;
+	left: 5px;
+	right: 5px;
+	/*top: 60px;*/
+	bottom: 70px;
+	/*width: expression((parseInt(this.parentNode.offsetWidth)-20)+'px');*/
+	/*height: expression((parseInt(this.parentNode.offsetHeight)-220)+'px');*/
+
+}
+
+div#file_selected_grid_box {
+	top: 0;
+	height: 95%;
+	width: 45%;
+
+	position: absolute !important;
+	left: 5px;
+	right: 5px;
+	/*top: 60px;*/
+	bottom: 70px;
+
+	/*margin: 0px 0px 0px auto;*/
+	margin: 0px 0px 0px 650px;
+
+	/*width: expression((parseInt(this.parentNode.offsetWidth)-20)+'px');*/
+	/*height: expression((parseInt(this.parentNode.offsetHeight)-220)+'px');*/
+
+}
+
+div#address_move_field {
+	text-align: center;
+}
+
+.address_right_button {
+	margin-top: 150px;
+	padding-left: 10px;
+}
+
+.address_left_button {
+	margin-top: 15px;
+	padding-left: 10px;
+}
+
+.comment_padding {
+	padding-top: 14px;
+	padding-bottom: 10px;
+}

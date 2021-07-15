@@ -1,0 +1,29 @@
+= マニュアル作成方法
+
+== 画面キャプチャ方法
+
+* Google Chromeにアドイン2つを入れます(Window Resizer, FireShot)
+* Window Resizerで画面サイズをLaptop(1440 x 900)にします
+* キャプチャしたい画面で、FireShotを使用し表示部分のキャプチャを行います
+
+= 画像内代替テキストを除去するマクロ
+
+== 手順
+
+.*VBE(Visual Basic Editor)をメニューに追加する*
+    1. [ファイル]メニューの[オプション]をクリックしWordオプションを開きます。
+    2. リボンのユーザー設定の右欄(メインタブ)から、開発にチェックを入れます。
+ 
+.*VBEを起動し除去マクロを実行する*
+    1. [開発]メニューの[Visual Basic]をクリックします。
+    2. ThisDocumentファイルを開き、以下コードを貼り付けます。
+----
+Sub アクティブドキュメントの代替テキストを削除する()
+    For Each shp In ActiveDocument.InlineShapes
+        With shp
+            .AlternativeText = ""
+        End With
+    Next
+End Sub
+----
+    3. 実行ボタンをクリックします。

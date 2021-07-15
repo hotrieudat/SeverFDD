@@ -1,0 +1,284 @@
+openapi: '3.0.3'
+info:
+  version: 1.4.6
+  title: ProjectsAuthorityGroupsController
+  description: |
+    <div>This controller has not unique index page.</div>
+    <div>Only called and processing from project detail.</div>
+
+servers:
+  - url: http://localhost:8084
+    description: For real server
+
+tags:
+  - name: Processes
+    description: |
+      <div>When calling with ajax, the request is "POST", except for legacy browsers.</div>
+  - name: Pages
+    description: (and modal pages). Almost 'GET' requests.
+
+paths:
+
+  /projects-authority-groups/regist:
+    get:
+      tags: ["Pages"]
+      description: modal | Register for team.
+      responses:
+        '200':
+          description: Successful response
+
+  /projects-authority-groups/execregist:
+    post:
+      tags: ["Processes"]
+      description: Create team.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                form[name]:
+                  description: Team name.
+                  type: string
+                  example: 'teamNameSample'
+                form[comment]:
+                  description: Comment.
+                  type: string
+                  example: 'team_comment'
+                form[can_encrypt]:
+                  description: |
+                    <div> flag</div>
+                    <div>'0' Can not encript. | 不可</div>
+                    <div>'1' Can encript. | 可</div>
+                  type: string
+                  example: '0'
+                form[can_decrypt]:
+                  description: |
+                    <div> flag</div>
+                    <div>'0' Can not decript. | 不可</div>
+                    <div>'1' Can decript. | 可</div>
+                  type: string
+                  example: '0'
+                form[can_edit]:
+                  description: |
+                    <div> flag</div>
+                    <div>'0' Can not edit. | 不可</div>
+                    <div>'1' Can edit. | 可</div>
+                  type: string
+                  example: '0'
+                form[can_clipboard]:
+                  description: |
+                    <div> flag</div>
+                    <div>'0' Can not use clipboard. | 不可</div>
+                    <div>'1' Can use clipboard. | 可</div>
+                  type: string
+                  example: '0'
+                form[can_print]:
+                  description: |
+                    <div> flag</div>
+                    <div>'0' Can not print. | 不可</div>
+                    <div>'1' Can print. | 可</div>
+                  type: string
+                  example: '0'
+                form[can_screenshot]:
+                  description: |
+                    <div> flag</div>
+                    <div>'0' Can not capture scrreen. | 不可</div>
+                    <div>'1' Can capture screen. | 可</div>
+                  type: string
+                  example: '0'
+                parent_code:
+                  description: |
+                    <div>Parent code.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: '900001'
+        required: true
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "登録が完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /projects-authority-groups/update/code/{ProjectId}*{TeamId}/id/{treeObjectId}:
+    get:
+      tags: ["Pages"]
+      description: |
+        <div>modal | Update for team.</div>
+        <div></div>
+      responses:
+        '200':
+          description: Successful response
+    parameters:
+    - $ref: "#/components/parameters/ProjectId"
+    - $ref: "#/components/parameters/TeamId"
+    - $ref: "#/components/parameters/treeObjectId"
+
+  /projects-authority-groups/execupdate:
+    post:
+      tags: ["Processes"]
+      description: Create team.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                form[name]:
+                  description: Team name.
+                  type: string
+                  example: 'TeamNameSampleForUpdate'
+                form[comment]:
+                  description: Comment.
+                  type: string
+                  example: 'comment2'
+                form[can_encrypt]:
+                  description: |
+                    <div> flag</div>
+                    <div>'0' Can not encript. | 不可</div>
+                    <div>'1' Can encript. | 可</div>
+                  type: string
+                  example: '1'
+                form[can_decrypt]:
+                  description: |
+                    <div> flag</div>
+                    <div>'0' Can not decript. | 不可</div>
+                    <div>'1' Can decript. | 可</div>
+                  type: string
+                  example: '1'
+                form[can_edit]:
+                  description: |
+                    <div> flag</div>
+                    <div>'0' Can not edit. | 不可</div>
+                    <div>'1' Can edit. | 可</div>
+                  type: string
+                  example: '1'
+                form[can_clipboard]:
+                  description: |
+                    <div> flag</div>
+                    <div>'0' Can not use clipboard. | 不可</div>
+                    <div>'1' Can use clipboard. | 可</div>
+                  type: string
+                  example: '1'
+                form[can_print]:
+                  description: |
+                    <div> flag</div>
+                    <div>'0' Can not print. | 不可</div>
+                    <div>'1' Can print. | 可</div>
+                  type: string
+                  example: '1'
+                form[can_screenshot]:
+                  description: |
+                    <div> flag</div>
+                    <div>'0' Can not capture scrreen. | 不可</div>
+                    <div>'1' Can capture screen. | 可</div>
+                  type: string
+                  example: '1'
+                parent_code:
+                  description: |
+                    <div>Parent code.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: '900001'
+        required: true
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "更新を完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /projects-authority-groups/execdelete/code/{ProjectId}*{TeamId}:
+    post:
+      tags: ["Processes"]
+      description: 特になし
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "削除を完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+    parameters:
+    - $ref: "#/components/parameters/ProjectId"
+    - $ref: "#/components/parameters/TeamId"
+
+components:
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+  # schemas:
+  parameters:
+
+    ProjectId:
+      name: ProjectId
+      in: path
+      required: true
+      description: Column projects.project_id
+      schema:
+        type: string
+        example: '900001'
+
+    TeamId:
+      name: TeamId
+      in: path
+      required: true
+      description: Column projects_authority_groups.authority_groups_id
+      schema:
+        type: string
+        example: '900001'
+
+    treeObjectId:
+      name: treeObjectId
+      in: path
+      required: true
+      description: dhtmlx's tree object id.
+      schema:
+        type: string
+        example: 'tree1'
+
+security:
+- basicAuth: []

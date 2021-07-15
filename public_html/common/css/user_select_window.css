@@ -1,0 +1,11 @@
+@CHARSET "UTF-8";
+
+
+#tags_row {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.addingRow {
+    padding-bottom: 10px;
+}

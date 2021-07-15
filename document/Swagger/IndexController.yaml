@@ -1,0 +1,83 @@
+openapi: '3.0.3'
+info:
+  version: 1.4.6
+  title: IndexController
+  description: Index for login ,select language and call reissue password. 
+
+servers:
+  - url: http://localhost:8084
+    description: For Docker
+    # variables:
+    #   port:
+    #     enum:
+    #       - '8083'
+    #       - '8443'
+    #       - '443'
+    #     default: '8083'
+
+tags:
+  - name: Processes
+    description: |
+      <div>When calling with ajax, the request is "POST", except for legacy browsers.</div>
+  - name: Pages
+    description: (and modal pages). Almost 'GET' requests.
+
+paths:
+
+  /index:
+    get:
+      tags: ["Pages"]
+      description: Index.
+      responses:
+        '200':
+          description: Successful response
+
+  /client-download-ver86:
+    get:
+      tags: ["Processes"]
+      description: Download application for 32bit machine.
+      responses:
+        '200':
+          $ref: '#/components/responses/success-download-86'
+
+  /client-download-ver64:
+    get:
+      tags: ["Processes"]
+      description: Download application for 64bit machine.
+      responses:
+        '200':
+          $ref: '#/components/responses/success-download-64'
+
+components:
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+  # schemas:
+  responses:
+
+    success-download-86:
+      description: OK
+      content:
+        application/octet-stream:
+          schema:
+            type: string
+            example: |
+              Reference: 
+                Designation directory: application/configs/zend.ini -> client.x86_path
+                application/data/client/filedefender_setup_x86.exe
+
+    success-download-64:
+      description: OK
+      content:
+        application/octet-stream:
+          schema:
+            type: string
+            example: |
+              Reference:
+                Designation directory: application/configs/zend.ini -> client.x64_path                  
+                application/data/client/filedefender_setup_x86_64.exe
+
+security:
+- basicAuth: []

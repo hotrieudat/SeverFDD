@@ -1,0 +1,497 @@
+openapi: '3.0.3'
+info:
+  version: 1.4.6
+  title: ProjectsParticipantController
+  description: |
+    <h2>Participate of user to projects.</h2>
+    <div>This controller doesn't have delete, update and search, </div>
+    <div>the methods found on other controller work instead.</div>
+    <dl>
+      <dt>Search:</dt>
+      <dd>Exists easy search in this controller's index page.</dd>
+      <dt>Update:</dt>
+      <dd>Not exists. This record is only relational.</dd>
+      <dt>Delete(Secession) user:</dt>
+      <dd>/projects-member/execdelete/</dd>
+      <dt>Delete(Secession) user groups:</dt>
+      <dd>/projects-user-groups-member/execdelete-users-on-user-groups/</dd>
+    </dl>
+    <div>And only called and processing from project detail or project secession.</div>
+    <h3>Attention</h3>
+    <div>It can affect the results of "Code ception".</div>
+    <div>Please delete, after create record.</div>
+
+servers:
+  - url: http://localhost:8084
+    description: For real server
+
+tags:
+  - name: Processes
+    description: |
+      <div>When calling with ajax, the request is "POST", except for legacy browsers.</div>
+  - name: Pages
+    description: (and modal pages). Almost 'GET' requests.
+
+paths:
+
+  /projects-participant/index/parent_code/{ProjectId}:
+    get:
+      tags: ["Pages"]
+      description: modal | Index.
+      responses:
+        '200':
+          description: Result.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: ""
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+    parameters:
+    - $ref: "#/components/parameters/ProjectId"
+
+  /projects-participant/get-user-list:
+    post:
+      description: Get user list on user tab of index modal.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                page: 
+                  description: Page number.
+                  type: integer
+                  example: 0
+      responses:
+        '200':
+          $ref: '#/components/responses/success_xml_list_for_get_user_list'
+
+  /projects-participant/get-sub-gridlist:
+    post:
+      tags: ["Processes"]
+      description: |
+        <div>Get user list on user groups tab right grid of index modal.</div>
+        <div>When the user group on the left is selected, the list of users belonging to that user group is returned.</div>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                page: 
+                  description: Page number.
+                  type: integer
+                  example: 0
+                parent_code:
+                  description: |
+                    <div>Parent code.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: '000001'
+                user_groups_ids: 
+                  description: |
+                    <div>Multiple user groups id, joined by ','.</div>
+                    <div>However, if only single data then only value.</div>
+                  type: string
+                  example: '000001'
+      responses:
+        '200':
+          $ref: '#/components/responses/success_xml_list_for_get_subglid_list'
+
+  /projects-participant/list:
+    post:
+      tags: ["Processes"]
+      description: Get user groups list on user groups tab left grid of index modal.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                page: 
+                  description: Page number.
+                  type: integer
+                  example: 0
+                parent_code:
+                  description: |
+                    <div>Parent code.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: '000001'
+      responses:
+        '200':
+          $ref: '#/components/responses/success_xml_list_for_list'
+
+  /projects-participant/register-user-groups/parent_code/{ProjectId}/:
+    post:
+      tags: ["Processes"]
+      description: |
+        <div>Register user groups to project.</div>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                parent_code:
+                  description: |
+                    <div>Parent code.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: '000001'
+                user_groups_ids: 
+                  description: |
+                    <div>Multiple user groups id, joined by ','.</div>
+                    <div>However, if only single data then only value.</div>
+                  type: string
+                  example: '000001'
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "登録が完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+    parameters:
+    - $ref: "#/components/parameters/ProjectId"
+
+  /projects-participant/register-users/parent_code/{ProjectId}/:
+    post:
+      tags: ["Processes"]
+      description: |
+        <div>Register users to project.</div>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                parent_code:
+                  description: |
+                    <div>Parent code.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: '000001'
+                user_ids: 
+                  description: |
+                    <div>Multiple user id, joined by ','.</div>
+                    <div>However, if only single data then only value.</div>
+                  type: string
+                  example: '006582'
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "登録が完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+    parameters:
+    - $ref: "#/components/parameters/ProjectId"
+
+components:
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+
+    xmllist_rows_inner_for_get_user_list:
+      items:
+        type: object
+        properties:
+          row:
+            type: object
+            properties:
+              id:
+                type: string
+                example: "006582"
+                xml:
+                  attribute: true
+              check_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+              company_name: # mean name
+                type: string
+                example: 'PLOTT'
+                xml:
+                  name: cell
+              user_name: # mean name
+                type: string
+                example: 'ASEANフロント1'
+                xml:
+                  name: cell
+              login_code: # mean name
+                type: string
+                example: a-front1@plott.local
+                xml:
+                  name: cell
+              authority_group_name: # mean name
+                type: string
+                example: システム管理者用権限
+                xml:
+                  name: cell
+              login_restrictions.: # mean name
+                type: string
+                example: 無効
+                xml:
+                  name: cell
+              authentication_destination: # mean name
+                type: string
+                example: 'PLOTT'
+                xml:
+                  name: cell
+              last_login_date: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+              spacer_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+      xml:
+        name: rows
+
+    xmllist_rows_inner_for_get_subglid_list:
+      items:
+        type: object
+        properties:
+          row:
+            type: object
+            properties:
+              id:
+                type: string
+                example: "000001*006673"
+                xml:
+                  attribute: true
+              user_groups_name: # mean name
+                type: string
+                example: 'testUserGroup'
+                xml:
+                  name: cell
+              company_name: # mean name
+                type: string
+                example: 'PLOTT'
+                xml:
+                  name: cell
+              user_name: # mean name
+                type: string
+                example: '姓 名'
+                xml:
+                  name: cell
+      xml:
+        name: rows
+
+    xmllist_rows_inner_for_list:
+      items:
+        type: object
+        properties:
+          row:
+            type: object
+            properties:
+              id:
+                type: string
+                example: "000003"
+                xml:
+                  attribute: true
+              check_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+              user_groups_name: # mean name
+                type: string
+                example: 'testUserGroup'
+                xml:
+                  name: cell
+              spacer_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+      xml:
+        name: rows
+
+  # $ref: '#/components/responses/success_json'
+  responses:
+    success_json:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              custom_data:
+                type: object
+                properties:
+                  error_code:
+                    description: If the registration failed, the error code is given here. If succeeded, this is empty string.
+                    type: string
+                    example: ''
+                  debug_messages:
+                    type: object
+                  error_messages:
+                    type: object
+                  messages:
+                    description: Message for the success of the registration.
+                    type: string
+                    example: ''
+                  status:
+                    description: Whether the request succeeded or not.
+                    type: boolean
+                    example: true
+
+    success_xml_list_for_get_user_list:
+      description: Result xml.
+      content:
+        application/xml:
+          schema:
+            type: object
+            xml:
+              name: return_data # <<<
+            properties:
+              rows:
+                type: array
+                items:
+                $ref: "#/components/schemas/xmllist_rows_inner_for_get_user_list"
+              message:
+                type: string
+                example: ""
+              debug:
+                type: string
+                example: ""
+              status:
+                type: integer
+                example: 1
+              page:
+                type: integer
+                example: 0
+              max:
+                type: integer
+                example: 263
+              limit:
+                type: integer
+                example: 50
+
+    success_xml_list_for_get_subglid_list:
+      description: Result xml.
+      content:
+        application/xml:
+          schema:
+            type: object
+            xml:
+              name: return_data # <<<
+            properties:
+              rows:
+                type: array
+                items:
+                $ref: "#/components/schemas/xmllist_rows_inner_for_get_subglid_list"
+              message:
+                type: string
+                example: ""
+              debug:
+                type: string
+                example: ""
+              status:
+                type: integer
+                example: 1
+              page:
+                type: integer
+                example: 0
+              max:
+                type: integer
+                example: 4
+              limit:
+                type: integer
+                example: 50
+
+    success_xml_list_for_list:
+      description: Result xml.
+      content:
+        application/xml:
+          schema:
+            type: object
+            xml:
+              name: return_data # <<<
+            properties:
+              rows:
+                type: array
+                items:
+                $ref: "#/components/schemas/xmllist_rows_inner_for_list"
+              message:
+                type: string
+                example: ""
+              debug:
+                type: string
+                example: ""
+              status:
+                type: integer
+                example: 1
+              page:
+                type: integer
+                example: 0
+              max:
+                type: integer
+                example: 10
+              limit:
+                type: integer
+                example: 50
+
+  parameters:
+
+    ProjectId:
+      name: ProjectId
+      in: path
+      required: true
+      description: Column projects.project_id / projects_files.project_id
+      schema:
+        type: string
+        example: '000001'
+
+security:
+- basicAuth: []

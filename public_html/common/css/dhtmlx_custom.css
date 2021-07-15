@@ -1,0 +1,22 @@
+@CHARSET "UTF-8";
+
+
+/* DhtmlxMessageBoxにスクロールを追加する処理 */
+.dhtmlx_modal_box{
+    overflow: auto;
+}
+
+/* Dhtmlx alertにスクロールを追加する処理 */
+.dhtmlx_popup_text{
+    overflow: auto;
+}
+
+/* DhtmlxMessageBoxにおけるボーダーを消すクラス */
+.dhtmlx-alert-warning .dhtmlx_popup_controls{
+    border: none;
+}
+
+/* Dhtmlx alertにおけるボーダーを消すクラス*/
+.dhtmlx-confirm .dhtmlx_popup_controls{
+    border: none;
+}

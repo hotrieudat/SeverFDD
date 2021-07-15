@@ -1,0 +1,16 @@
+@startuml
+
+activate クライアントアプリ
+activate サーバーアプリ
+
+title 暗号化処理のシーケンス
+
+クライアントアプリ -> サーバーアプリ : {"name": "xxxx"}
+note left : URL = API/File/Create-File-Password
+サーバーアプリ -> クライアントアプリ : 成功 {"status": true , custom_message{{"file_id":"yyyyyyyyyy","password":"yyy…214"}}} \n失敗 {"status": false , message:"xxxx"}
+
+クライアントアプリ -> サーバーアプリ : {"file_id": "yyyyyyyyyy","hush" : "xxxx"}
+note left : URL = API/Hash/Register-Hash
+サーバーアプリ -> クライアントアプリ : 成功 {"status": true , } \n失敗 {"status": false , message:"xxxx"}
+
+@enduml

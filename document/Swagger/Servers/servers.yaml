@@ -1,0 +1,14 @@
+- url: http://localhost/
+  description: For Docker
+- url: http://192.168.12.57/
+  description: For Yamada.
+# - url: https://test2.com/
+#   description: Staging server
+# - url: https://test3.com{port}/
+#   description: Production server
+  variables:
+    port:
+      enum:
+        - '8443'
+        - '443'
+      default: '8443'

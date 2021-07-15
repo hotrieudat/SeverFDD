@@ -1,0 +1,119 @@
+<?xml version="1.0" ?>
+<dataset>
+    <table name="application_control_mst">
+        <column>application_control_id</column>
+        <column>application_original_filename</column>
+        <column>application_file_name</column>
+        <column>application_file_display_name</column>
+        <column>application_description</column>
+        <column>application_product_name</column>
+        <column>is_preset</column>
+        <column>can_encrypt_application</column>
+        <column>application_control_comment</column>
+        <column>regist_user_id</column>
+        <column>update_user_id</column>
+        <row>
+            <value>00001</value>
+            <value>dllhost.exe</value>
+            <value>dllhost.exe</value>
+            <value>Windows フォトビューアー</value>
+            <value>COM Surrogate</value>
+            <value>Microsoft® Windows® Operating System</value>
+            <value>1</value>
+            <value>1</value>
+            <null></null>
+            <value>000001</value>
+            <value>000001</value>
+        </row>
+        <row>
+            <value>00002</value>
+            <value>test.exe</value>
+            <value></value>
+            <value>テストアプリ</value>
+            <value></value>
+            <value></value>
+            <value>0</value>
+            <value>1</value>
+            <value>テストデータ</value>
+            <value>000001</value>
+            <value>000001</value>
+        </row>
+    </table>
+    <table  name="application_size_mst">
+        <column>application_control_id</column>
+        <column>application_size_id</column>
+        <column>application_size</column>
+        <column>regist_date</column>
+        <column>update_date</column>
+        <row>
+            <value>00002</value>
+            <value>001</value>
+            <null />
+            <value>now()</value>
+            <value>now()</value>
+        </row>
+        <row>
+            <value>00002</value>
+            <value>002</value>
+            <null />
+            <value>now()</value>
+            <value>now()</value>
+        </row>
+        <row>
+            <value>00002</value>
+            <value>003</value>
+            <null />
+            <value>now()</value>
+            <value>now()</value>
+        </row>
+        <row>
+            <value>00002</value>
+            <value>004</value>
+            <null />
+            <value>now()</value>
+            <value>now()</value>
+        </row>
+        <row>
+            <value>00002</value>
+            <value>005</value>
+            <null />
+            <value>now()</value>
+            <value>now()</value>
+        </row>
+        <row>
+            <value>00002</value>
+            <value>006</value>
+            <null />
+            <value>now()</value>
+            <value>now()</value>
+        </row>
+        <row>
+            <value>00002</value>
+            <value>007</value>
+            <null />
+            <value>now()</value>
+            <value>now()</value>
+        </row>
+        <row>
+            <value>00002</value>
+            <value>008</value>
+            <null />
+            <value>now()</value>
+            <value>now()</value>
+        </row>
+        <row>
+            <value>00002</value>
+            <value>009</value>
+            <null />
+            <value>now()</value>
+            <value>now()</value>
+        </row>
+        <row>
+            <value>00002</value>
+            <value>010</value>
+            <null />
+            <value>now()</value>
+            <value>now()</value>
+        </row>
+    </table>
+</dataset>

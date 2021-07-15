@@ -1,0 +1,1008 @@
+openapi: '3.0.3'
+info:
+  version: 1.4.6
+  title: SettingsController
+  description: |
+    <h2>SettingsController</h2>
+    <h3>Caution: There are some operations that affect the entire system, so if you are not sure, check with your administrator before operating.</h3>
+    <h3>Attention: It can affect the results of "Code ception".</h3>
+
+servers:
+  - url: http://localhost:8084
+    description: For real server
+
+tags:
+  - name: Processes
+    description: |
+      <div>When calling with ajax, the request is "POST", except for legacy browsers.</div>
+  - name: Pages
+    description: (and modal pages). Almost 'GET' requests.
+
+paths:
+
+  /system/index:
+    get:
+      tags: ["Pages"]
+      description: Index
+      responses:
+        '200':
+          description: Successful response
+
+  /system/shut-down:
+    get:
+      tags: ["Pages"]
+      description: |
+        <h3>System shut down.</h3>
+        <div>Important: Do not try if you are not an administrator or if you cannot reach your administrator.</div>
+        <div>This page is execute shutdown at open.</div>
+      responses:
+        '200':
+          description: Successful response
+
+  /system/exec-shut-down:
+    post:
+      tags: ["Processes"]
+      description: |
+        <h3>Execute system shut down.</h3>
+        <div>Important: Do not try if you are not an administrator or if you cannot reach your administrator.</div>
+        <div>You will not be able to do anything.</div>
+      responses:
+        '200':
+          description: Successful response
+
+  /system/reboot:
+    get:
+      tags: ["Pages"]
+      description: System reboot.
+      responses:
+        '200':
+          description: Successful response
+
+  /system/exec-reboot:
+    post:
+      tags: ["Processes"]
+      description: Execute system reboot.
+      responses:
+        '200':
+          description: Successful response
+
+  /system/logout:
+    get:
+      description: |
+        <div>Unconfirmed, bacause the code comment says "for reboot", but the "exec reboot" method calls "sbin / shutdown", so this method is probably not used.</div>
+      responses:
+        '200':
+          description: 'Unconfirmed.'
+
+  /system/set-network:
+    get:
+      tags: ["Pages"]
+      description: Network settings.
+      responses:
+        '200':
+          description: Successful response
+
+  /system/exec-update-network-setting1:
+    post:
+      tags: ["Processes"]
+      description: Execute network settings.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/form_elements_exec_update_network_setting1'
+        required: false
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "登録が完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /system/exec-update-network-setting2:
+    post:
+      tags: ["Processes"]
+      description: Execute network settings.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/form_elements_exec_update_network_setting2'
+        required: false
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "登録が完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /system/exec-update-ntp-server-setting:
+    post:
+      description: Execute update NTP server.
+      tags: ["Processes"]
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/form_elements_exec_update_ntp_server_setting'
+        required: false
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "登録が完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /system/exec-update-mail-server-setting:
+    post:
+      description: Execute update Mail server.
+      tags: ["Processes"]
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/form_elements_exec_mail_server_setting'
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "登録が完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /system/set-ssl:
+    get:
+      tags: ["Pages"]
+      description: SSL setting.
+      responses:
+        '200':
+          description: Successful response
+
+  /system/execvalidation-for-issue-csr:
+    post:
+      tags: ["Processes"]
+      description: Validate before issue CSR(Certificate Signing Request).
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/form_elements_execvalidation_for_issue_csr'
+      responses:
+        '200':
+          description: Successful status and more.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "本当に登録しますか？"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /system/exec-issue-csr:
+    post:
+      tags: ["Processes"]
+      description: Execute issue CSR(Certificate Signing Request).
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/form_elements_execvalidation_for_issue_csr'
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "登録が完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /system/csr:
+    get:
+      tags: ["Pages"]
+      description: Page of download private key, CSR(Certificate Signing Request).
+      responses:
+        '200':
+          description: Successful response
+
+  /system/exec-install-certificate:
+    post:
+      tags: ["Processes"]
+      description: |
+        <div>Execute install certificate.</div>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/form_elements_exec_install_certificate'
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "登録が完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /system/exec-download-privateKey:
+    get:
+      tags: ["Processes"]
+      description: |
+        <div>Execute download private key.</div>
+        <div>Pprotocol is "get", because this methods is call by click a tag.</div>
+      responses:
+        '200':
+          description: |
+            <div>This sample is not FD's private key.</div>
+            <div>https://docs.vmware.com/en/VMware-NSX-Data-Center-for-vSphere/6.4/com.vmware.nsx.admin.doc/GUID-BBC4804F-AC54-4DD2-BF6B-ECD2F60083F6.html</div>
+          content:
+            application/force-download:
+              schema:
+                type: string
+                example: |
+                  -----BEGIN RSA PRIVATE KEY-----
+                  MIIEowIBAAKCAQEAvpnaPKLIKdvx98KW68lz8pGaRRcYersNGqPjpifMVjjE8LuC
+                  oXgPU0HePnNTUjpShBnynKCvrtWhN+haKbSp+QWXSxiTrW99HBfAl1MDQyWcukoE
+                  b9Cw6INctVUN4iRvkn9T8E6q174RbcnwA/7yTc7p1NCvw+6B/aAN9l1G2pQXgRdY
+                  C/+G6o1IZEHtWhqzE97nY5QKNuUVD0V09dc5CDYBaKjqetwwv6DFk/GRdOSEd/6b
+                  W+20z0qSHpa3YNW6qSp+x5pyYmDrzRIR03os6DauZkChSRyc/Whvurx6o85D6qpz
+                  ywo8xwNaLZHxTQPgcIA5su9ZIytv9LH2E+lSwwIDAQABAoIBAFml8cD9a5pMqlW3
+                  f9btTQz1sRL4Fvp7CmHSXhvjsjeHwhHckEe0ObkWTRsgkTsm1XLu5W8IITnhn0+1
+                  iNr+78eB+rRGngdAXh8diOdkEy+8/Cee8tFI3jyutKdRlxMbwiKsouVviumoq3fx
+                  OGQYwQ0Z2l/PvCwy/Y82ffq3ysC5gAJsbBYsCrg14bQo44ulrELe4SDWs5HCjKYb
+                  EI2b8cOMucqZSOtxg9niLN/je2bo/I2HGSawibgcOdBms8k6TvsSrZMr3kJ5O6J+
+                  77LGwKH37brVgbVYvbq6nWPL0xLG7dUv+7LWEo5qQaPy6aXb/zbckqLqu6/EjOVe
+                  ydG5JQECgYEA9kKfTZD/WEVAreA0dzfeJRu8vlnwoagL7cJaoDxqXos4mcr5mPDT
+                  kbWgFkLFFH/AyUnPBlK6BcJp1XK67B13ETUa3i9Q5t1WuZEobiKKBLFm9DDQJt43
+                  uKZWJxBKFGSvFrYPtGZst719mZVcPct2CzPjEgN3Hlpt6fyw3eOrnoECgYEAxiOu
+                  jwXCOmuGaB7+OW2tR0PGEzbvVlEGdkAJ6TC/HoKM1A8r2u4hLTEJJCrLLTfw++4I
+                  ddHE2dLeR4Q7O58SfLphwgPmLDezN7WRLGr7Vyfuv7VmaHjGuC3Gv9agnhWDlA2Q
+                  gBG9/R9oVfL0Dc7CgJgLeUtItCYC31bGT3yhV0MCgYEA4k3DG4L+RN4PXDpHvK9I
+                  pA1jXAJHEifeHnaW1d3vWkbSkvJmgVf+9U5VeV+OwRHN1qzPZV4suRI6M/8lK8rA
+                  Gr4UnM4aqK4K/qkY4G05LKrik9Ev2CgqSLQDRA7CJQ+Jn3Nb50qg6hFnFPafN+J7		
+                  7juWln08wFYV4Atpdd+9XQECgYBxizkZFL+9IqkfOcONvWAzGo+Dq1N0L3J4iTIk
+                  w56CKWXyj88d4qB4eUU3yJ4uB4S9miaW/eLEwKZIbWpUPFAn0db7i6h3ZmP5ZL8Q
+                  qS3nQCb9DULmU2/tU641eRUKAmIoka1g9sndKAZuWo+o6fdkIb1RgObk9XNn8R4r
+                  psv+aQKBgB+CIcExR30vycv5bnZN9EFlIXNKaeMJUrYCXcRQNvrnUIUBvAO8+jAe
+                  CdLygS5RtgOLZib0IVErqWsP3EI1ACGuLts0vQ9GFLQGaN1SaMS40C9kvns1mlDu
+                  LhIhYpJ8UsCVt5snWo2N+M+6ANh5tpWdQnEK6zILh4tRbuzaiHgb
+                  -----END RSA PRIVATE KEY-----
+
+  /system/exec-download-csr:
+    get:
+      tags: ["Processes"]
+      description: |
+        <div>Execute download CSR(Certificate Signing Request).</div>
+        <div>Pprotocol is "get", because this methods is call by click a tag.</div>
+      responses:
+        '200':
+          description: |
+            <div>This sample is not FD's CSR(Certificate Signing Request).</div>
+            <div>https://docs.vmware.com/en/VMware-NSX-Data-Center-for-vSphere/6.4/com.vmware.nsx.admin.doc/GUID-BBC4804F-AC54-4DD2-BF6B-ECD2F60083F6.html</div>
+          content:
+            application/force-download:
+              schema:
+                type: string
+                example: |
+                  -----BEGIN CERTIFICATE-----
+                  MIID0DCCArigAwIBAgIBATANBgkqhkiG9w0BAQUFADB/MQswCQYDVQQGEwJGUjET
+                  MBEGA1UECAwKU29tZS1TdGF0ZTEOMAwGA1UEBwwFUGFyaXMxDTALBgNVBAoMBERp
+                  bWkxDTALBgNVBAsMBE5TQlUxEDAOBgNVBAMMB0RpbWkgQ0ExGzAZBgkqhkiG9w0B
+                  CQEWDGRpbWlAZGltaS5mcjAeFw0xNDAxMjgyMDM2NTVaFw0yNDAxMjYyMDM2NTVa
+                  MFsxCzAJBgNVBAYTAkZSMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJ
+                  bnRlcm5ldCBXaWRnaXRzIFB0eSBMdGQxFDASBgNVBAMMC3d3dy5kaW1pLmZyMIIB
+                  IjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvpnaPKLIKdvx98KW68lz8pGa
+                  RRcYersNGqPjpifMVjjE8LuCoXgPU0HePnNTUjpShBnynKCvrtWhN+haKbSp+QWX
+                  SxiTrW99HBfAl1MDQyWcukoEb9Cw6INctVUN4iRvkn9T8E6q174RbcnwA/7yTc7p
+                  1NCvw+6B/aAN9l1G2pQXgRdYC/+G6o1IZEHtWhqzE97nY5QKNuUVD0V09dc5CDYB
+                  aKjqetwwv6DFk/GRdOSEd/6bW+20z0qSHpa3YNW6qSp+x5pyYmDrzRIR03os6Dau
+                  ZkChSRyc/Whvurx6o85D6qpzywo8xwNaLZHxTQPgcIA5su9ZIytv9LH2E+lSwwID
+                  AQABo3sweTAJBgNVHRMEAjAAMCwGCWCGSAGG+EIBDQQfFh1PcGVuU1NMIEdlbmVy
+                  YXRlZCBDZXJ0aWZpY2F0ZTAdBgNVHQ4EFgQU+tugFtyN+cXe1wxUqeA7X+yS3bgw
+                  HwYDVR0jBBgwFoAUhMwqkbBrGp87HxfvwgPnlGgVR64wDQYJKoZIhvcNAQEFBQAD
+                  ggEBAIEEmqqhEzeXZ4CKhE5UM9vCKzkj5Iv9TFs/a9CcQuepzplt7YVmevBFNOc0
+                  +1ZyR4tXgi4+5MHGzhYCIVvHo4hKqYm+J+o5mwQInf1qoAHuO7CLD3WNa1sKcVUV
+                  vepIxc/1aHZrG+dPeEHt0MdFfOw13YdUc2FH6AqEdcEL4aV5PXq2eYR8hR4zKbc1
+                  fBtuqUsvA8NWSIyzQ16fyGve+ANf6vXvUizyvwDrPRv/kfvLNa3ZPnLMMxU98Mvh
+                  PXy3PkB8++6U4Y3vdk2Ni2WYYlIls8yqbM4327IKmkDc2TimS8u60CT47mKU7aDY
+                  cbTV5RDkrlaYwm5yqlTIglvCv7o=
+                  -----END CERTIFICATE-----
+
+  /system/loginauth:
+    get:
+      tags: ["Pages"]
+      description: Login authentication.
+      responses:
+        '200':
+          description: Successful response
+
+  /system/execvalidation-for-update-auth-settings:
+    post:
+      tags: ["Processes"]
+      description: Validate before update auth settings.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/form_elements_execvalidation_for_update_auth_settings'
+      responses:
+        '200':
+          description: Successful status and more.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "本当に登録しますか？"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /system/update-auth-settings:
+    post:
+      tags: ["Processes"]
+      description: Execute update auth settings.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/form_elements_execvalidation_for_update_auth_settings'
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "登録が完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /system/version-up:
+    get:
+      tags: ["Pages"]
+      description: Version up.
+      responses:
+        '200':
+          description: Successful response
+
+  /system/exec-version-up:
+    post:
+      tags: ["Processes"]
+      description: Execute version up.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/form_elements_version_up'
+      responses:
+        '200':
+          description: Result.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: バージョンアップが完了しました。
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /system/set-syslog:
+    get:
+      tags: ["Pages"]
+      description: syslog転送設定
+      responses:
+        '200':
+          description: Successful response
+
+  /system/update-syslog:
+    post:
+      tags: ["Processes"]
+      description: Execute syslog転送設定
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/form_elements_set_syslog'
+      responses:
+        '200':
+          description: Successful response
+
+  /system/trouble-shooting:
+    get:
+      tags: ["Pages"]
+      description: 
+        <div>Trouble shooting page.</div>
+        <div>Generate system information file on web server.</div>
+        <div>Download system information file.</div>
+      responses:
+        '200':
+          description: Successful response
+
+  /system/exec-trouble-shooting:
+    post:
+      tags: ["Processes"]
+      description: Generate, copy system inforamtion files.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/form_elements_exec_trouble_shooting'
+      responses:
+        '200':
+          description: Successful response
+
+  /system/download-trouble-shooting:
+    post:
+      tags: ["Processes"]
+      description: Check genrated path.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/form_elements_exec_trouble_shooting'
+      responses:
+        '200':
+          description: Successful response
+
+  /system/exec-download-trouble-shooting:
+    get:
+      tags: ["Processes"]
+      description: |
+        <div>Execute download system information file.</div>
+        <div>Pprotocol is "get", because this methods is call by JS[location.href].</div>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/form_elements_exec_trouble_shooting'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/zip:
+              schema:
+                type: string
+                example: |
+                  download: system_info.zip
+
+components:
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+
+    form_elements_exec_update_network_setting1:
+      description: Network setting 1.
+      type: object
+      properties:
+        form[network_setting1][ip_address]:
+          description: Ip address.
+          type: string
+          example: 192.168.12.57
+        form[network_setting1][netmask]:
+          description: Cidr.
+          type: string
+          example: 24
+        form[network_setting1][gateway]:
+          description: Gateway IP address.
+          type: string
+          example: 192.168.12.1
+        form[network_setting1][primary_dns]:
+          description: Primary dns IP address.
+          type: string
+          example: 192.168.6.237
+        form[network_setting1][secondary_dns]:
+          description: Secondary dns IP address.
+          type: string
+          example: 192.168.3.237
+      xml:
+        name: form_elements_exec_update_network_setting1
+
+    form_elements_exec_update_network_setting2:
+      description: Network setting 2.
+      type: object
+      properties:
+        form[network_setting2][use_flag]:
+          description: |
+            <div>Used or not.</div>
+            <dl>
+              <dt>1</dt>
+              <dd>Use. | 使用しない</dd>
+              <dt>2</dt>
+              <dd>Not use. | 使用する</dd>
+            </dl>
+          type: string
+          example: '1'
+        form[network_setting2][ip_address]:
+          description: Ip address.
+          type: string
+          example: 192.168.12.57
+        form[network_setting2][netmask]:
+          description: Cidr.
+          type: string
+          example: 24
+        form[network_setting2][gateway]:
+          description: Gateway IP address.
+          type: string
+          example: 192.168.12.1
+      xml:
+        name: form_elements_exec_update_network_setting1
+
+    form_elements_exec_update_ntp_server_setting:
+      description: ''
+      type: object
+      properties:
+        form[ntp_server]:
+          description: NTP server dommains.
+          type: string
+          example: ntp.nict.jp
+      xml:
+        name: form_elements_exec_update_ntp_server_setting
+
+    form_elements_exec_mail_server_setting:
+      description: ''
+      type: object
+      properties:
+        form[mail_server][my_host_name]:
+          description: Host server name.
+          type: string
+          example: filedefender
+        form[mail_server][mail_relay_use_flag]:
+          description: |
+            <div>Relay Used or not.</div>
+            <dl>
+              <dt>1</dt>
+              <dd>Use. | 使用しない</dd>
+              <dt>2</dt>
+              <dd>Not use. | 使用する</dd>
+            </dl>
+          type: string
+          example: '1'
+        form[mail_server][relay_host]:
+          description: Mail server host for relay.
+          type: string
+          example: ''
+      xml:
+        name: form_elements_exec_mail_server_setting
+
+    form_elements_execvalidation_for_issue_csr:
+      description: 'Some symbols ["#; +] cannot be used.'
+      type: object
+      properties:
+        form[csr][countryName]:
+          description: Country name.
+          type: string
+          example: ''
+        form[csr][stateOrProvinceName]:
+          description: State of province name.
+          type: string
+          example: ''
+        form[csr][localityName]:
+          description: Locality name.
+          type: string
+          example: ''
+        form[csr][organizationName]:
+          description: Organization name.
+          type: string
+          example: ''
+        form[csr][organizationalUnitName]:
+          description: organizational unit name.
+          type: string
+          example: ''
+        form[csr][commonName]:
+          description: Common name.
+          type: string
+          example: ''
+        form[csr][emailAddress]:
+          description: Email address.
+          type: string
+          example: ''
+      xml:
+        name: form_elements_execvalidation_for_issue_csr
+
+    form_elements_exec_install_certificate:
+      description: ''
+      type: object
+      properties:
+        form[ssl][crt]:
+          description: CRT(Certificate).
+          type: string
+          example: ''
+        form[ssl][key]:
+          description: Private key.
+          type: string
+          example: ''
+        form[ssl][ca]:
+          description: CA(Certification Authority).
+          type: string
+          example: ''
+      xml:
+        name: form_elements_exec_install_certificate
+
+    form_elements_execvalidation_for_update_auth_settings:
+      description: ''
+      type: object
+      properties:
+        form[login_timeout]:
+          description: Login timeout "minutes" settings.
+          type: string
+          example: '120'
+        form[password_expiration_enabled]:
+          description: |
+            <div>Password expiration enabled flag.<div>
+            <dl>
+              <dt>1</dt>
+              <dd>Use. | 使用する</dd>
+              <dt>0</dt>
+              <dd>Not use. | 使用しない</dt>
+            </dl>
+          type: string
+          example: '1'
+        form[password_valid_for]:
+          description: Password valid dates.
+          type: string
+          example: '90'
+        form[password_expiration_notification_enabled]:
+          description: |
+            <div>Password expiration notification enabled flag.<div>
+            <dl>
+              <dt>1</dt>
+              <dd>Use. | 使用する</dd>
+              <dt>0</dt>
+              <dd>Not use. | 使用しない</dt>
+            </dl>
+          type: string
+          example: ''
+        form[password_expired_notify_days]:
+          description: Password expired notify days.
+          type: string
+          example: '7'
+        form[password_expiration_warning_on_login_enabled]:
+          description: |
+            <div>Password expiration warning on login enabled flag.</div>
+            <dl>
+              <dt>On checked(1)</dt>
+              <dd>Use. | 使用する</dd>
+              <dt>Off check(null)</dt>
+              <dd>Not use. | 使用しない</dt>
+            </dl>
+          type: string
+          example: 1
+        form[password_expiration_email_warning_enabled]:
+          description: |
+            <div>Password expiration email warning enabled flag.</div>
+            <dl>
+              <dt>On checked(1)</dt>
+              <dd>Use. | 使用する</dd>
+              <dt>Off check(null)</dt>
+              <dd>Not use. | 使用しない</dt>
+            </dl>
+          type: string
+          example: 1
+        form[operation_with_password_expiration]:
+          description: |
+            <div>Operation with password expiration.</div>
+            <dl>
+              <dt>1</dt>
+              <dd>パスワード変更画面へ強制移動</dd>
+              <dt>2</dt>
+              <dd>ユーザーをロック</dt>
+            </dl>
+          type: string
+          example: '1'
+        form[can_use_password_retry_restriction]:
+          description: |
+            <div>Will use password retry restriction.<div>
+            <dl>
+              <dt>1</dt>
+              <dd>Yes | 使用する</dd>
+              <dt>0</dt>
+              <dd>No | 使用しない</dt>
+            </dl>
+          type: string
+          example: '1'
+        form[password_retry_count]:
+          description: Password retry count.
+          type: string
+          example: '3'
+        form[password_min_length]:
+          description: Minimum enter char count, for password.
+          type: string
+          example: '5'
+        form[password_requires_lowercase]:
+          description: |
+            <div>Is requires lowercase for password.</div>
+            <dl>
+              <dt>On checked(1)</dt>
+              <dd>Use. | 使用する</dd>
+              <dt>Off check(null)</dt>
+              <dd>Not use. | 使用しない</dt>
+            </dl>
+          type: string
+          example: ''
+        form[password_requires_uppercase]:
+          description: |
+            <div>Is requires uppercase for password.</div>
+            <dl>
+              <dt>On checked(1)</dt>
+              <dd>Use. | 使用する</dd>
+              <dt>Off check(null)</dt>
+              <dd>Not use. | 使用しない</dt>
+            </dl>
+          type: string
+          example: ''
+        form[password_requires_number]:
+          description: |
+            <div>Is requires number for password.</div>
+            <dl>
+              <dt>On checked(1)</dt>
+              <dd>Use. | 使用する</dd>
+              <dt>Off check(null)</dt>
+              <dd>Not use. | 使用しない</dt>
+            </dl>
+          type: string
+          example: ''
+        form[password_requires_symbol]:
+          description: |
+            <div>Is requires symbols[!#%&$] for password.</div>
+            <dl>
+              <dt>On checked(1)</dt>
+              <dd>Use. | 使用する</dd>
+              <dt>Off check(null)</dt>
+              <dd>Not use. | 使用しない</dt>
+            </dl>
+          type: string
+          example: ''
+        form[is_password_same_as_login_code_allowed]:
+          description: |
+            <div>Not admit password same as login code?</div>
+            <dl>
+              <dt>1</dt>
+              <dd>Yes. | IDと同値を許可しない</dd>
+              <dt>0</dt>
+              <dd>No. | IDと同値を許可する</dt>
+            </dl>
+          type: string
+          example: ''
+      xml:
+        name: form_elements_execvalidation_for_update_auth_settings
+
+    form_elements_version_up:
+      description: ''
+      type: object
+      properties:
+        file:
+          description: File for version up.
+          type: file
+          example: ''
+      xml:
+        name: form_elements_version_up
+
+    form_elements_set_syslog:
+      description: ''
+      type: object
+      properties:
+        form[syslog_transfer_flag]:
+          description: |
+            <div>Will transfer "system log".</div>
+            <dl>
+              <dt>0</dt>
+              <dd>Yes: 転送する</dd>
+              <dt>1</dt>
+              <dd>No: 転送しない</dd>
+            </dl>
+          type: string
+          example: '1'
+        form[syslog_host]:
+          description: Server host ip address, for transfer of system log.
+          type: string
+          example: ''
+      xml:
+        name: form_elements_set_syslog
+
+    form_elements_exec_trouble_shooting:
+      description: 'This parameter is empty.'
+      type: object
+      xml:
+        name: form_elements_exec_trouble_shooting
+
+  # responses:
+
+  #   success_xml_get_groups_users:
+  #     description: |
+  #       <div>Result list of teams and groups,and those participant user.</div>
+  #       <div>You can see format at 'application/smarty/templates/treexml.tpl'.</div>
+  #     content:
+  #       application/xml:
+  #         schema:
+  #           type: object
+  #           xml:
+  #             name: tree # <<<
+  #           properties:
+  #             tree:
+  #               type: array
+  #               items:
+  #               $ref: "#/components/schemas/xmllist_tree_inner"
+
+  #   success_xml_get_projects_member:
+  #     description: Result list of participant users for project.
+  #     content:
+  #       application/xml:
+  #         schema:
+  #           type: object
+  #           xml:
+  #             name: return_data # <<<
+  #           properties:
+  #             tree:
+  #               type: array
+  #               items:
+  #               $ref: "#/components/schemas/xmllist_grid_inner"
+
+  #   success_xml_get_projects_files:
+  #     description: Result list of files registered in the project.
+  #     content:
+  #       application/xml:
+  #         schema:
+  #           type: object
+  #           xml:
+  #             name: return_data # <<<
+  #           properties:
+  #             tree:
+  #               type: array
+  #               items:
+  #               $ref: "#/components/schemas/xmllist_file_grid_inner"
+
+  #   success_xml_get_last_tab:
+  #     description: Result.
+  #     content:
+  #       application/xml:
+  #         schema:
+  #           type: object
+  #           xml:
+  #             name: result # <<<
+  #           properties:
+  #             message:
+  #               type: string
+  #               example: "users"
+  #             debug:
+  #               type: string
+  #               example: ""
+  #             status:
+  #               type: integer
+  #               example: 1
+
+  parameters:
+    ProjectId:
+      name: ProjectId
+      in: path
+      required: true
+      description: Column projects.project_id
+      schema:
+        type: string
+        example: '000001'
+
+security:
+- basicAuth: []

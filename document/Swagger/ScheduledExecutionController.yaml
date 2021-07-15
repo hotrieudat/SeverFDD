@@ -1,0 +1,75 @@
+openapi: '3.0.3'
+info:
+  version: 1.4.6
+  title: ScheduledExecutionController
+
+servers:
+  - url: http://localhost:8084
+    description: For real server
+
+tags:
+  - name: Processes
+    description: |
+      <div>When calling with ajax, the request is "POST", except for legacy browsers.</div>
+  - name: Pages
+    description: (and modal pages). Almost 'GET' requests.
+
+paths:
+
+  /scheduled-execution/manipulate-cron:
+    get:
+      tags: ["Processes"]
+      description: |
+        <div>Execute command on console.</div>
+        <div>"php /var/www/application/batch/index_console.php -c ".$controller_name." -a ".$action_name;</div>
+        <div>Run with the following values:</div>
+
+            "controller" => [
+                "ldap-console" => [
+                    "action" => [
+                        "exec-import" => [
+                            "param" => [
+                                "cron_flg" => true,
+                            ],
+                        ],
+                    ],
+                ],
+                "user-password-expiration-notification-console" => [
+                    "action" => [
+                        "exec-notification" => [
+                            "param" => [
+                                []
+                            ],
+                        ],
+                    ],
+                ],
+
+            ]
+        </div>
+      responses:
+        '200':
+          description: |
+            <div>ldap-console->exec-import do not return response.</div>
+            <div>user-password-expiration-notification-console->exec-notification do not return response.</div>
+            <div>If exists response, then it's error message.</div>
+
+  /scheduled-execution/manipulate-cron-per-ten-minutes:
+    get:
+      tags: ["Processes"]
+      description: |
+        <div>Execute command on console.</div>
+        <div>"php /var/www/application/batch/index_console.php -c ".$controller_name." -a ".$action_name;</div>
+        <div>But maybe not using, because parameter is empty.</div>
+      responses:
+        '200':
+          description: May be don't get response.
+
+components:
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+security:
+- basicAuth: []

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="https://cdn.rawgit.com/andyferra/2554919/raw/2e66cabdafe1c9a7f354aa2ebf5bc38265e638e5/github.css">
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<h1 id="サーバー側の暗号化周りの仕様メモ仮">サーバー側の暗号化周りの仕様メモ（仮）</h1>
+<h2 id="要件定義の内容">要件定義の内容</h2>
+<ul>
+<li>暗号化を実施したファイルを一覧で表示ができる。</li>
+<li>一覧から検索ができる。</li>
+<li>暗号化したファイルの情報について登録ができる。</li>
+<li>暗号化したファイルの情報を編集することができる。</li>
+<li>暗号化したファイルの詳細から、ログ画面へ遷移することができる。</li>
+</ul>
+<h1 id="section">=========================================================</h1>
+<h1 id="dbカラム構成">DBカラム構成</h1>
+<h2 id="ファイルを管理するマスタのカラム情報について">ファイルを管理するマスタのカラム情報について</h2>
+<ul>
+<li>ファイルID</li>
+<li>ファイル名</li>
+<li>ファイルパスワード</li>
+<li>複合可否のフラグ</li>
+</ul>
+<blockquote>
+<p>登録者・更新者・登録日・更新日に関しては、下記URLを参照</p>
+<p><a href="https://192.168.12.200/admin/">PlottGenerator リンク</a></p>
+<p>ID/PW plott/plott</p>
+<p>※カラム情報はリンクより確認してください</p>
+</blockquote>
+<h1 id="section-1">=================================================</h1>
+<h1 id="機能概要">機能概要</h1>
+<h3 id="新規登録編集削除検索csv出力に関してはプロットフレームワークの仕様に従う">新規登録・編集・削除・検索・CSV出力に関してはプロットフレームワークの仕様に従う</h3>
+<h3 id="別途作成が必要な機能について">別途作成が必要な機能について</h3>
+<h3 id="クライアントより受け取った情報をもとにパスワードを作成しその内容を保存しパスワード情報をログイン中のユーザーidに紐づく公開鍵情報をもとにクライアントに渡す機能">クライアントより受け取った情報をもとに、パスワードを作成し、その内容を保存しパスワード情報をログイン中のユーザーIDに紐づく公開鍵情報をもとにクライアントに渡す機能。</h3>
+<ul>
+<li>概要</li>
+<li><p>川中さんの作成した<a href="file://///192.168.12.202/kyoto_samba/kawanaka/markdown_docs/encryption_operation.html">暗号化方法について</a>に参考</p></li>
+<li>クライアントに求められる機能</li>
+<li>パスワードの生成</li>
+<li><p>パスワードをログイン中のユーザーの公開鍵で暗号化する方法</p></li>
+<li>特記事項</li>
+<li>公開鍵にて暗号化する方法は、PHPの関数openssl_public_encryptを利用する、またその際第四引数に「OPENSSL_PKCS1_OAEP_PADDING」を用いる</li>
+<li>パスワードの長さは、214とする。（※暗号化時のパディングの為）</li>
+<li>暗号化処理に関する知識について
+<ul>
+<li>参考記事 <a href="http://qiita.com/kunichiko/items/3c0b1a2915e9dacbd4c1">URL</a></li>
+</ul></li>
+</ul>
+</body>
+</html>

@@ -1,0 +1,37 @@
+openapi: 3.0.3
+info:
+  title: SummarizeLogController
+  version: 1.4.6
+  description: This is a controller called by left menu on web.
+
+servers:
+  - url: http://localhost:8084
+    description: For real server
+
+tags:
+  - name: Processes
+    description: |
+      <div>When calling with ajax, the request is "POST", except for legacy browsers.</div>
+  - name: Pages
+    description: (and modal pages). Almost 'GET' requests.
+
+paths:
+
+  /summarize-log/index:
+    description: ''
+    get:
+      tags: ["Pages"]
+      description: This always returns true.
+      responses:
+        '200':
+          description: Successful response
+
+components:
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+security:
+- basicAuth: []

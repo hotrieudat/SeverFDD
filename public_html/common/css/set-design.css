@@ -1,0 +1,45 @@
+@CHARSET "UTF-8";
+
+img {
+    vertical-align: top;
+}
+
+.color_btn {
+    border: 1px solid #C0C0C0;
+}
+
+.colors {
+    width:20px;
+    height:20px;
+    border:1px #ebebeb solid;
+    float:left;
+    margin: 3px;
+}
+
+.select_color {
+    display:none;
+    width:252px;
+    position:absolute;
+    border:1px #C5C5C5 solid;
+    background-color:white;
+}
+
+#login_select_color {
+    z-index:10;
+}
+
+.now_color {
+    width:20px;
+    height:20px;
+    border:1px #ebebeb solid;
+    display:inline-block;
+    vertical-align:middle;
+}
+
+.entry_word {
+    width:90%;
+}
+
+#global_menu_select_color{
+    z-index: 1000;
+}

@@ -1,0 +1,1088 @@
+openapi: 3.0.3
+info:
+  title: ClientApiController
+  version: 1.0.0
+  description: This is a controller mainly called by client app.
+
+servers:
+- url: http://localhost:8084
+  description: For real server
+
+paths:
+
+  /client-api/keep-alive/v/{version}:
+    description: Periodic connection from client app in order to keep the connection alive.
+    get:
+      description: This always returns true.
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                description: Always true.
+                type: boolean
+                example: true.
+        '403':
+          $ref: "#/components/responses/FromNotClient"
+    parameters:
+    - $ref: "#/components/parameters/version"
+
+  /client-api/get-user-information/v/{version}:
+    get:
+      description: This returns logined user information data.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  custom_data:
+                    type: object
+                    properties:
+                      message:
+                        description: News information.
+                        type: string
+                        example: ''
+                      users:
+                        description: User information.
+                        type: object
+                        properties:
+                          has_license_converted:
+                            description: Whether the user has the license of not.
+                            type: string
+                            example: あり
+                          mail:
+                            $ref: "#/components/schemas/mail"
+                          user_kana:
+                            $ref: "#/components/schemas/user_kana"
+                          user_name:
+                            $ref: "#/components/schemas/user_name"
+                  debug_messages:
+                    $ref: "#/components/schemas/debug_messages"
+                  error_messages:
+                    $ref: "#/components/schemas/error_messages"
+                  messages:
+                    $ref: "#/components/schemas/messages"
+                  status:
+                    $ref: "#/components/schemas/status"
+    parameters:
+    - $ref: "#/components/parameters/version"
+
+  /client-api/get-projects-list/v/{version}/mode/{mode}:
+    get:
+      description: This returns a list of projects which the logined user belongs.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  custom_data:
+                    type: object
+                    properties:
+                      projects_list:
+                        type: object
+                        properties:
+                          is_closed:
+                            description: Whether the project is closed or not. 1 means true and 0 means false.
+                            type: integer
+                            example: '0'
+                          project_comment:
+                            description: The comment for the project.
+                            type: string
+                          project_id:
+                            $ref: "#/components/schemas/project_id"
+                          project_name:
+                            description: Project's name.
+                            type: string
+                  debug_messages:
+                    $ref: "#/components/schemas/debug_messages"
+                  error_messages:
+                    $ref: "#/components/schemas/error_messages"
+                  messages:
+                    $ref: "#/components/schemas/messages"
+                  status:
+                    $ref: "#/components/schemas/status"
+    parameters:
+    - $ref: "#/components/parameters/version"
+    - $ref: "#/components/parameters/mode"
+
+  /client-api/get-groups-list/v/{version}:
+    post:
+      description: This returns a list of groups(both of user groups and teams) which the logined user belongs.
+      requestBody:
+        description: The information about the application, PC, and file.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                project_id:
+                  description: Project id.
+                  type: string
+                  example: '000009'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  custom_data:
+                    type: object
+                    properties:
+                      groups_list:
+                        description: A list of groups(both of user groups and teams) which the logined user belongs.
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            can_clipboard:
+                              description: Whether group members can use his/her clipboard or not. 1 means trure and 2 means false.
+                              type: integer
+                              example: '1'
+                            can_edit:
+                              description: Whether group members can edit encrypted files or not. 1 means trure and 2 means false.
+                              type: integer
+                              example: '1'
+                            can_print:
+                              description: Whether group members can print encrypted files or not. 1 means trure and 2 means false.
+                              type: integer
+                              example: '1'
+                            can_screenshot:
+                              description: Whether group members can take screenshots. 1 means trure and 2 means false.
+                              type: integer
+                              example: '1'
+                            id:
+                              description: Group's id.
+                              type: string
+                              example: '000001'
+                            name:
+                              description: Group's name.
+                              type: string
+                              example: サンプルグループ
+                            type:
+                              description: 1 means teams, and 2 means user groups.
+                              type: integer
+                              example: '1'
+                  debug_messages:
+                    $ref: "#/components/schemas/debug_messages"
+                  error_messages:
+                    $ref: "#/components/schemas/error_messages"
+                  messages:
+                    $ref: "#/components/schemas/messages"
+                  status:
+                    $ref: "#/components/schemas/status"
+    parameters:
+    - $ref: "#/components/parameters/version"
+
+  /client-api/get-project-members/v/{version}:
+    post:
+      description: This returns a list of users who belong the project.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                project_id:
+                  description: If the registration failed, the error code is given here. If succeeded, this is empty string.
+                  type: string
+                  example: '"900001"'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  custom_data:
+                    type: object
+                    properties:
+                      members_list:
+                        description: A list of users who belong the project.
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            is_manager:
+                              description: Whether the user is project's manager or not. 1 means true and 0 means false.
+                              type: integer
+                              example: '1'
+                            name:
+                              $ref: "#/components/schemas/user_name"
+                  debug_messages:
+                    $ref: "#/components/schemas/debug_messages"
+                  error_messages:
+                    $ref: "#/components/schemas/error_messages"
+                  messages:
+                    $ref: "#/components/schemas/messages"
+                  status:
+                    $ref: "#/components/schemas/status"
+    parameters:
+    - $ref: "#/components/parameters/version"
+
+  /client-api/get-authority-groups-members/v/{version}:
+    post:
+      description: This returns a list of users who belong the team. The term authority group is legacy name for teams.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                project_id:
+                  description: If the registration failed, the error code is given here. If succeeded, this is empty string.
+                  type: string
+                  example: '"900001"'
+                id:
+                  description: Team id.
+                  type: string
+                  example: '"900001"'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  custom_data:
+                    type: object
+                    properties:
+                      members_list:
+                        $ref: "#/components/schemas/members_list"
+                  debug_messages:
+                    $ref: "#/components/schemas/debug_messages"
+                  error_messages:
+                    $ref: "#/components/schemas/error_messages"
+                  messages:
+                    $ref: "#/components/schemas/messages"
+                  status:
+                    $ref: "#/components/schemas/status"
+    parameters:
+    - $ref: "#/components/parameters/version"
+
+  /client-api/get-user-groups-members/v/{version}:
+    post:
+      description: This returns a list of users who belong the user group.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                project_id:
+                  description: If the registration failed, the error code is given here. If succeeded, this is empty string.
+                  type: string
+                  example: '"900001"'
+                id:
+                  description: User groups id.
+                  type: string
+                  example: '"900001"'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  custom_data:
+                    type: object
+                    properties:
+                      members_list:
+                        $ref: "#/components/schemas/members_list"
+                  debug_messages:
+                    $ref: "#/components/schemas/debug_messages"
+                  error_messages:
+                    $ref: "#/components/schemas/error_messages"
+                  messages:
+                    $ref: "#/components/schemas/messages"
+                  status:
+                    $ref: "#/components/schemas/status"
+    parameters:
+    - $ref: "#/components/parameters/version"
+
+  /client-api/get-encryption-target-groups-members/v/{version}:
+    post:
+      description: This returns a list of users who belong the distination groups.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                project_id:
+                  description: If the registration failed, the error code is given here. If succeeded, this is empty string.
+                  type: string
+                  example: '"900001"'
+                groups_data:
+                  description: .
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        description: Explanation of the application.
+                        type: string
+                        example: '"900002"'
+                      type:
+                        description: Explanation of the application.
+                        type: string
+                        example: '1'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  custom_data:
+                    type: object
+                    properties:
+                      members_list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            can_clipboard:
+                              $ref: "#/components/schemas/can_clipboard"
+                            can_edit:
+                              $ref: "#/components/schemas/can_edit"
+                            can_print:
+                              $ref: "#/components/schemas/can_print"
+                            can_screenshot:
+                              $ref: "#/components/schemas/can_screenshot"
+                            user_id:
+                              $ref: "#/components/schemas/user_id"
+                            user_name:
+                              $ref: "#/components/schemas/user_name"
+                  debug_messages:
+                    $ref: "#/components/schemas/debug_messages"
+                  error_messages:
+                    $ref: "#/components/schemas/error_messages"
+                  messages:
+                    $ref: "#/components/schemas/messages"
+                  status:
+                    $ref: "#/components/schemas/status"
+    parameters:
+    - $ref: "#/components/parameters/version"
+
+  /client-api/create-file-password/v/{version}:
+    post:
+      description: This returns the result of the file encryption registration. If it is true, this also return the file information. We have to add Failure Patterns.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                project_id:
+                  description: If the registration failed, the error code is given here. If succeeded, this is empty string.
+                  type: string
+                  example: '"900001"'
+                id:
+                  description: Team id.
+                  type: string
+                  example: '"900001"'
+                name:
+                  description: File name.
+                  type: string
+                  example: 'file_name'
+                project_public_list:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      description: Explanation of the application.
+                      type: string
+                      example: メモ帳
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  custom_data:
+                    type: object
+                    properties:
+                      file_id:
+                        description: File's id.
+                        type: string
+                        example: '0000000001'
+                      password:
+                        $ref: "#/components/schemas/password"
+                  debug_messages:
+                    $ref: "#/components/schemas/debug_messages"
+                  error_messages:
+                    $ref: "#/components/schemas/error_messages"
+                  messages:
+                    $ref: "#/components/schemas/messages"
+                  status:
+                    $ref: "#/components/schemas/status"
+    parameters:
+    - $ref: "#/components/parameters/version"
+
+  /client-api/register-hash/v/{version}:
+    post:
+      description: |
+        <div>This registers the file hash data and returns the result.</div>
+        <div>Posting the same hash will result in an unknown error, but in reality the hash is always unique, so that's okay.</div>
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                project_id:
+                  description: If the registration failed, the error code is given here. If succeeded, this is empty string.
+                  type: string
+                  example: '"900001"'
+                id:
+                  description: Team id.
+                  type: string
+                  example: '"900001"'
+                file_id:
+                  description: File id.
+                  type: string
+                  example: '"0900000001"'
+                hash:
+                  description: File hash.
+                  type: string
+                  example: '4b94f51c853be6c40e0a129010a6e728e02b53fabeb633ce787fecf4c6969682'
+                pc_info:
+                  description: Information abaout the application.
+                  type: object
+                  properties:
+                    client_ip_local:
+                      description: .
+                      type: string
+                      example: '"192.168.12.109"'
+                    host_name:
+                      description: .
+                      type: string
+                      example: '"name"'
+                    location:
+                      description: .
+                      type: string
+                      example: ''
+                    mac_addr:
+                      description: .
+                      type: string
+                      example: '""'
+                    os_display_user:
+                      description: .
+                      type: string
+                      example: '""'
+                    os_version:
+                      description: .
+                      type: string
+                      example: '""'
+                    serial_no:
+                      description: .
+                      type: string
+                      example: '""'
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  custom_data:
+                    type: object
+                    properties:
+                      error_code:
+                        description: If the registration failed, the error code is given here. If succeeded, this is empty string.
+                        type: string
+                        example: ''
+                  debug_messages:
+                    $ref: "#/components/schemas/debug_messages"
+                  error_messages:
+                    $ref: "#/components/schemas/error_messages"
+                  messages:
+                    description: Message for the success of the registration.
+                    type: string
+                    example: '登録更新を完了しました。'
+                  status:
+                    $ref: "#/components/schemas/status"
+    parameters:
+    - $ref: "#/components/parameters/version"
+
+  /client-api/get-password/v/{version}:
+    post:
+      description: This returns the file information and the authority of the user for it.
+      requestBody:
+        description: The information about the application, PC, and file.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                application_info:
+                  description: Information abaout the application.
+                  type: object
+                  properties:
+                    description:
+                      description: Explanation of the application.
+                      type: string
+                      example: メモ帳
+                    file_name:
+                      type: string
+                      example: Notepad
+                    file_size:
+                      description: Byte file size.
+                      type: integer
+                      example: 181248
+                    original_file_name:
+                      type: string
+                      example: notepad.exe
+                    product_name:
+                      type: string
+                      example: Microsoft® Windows® Operating System
+                hash:
+                  type: string
+                  example: 57975558af1e873db4123216a2f90c91e34eb2df2c06c8fa230165e5ede08ac3
+                pc_info:
+                  $ref: "#/components/schemas/pc_info"
+                public_key:
+                  type: string
+                  example: -----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzU+DdWWdJ4cU9GmhMKlzI+HjpeG65FKCajDXf1biOu7Z45toS8MKh1R3PCxGt4OwSj9l81QwsmqbPqG5WYPyttLS/DyjaFZ7ji7YR7mf8v2kfN4F3FTVYKOTIMdfxW2MA4XGQmfmTPiTRg6ytS3LQVJQnxtW+iYGwQy/7had2J+rJXSZBR9+nauVwknRHZmby6J/sAgx3zIfGojtqTrsYlxdbafFuhRLRYqCoLGHwnRfRwzuomGihXUSFcT0dUJNI6VYSEwCS/V+RVBIhbfaq7/05N41fFR8sX3lgwD3QoD1ogSTwGnungb4Rd1YPoNPrHXggdrJVKw7FuC1R2hRuQIDAQAB-----END PUBLIC KEY-----
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  custom_data:
+                    type: object
+                    properties:
+                      can_clipboard:
+                        $ref: "#/components/schemas/can_clipboard"
+                      can_edit:
+                        $ref: "#/components/schemas/can_edit"
+                      can_print:
+                        $ref: "#/components/schemas/can_print"
+                      can_screenshot:
+                        $ref: "#/components/schemas/can_screenshot"
+                      password:
+                        $ref: "#/components/schemas/password"
+                      project_id:
+                        $ref: "#/components/schemas/project_id"
+                  debug_messages:
+                    $ref: "#/components/schemas/debug_messages"
+                  error_messages:
+                    $ref: "#/components/schemas/error_messages"
+                  messages:
+                    $ref: "#/components/schemas/messages"
+                  status:
+                    $ref: "#/components/schemas/status"
+    parameters:
+    - $ref: "#/components/parameters/version"
+
+  /client-api/relate-hash-to-existing-file/v/{version}:
+    post:
+      description: This updates the file hash. This returns the result.
+      requestBody:
+        description: The information about the updating of the hash.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                application_original_filename:
+                  type: string
+                  example: メモ帳
+                new_hash:
+                  description: Hash after the updating
+                  type: string
+                  example: 1534f5f63f811fb9e98c0e9d2eaf332d028a152e01d636b419300cd0b19c6ce3
+                old_hash:
+                  description: Hash before the updating
+                  type: string
+                  example: 57975558af1e873db4123216a2f90c91e34eb2df2c06c8fa230165e5ede08ac3
+                pc_info:
+                  $ref: "#/components/schemas/pc_info"
+                project_id:
+                  type: string
+                  example: '000001'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  custom_data:
+                    type: object
+                    properties:
+                      error_code:
+                        type: string
+                        example: ''
+                  debug_messages:
+                    $ref: "#/components/schemas/debug_messages"
+                  error_messages:
+                    $ref: "#/components/schemas/error_messages"
+                  messages:
+                    $ref: "#/components/schemas/messages"
+                  status:
+                    $ref: "#/components/schemas/status"
+    parameters:
+    - $ref: "#/components/parameters/version"
+
+  /client-api/update-user-password/v/{version}:
+    post:
+      description: This updates user's password.
+      requestBody:
+        description: The information about old/new password.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                extra:
+                  type: object
+                  properties:
+                    current_user_password:
+                      description: Password before updating.
+                      type: string
+                      example: oldpassword
+                    password_confirmation:
+                      description: Confirmation for new password.
+                      type: string
+                      example: newpassword
+                form:
+                  type: object
+                  properties:
+                    password:
+                      description: New password.
+                      type: string
+                      example: newpassword
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  custom_data:
+                    type: object
+                    properties:
+                      error_code:
+                        type: string
+                        example: ''
+                  debug_messages:
+                    $ref: "#/components/schemas/debug_messages"
+                  error_messages:
+                    $ref: "#/components/schemas/error_messages"
+                  messages:
+                    $ref: "#/components/schemas/messages"
+                  status:
+                    $ref: "#/components/schemas/status"
+    parameters:
+    - $ref: "#/components/parameters/version"
+
+  /client-api/get-file-information/v/{version}:
+    post:
+      description: This returns the file information.
+      requestBody:
+        description: File's hash.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                hash:
+                  description: File's hash.
+                  type: string
+                  example: ce5004f7d4a28fd5b222859a5edc6c46e314ad5c421f08962119d100b37501e4
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  custom_data:
+                    type: object
+                    properties:
+                      assign_public_teams:
+                        description: The file's destination groups improded by comma.
+                        type: string
+                        example: テストグループ1,テストグループ2
+                      can_open:
+                        description: Whether the user can open the file or not. 1 means true, and 0 means false.
+                        type: integer
+                        example: 1
+                      encrypts_user_name:
+                        description: User name who encrypted the file.
+                        type: string
+                        example: プロット 太郎
+                      file_id:
+                        type: string
+                        example: '0000000001'
+                      file_name:
+                        type: string
+                        example: テストファイル
+                      is_assign_public_terms:
+                        description: Whether the user belongs at least one of the destination groups or not. 1 means true, and 0 means false.
+                        type: integer
+                        example: 1
+                      project_id:
+                        type: string
+                        example: '000001'
+                      project_name:
+                        type: string
+                        example: テストプロジェクト
+                      usage_count_limit:
+                        type: integer
+                        example: 5
+                      validity_span_date:
+                        description: Timespan the file can be used.
+                        type: string
+                        example: '1990/01/01 00:00～'
+                  debug_messages:
+                    $ref: "#/components/schemas/debug_messages"
+                  error_messages:
+                    $ref: "#/components/schemas/error_messages"
+                  messages:
+                    type: string
+                    example: 403 Forbidden
+                  status:
+                    $ref: "#/components/schemas/status"
+    parameters:
+    - $ref: "#/components/parameters/version"
+
+  /client-api/get-application-information/v/{version}:
+    get:
+      description: This returns the information about the white list of applications.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  custom_data:
+                    type: object
+                    properties:
+                      white_list:
+                        description: To be modified.
+                        type: object
+                      extensions:
+                        description: .
+                        type: array
+                  debug_messages:
+                    $ref: "#/components/schemas/debug_messages"
+                  error_messages:
+                    $ref: "#/components/schemas/error_messages"
+                  messages:
+                    $ref: "#/components/schemas/messages"
+                  status:
+                    $ref: "#/components/schemas/status"
+    parameters:
+    - $ref: "#/components/parameters/version"
+
+  /client-api/server-version/v/{version}:
+    get:
+      description: This returns the version information of the server.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+                example: '1.0.0'
+    parameters:
+    - $ref: "#/components/parameters/version"
+
+  /client-api/register-file-log/v/{version}:
+    post:
+      description: |
+        <h3>Register file log.</h3>
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                operation:
+                  description: |
+                    <div>Oepration type for log_rec.operation_id.</div>
+                    <div>save or save_us. (If you enter anything other than "save", which is treated as "save_us".)</div>
+                  type: string
+                  example: save
+                hash:
+                  description: projects_files_hash.hash.
+                  type: string
+                  example: 4b94f51c853be6c40e0a129010a6e728e02b53fabeb633ce787fecf4c6969682
+                application_original_filename:
+                  description: application_control_mst.application_original_filename.
+                  type: string
+                  example: notepad.exe2
+                client_ip_local:
+                  description: client local ip address.
+                  type: string
+                  example: ''
+                mac_addr:
+                  description: mac address.
+                  type: string
+                  example: 00:15:5D:0C:0B:0A
+                serial_no:
+                  description: mac address.
+                  type: string
+                  example: 00371-222-9616695-86084
+                location:
+                  description: location.
+                  type: string
+                  example: ""
+                os_display_user:
+                  description: Displayed user on OS.
+                  type: string
+                  example: MSDNサンプル
+                os_version:
+                  description: OS version.
+                  type: string
+                  example: Windows 7 Professional  x64
+                os_user:
+                  description: User on OS.
+                  type: string
+                  example: msdn
+                host_name:
+                  description: Host (machine) name.
+                  type: string
+                  example: MSDN-PC
+      responses:
+        '200':
+          $ref: '#/components/responses/success_json_small'
+    parameters:
+    - $ref: "#/components/parameters/version"
+
+  /client-api/get-ldap-list:
+    get:
+      description: |
+        <h3>Get Ldap name and id for client.</h3>
+        <div>MEMO:</div>
+        <div>The language is fixedly specified in 'application/controllers/ClientApiController.php->init()'.</div>
+        <div>If you post language_id, change the process as well.</div>
+      responses:
+        '200':
+          $ref: '#/components/responses/success_json_on_get_ldap_list'
+
+components:
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+    user_id:
+      description: User's id.
+      type: string
+      example: '000001'
+    user_name:
+      description: User's name.
+      type: string
+      example: プロット 太郎
+    user_kana:
+      description: User's name represented in KATAKANA.
+      type: string
+      example: プロット タロウ
+    mail:
+      description: User's mail address.
+      type: string
+      example: tarou@plott.co.jp
+    project_id:
+      description: Project's id.
+      type: string
+      example: '000001'
+    members_list:
+      description: A list of users who belong the group.
+      type: array
+      items:
+        type: object
+        properties:
+          mail:
+            $ref: "#/components/schemas/mail"
+          user_id:
+            $ref: "#/components/schemas/user_id"
+          user_kana:
+            $ref: "#/components/schemas/user_kana"
+          user_name:
+            $ref: "#/components/schemas/user_name"
+    can_clipboard:
+      description: Whether he/she can use the clipboard or not. 1 means true and 0 means false.
+      type: integer
+      example: '1'
+    can_edit:
+      description: Whether he/she can edit enclypted files or not. 1 means true and 0 means false.
+      type: integer
+      example: '1'
+    can_print:
+      description: Whether he/she can print files or not. 1 means true and 0 means false.
+      type: integer
+      example: '1'
+    can_screenshot:
+      description: Whether he/she can take screenshots or not. 1 means true and 0 means false.
+      type: integer
+      example: '1'
+    password:
+      description: Hash data for the file password.
+      type: string
+      example: 'TbxDlos8KjDc2PK3HXaSw8Iahwqrbs9KBPUfE9GkZTM1faIHbXoTahM/WOx/bnbZZroyE1OhX7hPmZgp0r4cxmWBPcBfG1UXOPSF6afsXTxY0AmActJPnGzVEwbSrWYzZfAN1+tTugkza1lRThamvh3Kn8OHfwrbJfVWkS8NTEVGAupMc1G0sDEFXrFKiILiIX8lgy4muPwB2tW6ImPyoHg0P/K0qahVYC4G/N/KaE2M5zhG3xtPXbpavM4unXd6h2scl6jHqvMzKc2uOnQcdJYdQ4SCvT9ejZVW99V4dwsQCFNZdUbmUinPzP/ZPqXMfWKakwAGGM2Dbkt87a/zVQ=='
+    pc_info:
+      description: Informaton about the PC and its account.
+      type: object
+      properties:
+        client_ip_local:
+          type: string
+        host_name:
+          type: string
+          example: KT-DW1118
+        location:
+          type: string
+        mac_addr:
+          description: MAC address.
+          type: string
+          example: E8:D8:D1:43:D6:33
+        os_display_user:
+          type: string
+          example: t-plott
+        os_user:
+          type: string
+          example: KT-DW1118
+        os_version:
+          type: string
+          example: Windows 10 Pro x64
+        serial_no:
+          type: string
+    debug_messages:
+      type: object
+    error_messages:
+      type: object
+    messages:
+      type: object
+    status:
+      description: Whether the request succeeded or not.
+      type: boolean
+      example: true
+  responses:
+    FromNotClient:
+      description: When the connection is not from a client application, it returns error.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              custom_data:
+                type: object
+                properties:
+                  error_code:
+                    type: integer
+                    example: 403
+              debug_messages:
+                $ref: "#/components/schemas/debug_messages"
+              error_messages:
+                $ref: "#/components/schemas/error_messages"
+              messages:
+                $ref: "#/components/schemas/messages"
+              status:
+                type: boolean
+                example: false
+
+    success_json_on_get_ldap_list:
+      description: <div>OK</div>
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              custom_data:
+                type: array
+                items:
+                  properties:
+                    ldap_id:
+                      description: ''
+                      type: string
+                      example: '0001'
+                    ldap_name:
+                      description: ''
+                      type: string
+                      example: 'Name'
+              debug_messages:
+                type: object
+              error_messages:
+                type: object
+              messages:
+                type: string
+                example: ''
+              status:
+                description: Whether the request succeeded or not.
+                type: boolean
+                example: true
+
+    success_json_small:
+      description: <div>OK</div>
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              debug_messages:
+                type: object
+              error_messages:
+                type: object
+              messages:
+                type: string
+                example: ''
+              status:
+                description: Whether the request succeeded or not.
+                type: integer
+                example: 1
+
+  parameters:
+    version:
+      name: version
+      in: path
+      required: true
+      description: version for client api.
+      schema:
+        type: string
+        example: '1'
+    mode:
+      name: mode
+      in: path
+      required: true
+      description: If this is 1, the result includes closed projects(otherwise, only open projects are given).
+      schema:
+        type: integer
+        example: '0'
+
+security:
+- basicAuth: []

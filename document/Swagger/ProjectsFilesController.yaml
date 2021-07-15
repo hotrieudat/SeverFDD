@@ -1,0 +1,445 @@
+openapi: '3.0.3'
+info:
+  version: 1.4.6
+  title: ProjectsFilesController
+  description: |
+    <h2>Manage files that belong to the project.</h2>
+    <div>This controller doesn't have some pages, </div>
+    <div>the methods found on projects detail controller work instead.</div>
+    <div>and, has not function for register, delete.</div>
+    <dl>
+      <dt>Index:</dt>
+      <dd>/projects-detail/index/parent_code/{ProjectId}</dd>
+      <dt>SearchDialog:</dt>
+      <dd>/projects-detail/searchfile-dialog/parent_code/{ProjectId}/</dd>
+      <dt>Search:</dt>
+      <dd>/projects-detail/search-files/parent_code/{ProjectId}/</dd>
+      <dt>Sort:</dt>
+      <dd>/projects-detail/sort-file/</dd>
+    </dl>
+
+servers:
+  - url: http://localhost:8084
+    description: For real server
+
+tags:
+  - name: Processes
+    description: |
+      <div>When calling with ajax, the request is "POST", except for legacy browsers.</div>
+  - name: Pages
+    description: (and modal pages). Almost 'GET' requests.
+
+paths:
+
+  /projects-files/list-custom:
+    post:
+      tags: ["Processes"]
+      description: |
+        <div>Get list for file tab content on 'projects-files/update/code/{ProjectId}*{FileId}'.</div>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                code:
+                  description: ProjectId*FileId
+                  type: string
+                  example: '900001*0000000001'
+                page:
+                  description: Page number.
+                  type: string
+                  example: '0'
+      responses:
+        '200':
+          $ref: '#/components/responses/success_xml_list'
+
+  /projects-files/update/code/{ProjectId}*{FileId}:
+    get:
+      tags: ["Pages"]
+      description: Update file information.
+      responses:
+        '200':
+          description: Successful response
+    parameters:
+    - $ref: "#/components/parameters/ProjectId"
+    - $ref: "#/components/parameters/FileId"
+
+  /projects-files/validate-for-update:
+    post:
+      tags: ["Processes"]
+      description: Validate before update file information.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                code: 
+                  description: Target column.
+                  type: string
+                  example: '900001*0000000001'
+                form[usage_count_limit]:
+                  description: direction to sort. asc | desc
+                  type: string
+                  example: '69'
+                form[validity_start_date]: 
+                  description: It is using for the purpose of discriminating between the grid of the user tab and the grid of the file tab, on this function.
+                  type: string
+                  example: 2020/10/20 09:52:00
+                form[validity_end_date]:
+                  description: This parent code is project id.
+                  type: string
+                  example: 2020/10/21 09:52:00
+                form[can_open]:
+                  description: This parent code is project id.
+                  type: string
+                  example: 1
+                isUnit:
+                  description: This parent code is project id.
+                  type: string
+                  example: false
+      responses:
+        '200':
+          description: Result.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: ""
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /projects-files/execupdate:
+    post:
+      tags: ["Processes"]
+      description: Execute update.
+      requestBody:
+        description: |
+          <h3>In to ajax parameters:data.</h3>
+          <h3>Attention: It can affect the results of "Code ception".</h3>
+          <div>Please undo, after making changes.</div>
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                code: 
+                  description: Target column.
+                  type: string
+                  example: '900001*0000000001'
+                form[usage_count_limit]:
+                  description: direction to sort. asc | desc
+                  type: string
+                  example: '69'
+                form[validity_start_date]: 
+                  description: It is using for the purpose of discriminating between the grid of the user tab and the grid of the file tab, on this function.
+                  type: string
+                  example: 2020/10/20 09:52:00
+                form[validity_end_date]:
+                  description: This parent code is project id.
+                  type: string
+                  example: 2020/10/21 09:52:00
+                form[can_open]:
+                  description: This parent code is project id.
+                  type: string
+                  example: 1
+                isUnit:
+                  description: This parent code is project id.
+                  type: string
+                  example: false
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "更新を完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /projects-files/unit-update/parent_code/{UserId}*{ProjectId}*{FileId}:
+    get:
+      tags: ["Pages"]
+      description: Unit update.
+      responses:
+        '200':
+          description: Successful response
+    parameters:
+    - $ref: "#/components/parameters/UserId"
+    - $ref: "#/components/parameters/ProjectId"
+    - $ref: "#/components/parameters/FileId"
+
+  /projects-files/validation-for-unit-update:
+    post:
+      tags: ["Processes"]
+      description: Validate before unit update.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                _practicable_usage_count: 
+                  description: Practicable usage count.
+                  type: string
+                  example: 99
+                form[validity_start_date]:
+                  description: Validity start date.
+                  type: string
+                  example: 2020/10/01 11:50:00
+                form[validity_end_date]: 
+                  description: Validity end date.
+                  type: string
+                  example: 
+                parent_code:
+                  description: |
+                    <div>user id * project id * file id.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: 006501*900001*0000000001
+      responses:
+        '200':
+          description: Result.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: ""
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /projects-files/execunitupdate:
+    post:
+      tags: ["Processes"]
+      description: |
+        <h3>Execute unit update.</h3>
+        <h3>Attention: It can affect the results of "Code ception".</h3>
+        <div>Please undo, after making changes.</div>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                _practicable_usage_count: 
+                  description: Practicable usage count.
+                  type: string
+                  example: 99
+                form[validity_start_date]:
+                  description: Validity start date.
+                  type: string
+                  example: 2020/10/01 11:50:00
+                form[validity_end_date]: 
+                  description: Validity end date.
+                  type: string
+                  example: 
+                parent_code:
+                  description: |
+                    <div>user id * project id * file id.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: 006501*900001*0000000001
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "更新を完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+components:
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+
+    xmllist_rows_inner:
+      items:
+        type: object
+        properties:
+          row:
+            type: object
+            properties:
+              id:
+                type: string
+                example: "900001*0000000001"
+                xml:
+                  attribute: true
+              check_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+              physical_file_name: # mean name
+                type: string
+                example: '【極秘】機密情報.docx'
+                xml:
+                  name: cell
+              number_of_views: # mean name
+                type: string
+                example: '2回'
+                xml:
+                  name: cell
+              validity_span_dates: # mean name
+                type: string
+                example: 2020/09/09 17:30:00～2020/12/23 17:30:00
+                xml:
+                  name: cell
+              whether_the_file_is_available: # mean name
+                type: string
+                example: 利用可
+                xml:
+                  name: cell
+              registered_date: # mean name
+                type: string
+                example: 2020/09/09 10:29:07
+                xml:
+                  name: cell
+              spacer_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+      xml:
+        name: rows
+
+  responses:
+
+    success_json:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              custom_data:
+                type: object
+                properties:
+                  error_code:
+                    description: If the registration failed, the error code is given here. If succeeded, this is empty string.
+                    type: string
+                    example: ''
+                  debug_messages:
+                    type: object
+                  error_messages:
+                    type: object
+                  messages:
+                    description: Message for the success of the registration.
+                    type: string
+                    example: ''
+                  status:
+                    description: Whether the request succeeded or not.
+                    type: boolean
+                    example: true
+
+    success_xml_list:
+      description: Result xml.
+      content:
+        application/xml:
+          schema:
+            type: object
+            xml:
+              name: return_data # <<<
+            properties:
+              rows:
+                type: array
+                items:
+                $ref: "#/components/schemas/xmllist_rows_inner"
+              message:
+                type: string
+                example: ""
+              debug:
+                type: string
+                example: ""
+              status:
+                type: integer
+                example: 1
+              page:
+                type: integer
+                example: 0
+              max:
+                type: integer
+                example: 11
+              limit:
+                type: integer
+                example: 50
+
+  parameters:
+
+    ProjectId:
+      name: ProjectId
+      in: path
+      required: true
+      description: Column projects.project_id / projects_files.project_id
+      schema:
+        type: string
+        example: '900001'
+
+    FileId:
+      name: FileId
+      in: path
+      required: true
+      description: Column projects_files.file_id
+      schema:
+        type: string
+        example: '0000000001'
+
+    UserId:
+      name: UserId
+      in: path
+      required: true
+      description: Column user_id
+      schema:
+        type: string
+        example: '006501'
+
+security:
+- basicAuth: []

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="https://cdn.rawgit.com/andyferra/2554919/raw/2e66cabdafe1c9a7f354aa2ebf5bc38265e638e5/github.css">
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<h1 id="ユーザー周りの仕様書仮">ユーザー周りの仕様書（仮）</h1>
+<h2 id="要件定義の内容">要件定義の内容</h2>
+<ul>
+<li>暗号化ができるユーザーとできないユーザーが分けられるようにする</li>
+<li>LDAPとの連携ができる</li>
+<li>LDAPにて連携時に</li>
+<li>ユーザー情報をインポートできる機能を用意する</li>
+<li>公開鍵認証で実装する</li>
+<li>PW強度について変更ができる → 将来的な実装</li>
+<li>PWのリマインダー機能</li>
+</ul>
+<h1 id="section">=========================================================</h1>
+<h1 id="dbカラム構成">DBカラム構成</h1>
+<h2 id="ユーザー情報を管理するマスタのカラム情報について">ユーザー情報を管理するマスタのカラム情報について</h2>
+<ul>
+<li>ユーザーID</li>
+<li>ログインID</li>
+<li>パスワード</li>
+<li>ユーザー名</li>
+<li>ユーザーフリガナ</li>
+<li>メールアドレス</li>
+<li>ユーザーの公開鍵</li>
+<li>暗号化設定</li>
+<li>LDAP用ID</li>
+<li>パスワード変更日時</li>
+</ul>
+<blockquote>
+<p>登録者・更新者・登録日・更新日に関しては、下記URLを参照</p>
+<p><a href="https://192.168.12.200/admin/">PlottGenerator リンク</a></p>
+<p>ID/PW plott/plott</p>
+<p>※カラム情報はリンクより確認してください</p>
+</blockquote>
+<h2 id="ldap情報を管理するマスタについて">LDAP情報を管理するマスタについて</h2>
+<ul>
+<li>別途要検討 → SF6をベースにすれば行けるかも？</li>
+</ul>
+<h1 id="section-1">=================================================</h1>
+<h1 id="機能概要">機能概要</h1>
+<h3 id="新規登録編集削除検索csv出力に関してはプロットフレームワークの仕様に従う">新規登録・編集・削除・検索・CSV出力に関してはプロットフレームワークの仕様に従う</h3>
+<h3 id="別途作成が必要な機能について">別途作成が必要な機能について</h3>
+<ul>
+<li><a href="#anchor1">公開鍵認証機能</a></li>
+<li><a href="#anchor2">ユーザー情報のインポート機能</a></li>
+<li><a href="#anchor3">PW強度によるバリデーション</a></li>
+<li><a href="#anchor4">PWのリマインダー機能</a></li>
+<li><a href="#anchor5">クライアント側で作成された公開鍵をサーバー側に登録する機能</a></li>
+</ul>
+<p><a id="anchor1"></a></p>
+<h3 id="公開鍵認証機能"><a href="#anchor1">公開鍵認証機能</a></h3>
+<ul>
+<li>概要
+<ul>
+<li>クライアントアプリからサーバーに対して認証を行う際に使用</li>
+<li>パスワード認証でも良いが、鍵ペアはオフライン暗号化で必要となるためこちらにも転用</li>
+</ul></li>
+<li>認証手順
+<ol type="1">
+<li>クライアント、サーバーにログイン依頼（その際セッション作成）</li>
+<li>サーバー、ワンタイムパスワードを生成、セッションに保存する 同時に、ユーザーの公開鍵で暗号化してクライアントに返す</li>
+<li>クライアント、自らの秘密鍵で復号化してその値をサーバーに返す</li>
+<li>サーバー、セッションに保存したワンタイムパスワードとクライアントからの値が同一であれば、クライアントを認証する</li>
+</ol></li>
+</ul>
+<p><a id="anchor2"></a></p>
+<h3 id="ユーザー情報のインポート機能"><a href="#anchor2">ユーザー情報のインポート機能</a></h3>
+<ul>
+<li>概要
+<ul>
+<li>ユーザー情報をTSVにて一括で取り込む機能（ファイルの形式については用相談） &gt; CSVだと考慮しなくてはならない点が多くめんどくさいのでやだ</li>
+<li>既に登録済みのログインIDがTSVに含まれていた場合は、登録を失敗とする</li>
+<li>取り込む情報については、1000件を上限とする （要相談）</li>
+</ul></li>
+</ul>
+<p><a id="anchor3"></a></p>
+<h3 id="pw強度によるバリデーション"><a href="#anchor3">PW強度によるバリデーション</a></h3>
+<ul>
+<li>概要
+<ul>
+<li>別途ヴァリデーション機能を要する必要あり</li>
+</ul></li>
+</ul>
+<p><a id="anchor4"></a></p>
+<h3 id="pwのリマインダー機能"><a href="#anchor4">PWのリマインダー機能</a></h3>
+<ul>
+<li>概要
+<ul>
+<li>基本的に、SmoothFile6の挙動に合わせる。</li>
+<li>ログインIDを入力後、パスワードを初期化し登録されているメールアドレスに通知を行う</li>
+<li>メールアドレスに記載されたパスワードを使用して、ログインするとパスワード変更画面が表示される</li>
+<li>LDAPユーザーは利用不可 &gt; メールアドレスが登録されていない場合どうするのか ⇒ メールアドレスを必須にする？</li>
+</ul></li>
+</ul>
+<p><a id="anchor5"></a></p>
+<h3 id="クライアント側で作成された公開鍵をサーバー側に登録する機能"><a href="#anchor5">クライアント側で作成された公開鍵をサーバー側に登録する機能</a></h3>
+<ul>
+<li>概要
+<ul>
+<li>クライアント側で登録された、秘密鍵のペアとなる公開鍵を登録されているユーザー情報に更新する機能</li>
+<li>処理概要
+<ol type="1">
+<li>クライアントより、アカウントID、ログインID、パスワード、公開鍵を受け取る</li>
+<li>受け取った情報をもとに登録済みのアカウントが存在するか判定</li>
+<li>存在したら、受け取った公開鍵を登録する</li>
+</ol></li>
+<li><strong>JsonデータをHttpsで受け取るために、php.iniのallow_url_fopenを変更する必要がある<a href="http://helog.jp/xampp/file_get_contents-https/">参考記事</a></strong></li>
+</ul></li>
+</ul>
+</body>
+</html>

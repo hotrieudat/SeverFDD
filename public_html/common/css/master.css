@@ -1,0 +1,112 @@
+@CHARSET "UTF-8";
+/* 全体的なレイアウトを記述(reset.cssに近い初期レベルを設定) */
+
+/* ----------------------------------------------------------------------------------------------------------------------------
+    html tag
+----------------------------------------------------------------------------------------------------------------------------*/
+
+html, body {
+    font-family: "メイリオ",sans-serif;
+    font-size: 12px;
+    height: 100%;
+    padding: 0px;
+    margin: 0px;
+    overflow: hidden;
+}
+
+form {
+    margin: 0px;
+}
+
+table {
+    width: 100%;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+a img {
+    border: none;
+}
+
+label {
+    margin-right: 10px;
+}
+
+input[type="text"],
+input[type="password"]
+{
+    height: 20px;
+    width: 300px;
+    padding: 0px 2px 0px 4px;
+    border: 1px solid #C0C0C0;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+    position: relative;
+    top: 2px;
+    margin-right: 5px;
+}
+
+textarea {
+    min-height: 100px;
+    width: 300px;
+    padding: 0px 2px 0px 4px !important;
+    border: 1px solid #C0C0C0;
+}
+
+select {
+    min-width: 200px;
+    max-width: 300px;
+    border: 1px solid #C0C0C0;
+}
+
+/* ----------------------------------------------------------------------------------------------------------------------------
+    form frame
+----------------------------------------------------------------------------------------------------------------------------*/
+
+.header {
+    height: 35px;
+    width: 100%;
+    min-width: 800px;
+    overflow: visible;
+}
+
+.container {
+    margin: 0;
+    overflow: hidden;
+    height: 100%
+}
+
+.menu_wrapper {
+    float: left;
+    display: inline-block;
+    height: 100%;
+    position: relative;
+    z-index: 100;
+}
+
+.right_wrapper {
+    /* 幅をフレキシブルに伸縮させる */
+    overflow: hidden;
+    width: auto;
+    position: relative;
+    height: 100%
+}
+
+.contents {
+    height: 100%;
+    min-width: 700px;
+    position: relative;
+    z-index: 0;
+    overflow-y: auto;
+}
+
+.contents_inner {
+    height: 100%;
+    padding: 30px;
+    overflow-x: hidden;
+}

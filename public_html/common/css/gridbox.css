@@ -1,0 +1,125 @@
+@CHARSET "UTF-8";
+
+/* GridBoxに関する共通用のCSS */
+
+/* ----------------------------------------------------------------------------------------------------------------------------
+    Grid
+----------------------------------------------------------------------------------------------------------------------------*/
+
+/* TODO: 直接ページに行われているが、修正する予定 */
+
+
+/* ----------------------------------------------------------------------------------------------------------------------------
+    loading
+----------------------------------------------------------------------------------------------------------------------------*/
+/*
+#exec_layer {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    position: absolute;
+    opacity: 0.5;
+    background: rgba(0, 0, 0, 0.4);
+    background-color: #000;
+    filter: alpha(opacity=40);
+    z-index: 50;
+}
+
+.exec_layer {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    position: absolute;
+    background: rgba(0, 0, 0, 0.4);
+    background-color: #000;
+    filter: alpha(opacity=40);
+    z-index: 50;
+}
+
+.throbber {
+    font-size: 10px;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    text-indent: -9999em;
+    -webkit-animation: load5 1.1s infinite ease;
+    animation: load5 1.1s infinite ease;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+    position: absolute;
+    top: 44%;
+    top: calc(45% - 50px);
+    left: 44%;
+    left: calc(50% - 50px);
+}
+*/
+
+/* ----------------------------------------------------------------------------------------------------------------------------
+    pager
+----------------------------------------------------------------------------------------------------------------------------*/
+#pagination {
+    width: auto;
+    padding-top: 20px;
+    text-align: center;
+    border-collapse: separate;
+    border-spacing: 10px 0;
+    background-color: white;
+    min-width: 700px;
+}
+#ex_pagination, [id^="pagination_"] {
+    color: #000;
+}
+
+#pagination ul, #ex_pagination ul, [id^="pagination_"] ul {
+    font-size: 0;
+    padding-left: 0;
+    display: table;
+    margin: auto;
+}
+
+#pagination ul li, #ex_pagination ul li, [id^="pagination_"] ul li {
+    display: table-cell;
+    font-size: 13px;
+    width: 100px;
+    height: 35px;
+    border: 1px solid #acacac;
+    /*color: #0972AF; #1195対応 */
+    vertical-align: middle;
+}
+[id^="pagination_"] ul li.pagenumber {
+    width: 35px!important;
+}
+
+#pagination ul li.selectable, #ex_pagination ul li.selectable, [id^="pagination_"] ul li.selectable {
+    display: table-cell;
+    border: 1px solid #acacac;
+    color: #0972AF;
+}
+
+#pagination ul li.selectable:hover, #ex_pagination ul li.selectable:hover, [id^="pagination_"] ul li.selectable:hover {
+    display: table-cell;
+    border: 1px solid #075b8c;
+    color: #0972AF;
+    cursor: pointer;
+}
+
+#pagination ul li.selected, #ex_pagination ul li.selected, [id^="pagination_"] ul li.selected {
+    display: table-cell;
+    border: 1px solid #acacac;
+    /*color: #0972AF; #1195対応 */
+    background-color: #e7e7e7;
+}
+
+#pagination ul li.pagenumber {
+    width: 35px;
+}
+
+/* checkbox の cursor 変更 */
+div.gridbox_dhx_web.gridbox table.obj.row20px tr td img[src*="item_chk"] {
+    cursor: pointer!important;
+}

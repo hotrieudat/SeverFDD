@@ -1,0 +1,125 @@
+openapi: '3.0.3'
+info:
+  version: 1.4.6
+  title: BackupController
+
+servers:
+  - url: http://localhost:8084
+    description: For real server
+
+tags:
+  - name: Processes
+    description: |
+      <div>When calling with ajax, the request is "POST", except for legacy browsers.</div>
+  - name: Pages
+    description: (and modal pages). Almost 'GET' requests.
+
+paths:
+
+  /backup/index:
+    get:
+      tags: ["Pages"]
+      description: |
+        <div>Index.</div>
+        <div>True path is /system/backup/index.</div>
+      responses:
+        '200':
+          description: Successful response
+
+  /backup/exec-export:
+    post:
+      tags: ["Processes"]
+      description: |
+        <div>Export.</div>
+        <div>True path is /system/backup/exec-export</div>
+      responses:
+        '200':
+          $ref: '#/components/responses/success_json_exec_export'
+
+  /backup/export-file:
+    get:
+      description: |
+        <div>Get system information from web server.</div>
+        <div>True path is /system/backup/export-file</div>
+      responses:
+        '200':
+          description: OK
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                example: |
+                  download: FD_system_info_{YYYYMMDD_HHiiss}.zip
+
+  /backup/exec-import:
+    post:
+      tags: ["Processes"]
+      description: |
+        <div>Output report file, after import.</div>
+        <div>True path is /system/backup/export-import</div>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  description: import_file_system.
+                  type: 'file'
+                  example: ''
+      responses:
+        '200':
+          $ref: '#/components/responses/success_exec_import'
+
+components:
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  # $ref: '#/components/responses/success_json_exec_export'
+  responses:
+    success_json_exec_export:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              custom_data:
+                type: object
+                properties:
+                  error_code:
+                    description: If the registration failed, the error code is given here. If succeeded, this is empty string.
+                    type: string
+                    example: ''
+                  debug_messages:
+                    type: object
+                  error_messages:
+                    type: object
+                  messages:
+                    description: Message for the success of the registration.
+                    type: string
+                    example: '@TODO permission error 改善後にテキストを取得し張り付ける'
+                  status:
+                    description: Whether the request succeeded or not.
+                    type: boolean
+                    example: true
+
+    success_exec_import:
+      description: OK
+      content:
+        application/octet-stream:
+          schema:
+            type: string
+            example: | 
+              file Name: 'result.txt'
+              "======================================="
+              "=【システムデータインポート結果】"
+              "======================================="
+              "【エラー】"
+
+security:
+- basicAuth: []

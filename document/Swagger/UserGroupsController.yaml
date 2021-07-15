@@ -1,0 +1,479 @@
+openapi: '3.0.3'
+info:
+  version: 1.4.6
+  title: UserGroupsController
+  description: |
+    <h2>Manage user groups.</h2>
+
+servers:
+  - url: http://localhost:8084
+    description: For real server
+
+tags:
+  - name: Processes
+    description: |
+      <div>When calling with ajax, the request is "POST", except for legacy browsers.</div>
+  - name: Pages
+    description: (and modal pages). Almost 'GET' requests.
+
+paths:
+
+  /user-groups/index:
+    get:
+      tags: ["Pages"]
+      description: Index.
+      responses:
+        '200':
+          description: Successful response
+
+  /user-groups/list:
+    post:
+      tags: ["Processes"]
+      description: Get list for index page.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                page:
+                  description: |
+                    <div>Page number.</div>
+                  type: integer
+                  example: 0
+      responses:
+        '200':
+          $ref: '#/components/responses/success_xml_list_for_list'
+
+  /user-groups/searchdialog:
+    get:
+      tags: ["Pages"]
+      description: modal | Search user groups.
+      responses:
+        '200':
+          description: Successful response
+
+  /user-groups/search:
+    post:
+      tags: ["Processes"]
+      description: |
+        <div>Set search parameters for user groups page.</div>
+        <div>The parameters sent will be registered in the session.</div>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                search[master][name][ilike]:
+                  description: User group name.
+                  type: string
+                  example: 'KYOTOサンプル'
+                search[master][comment][ilike]:
+                  description: Comment.
+                  type: string
+                  example: ''
+      responses:
+        '200':
+          description: Result.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: ""
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /user-groups/sort:
+    post:
+      tags: ["Processes"]
+      description: Reload after set sort parameters.
+      requestBody:
+        description: |
+          <div>In to ajax parameters:data.</div>
+          <div>This method changes the sort target according to the contents of the parameters.</div>
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                order:
+                  description: Target column.
+                  type: string
+                  example: name
+                direction:
+                  description: direction to sort. asc | desc
+                  type: string
+                  example: 'asc'
+                parent_code:
+                  description: |
+                    <div>Parent code.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: ''
+      responses:
+        '200':
+          description: Result.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: ""
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /user-groups/execvalidation:
+    post:
+      tags: ["Processes"]
+      description: Validate before isnert / update.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                form[name]: 
+                  description: User group name.
+                  type: string
+                  example: 'testUserGroup'
+                form[comment]:
+                  description: Comment.
+                  type: string
+                  example: ''
+                isUpdate:
+                  description: |
+                    <div>Is update flag.</div>
+                    <dl>
+                      <dt>0</dt>
+                      <dd>false(Is insert).</dd>
+                      <dt>1</dt>
+                      <dd>true(Is Update).</dd>
+                    </dl>
+                  type: string
+                  example: '1'
+                successMessage:
+                  description: |
+                    <div>Confrim message.</div>
+                    <dl>
+                      <dt>Insert</dt>
+                      <dd>OK | 本当に登録しますか？</dd>
+                      <dt>Update</dt>
+                      <dd>OK | 登録情報を更新しますか？</dd>
+                    </dl>
+                  type: string
+                  example: '本当に登録しますか？'
+      responses:
+        '200':
+          description: Successful status and more.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "本当に登録しますか？"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /user-groups/regist:
+    get:
+      tags: ["Pages"]
+      description: Register.
+      responses:
+        '200':
+          description: Successful response
+
+  /user-groups/execregist:
+    post:
+      tags: ["Processes"]
+      description: |
+        <div>Register user group.</div>
+        <h3>Attention: It can affect the results of "Code ception".</h3>
+        <h3>When insert record on application_control_mst then insert record too on application_size_mst with cascade.</h3>
+        <div>Please delete, after insert record.</div>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                form[name]: 
+                  description: User group name.
+                  type: string
+                  example: 'testUserGroup'
+                form[comment]:
+                  description: Comment.
+                  type: string
+                  example: ''
+                isUpdate:
+                  description: Is update flag.
+                  type: string
+                  example: '0'
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "登録が完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /user-groups/update/code/{UserGroupsId}:
+    get:
+      tags: ["Pages"]
+      description: Update.
+      responses:
+        '200':
+          description: Successful response
+    parameters:
+    - $ref: "#/components/parameters/UserGroupsId"
+
+  /user-groups/execupdate:
+    post:
+      tags: ["Processes"]
+      description: |
+        <div> Update user group.</div>
+        <h3>Attention: It can affect the results of "Code ception".</h3>
+        <h3>When update record on application_control_mst then update record too on application_size_mst with cascade.</h3>
+        <div>Please revert, after update record.</div>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                form[name]: 
+                  description: User group name.
+                  type: string
+                  example: 'testUserGroup'
+                form[comment]:
+                  description: Comment.
+                  type: string
+                  example: ''
+                isUpdate:
+                  description: Is update flag.
+                  type: string
+                  example: '1'
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "更新を完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /user-groups/execdelete:
+    post:
+      tags: ["Processes"]
+      description: |
+        <div>Delete user group.</div>
+        <h3>Attention: It can affect the results of "Code ception".</h3>
+        <h3>When delete record on application_control_mst then delete record too on application_size_mst with cascade.</h3>
+        <div>Please delete, after create record.</div>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                code:
+                  description: user_groups.user_groups_id
+                  type: string
+                  example: '900004'
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "削除を完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+components:
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+
+    xmllist_rows_inner_for_list:
+      items:
+        type: object
+        properties:
+          row:
+            type: object
+            properties:
+              id:
+                type: string
+                example: "000003"
+                xml:
+                  attribute: true
+              check_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+              user_groups_name: # mean name
+                type: string
+                example: 'KYOTOサンプル'
+                xml:
+                  name: cell
+              comment: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+              number_of_registered_users: # mean name
+                type: integer
+                example: 0
+                xml:
+                  name: cell
+              spacer_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+      xml:
+        name: rows
+
+  # $ref: '#/components/responses/success_json'
+  responses:
+    success_json:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              custom_data:
+                type: object
+                properties:
+                  error_code:
+                    description: If the registration failed, the error code is given here. If succeeded, this is empty string.
+                    type: string
+                    example: ''
+                  debug_messages:
+                    type: object
+                  error_messages:
+                    type: object
+                  messages:
+                    description: Message for the success of the registration.
+                    type: string
+                    example: ''
+                  status:
+                    description: Whether the request succeeded or not.
+                    type: boolean
+                    example: true
+
+    success_xml_list_for_list:
+      description: Result xml.
+      content:
+        application/xml:
+          schema:
+            type: object
+            xml:
+              name: return_data # <<<
+            properties:
+              rows:
+                type: array
+                items:
+                $ref: "#/components/schemas/xmllist_rows_inner_for_list"
+              message:
+                type: string
+                example: ""
+              debug:
+                type: string
+                example: ""
+              status:
+                type: integer
+                example: 1
+              page:
+                type: integer
+                example: 0
+              max:
+                type: integer
+                example: 10
+              limit:
+                type: integer
+                example: 50
+
+  parameters:
+
+    UserGroupsId:
+      name: UserGroupsId
+      in: path
+      required: true
+      description: Column user_groups.user_groups_id
+      schema:
+        type: string
+        example: '000001'
+
+security:
+- basicAuth: []

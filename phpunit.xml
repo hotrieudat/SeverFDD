@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<phpunit
+        bootstrap="./tests/bootstrap.php"
+        colors="true"
+        convertErrorsToExceptions="true"
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true"
+        verbose="true"
+        stopOnFailure="false"
+        processIsolation="false"
+        backupGlobals="false"
+        syntaxCheck="true"
+>
+    <php>
+        <var name="DB_DSN" value="pgsql:dbname=filedefender;host=localhost"/>
+        <var name="DB_USER" value="postgres"/>
+        <var name="DB_PASSWD" value=""/>
+        <var name="DB_DBNAME" value="filedefender"/>
+    </php>
+    <testsuite name="models">
+        <directory>./tests/models/</directory>
+    </testsuite>
+    <!--
+    @2021/02/04
+    テストで必要なデータを削除してしまうため、一旦使用しない様にしておく
+    -->
+    <!--<testsuite name="service">-->
+        <!--<directory>./tests/service/</directory>-->
+    <!--</testsuite>-->
+    <testsuite name="PloService">
+        <directory>./tests/PloService/</directory>
+    </testsuite>
+    <testsuite name="controllers">
+        <directory>./tests/controllers/</directory>
+    </testsuite>
+    <testsuite name="all">
+        <directory>./tests/models/</directory>
+        <!--<directory>./tests/service/</directory>-->
+        <directory>./tests/PloService/</directory>
+    </testsuite>
+</phpunit>

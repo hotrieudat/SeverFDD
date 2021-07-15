@@ -1,0 +1,103 @@
+@charset "UTF-8";
+/*
+ * D3.js用スタイルシート
+ */
+
+
+
+
+/*
+ * 以下ログ分析モーダルウインドウ用
+ */
+/* 注意書き */
+div#note {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+/* グラフ・凡例リストレイアウト */
+div#graph_container {
+    width: 700px;
+    height: 350px;
+}
+
+div#graph_area_left {
+    float: left;
+    width: 350px;
+    height: 350px;
+}
+
+div#graph_area_right {
+    float: right;
+    width: 350px;
+    height: 350px;
+}
+
+div#legends_area {
+    margin-top: 5px;
+    overflow-x: auto;
+    overflow-y: auto;
+    width: 375px;
+    height: 260px;
+    border:solid 1px #000;
+    font-size: 17pt;
+}
+
+/* 凡例 */
+a.legend {
+    color: #0E73BB;
+    text-decoration: none;
+}
+
+/* 凡例(ホバー) */
+a.legend:hover {
+    color: #0E73BB;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* タイトル */
+div#legends_title_area {
+    margin-top: 40px;
+    font-size: 10pt;
+    /*font-weight: bold;*/
+}
+
+p#legends_list {
+    margin: 5px
+}
+
+/* グラフ各要素の値 */
+.pie-text {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+/* タブ位置 */
+.tab_wrapper {
+    position: relative;
+    border-bottom: #D0D0D0 solid 1px;
+    padding-left: 15px;
+    margin: 10px 40px 0 0;
+    font-size: 0;
+}
+
+/* グラフ位置 */
+div#pie_svg {
+    margin-top: 20px;
+}
+
+/* 吹き出し */
+.tooltip {
+    position: absolute;
+    text-align: center;
+    width: auto;
+    height: auto;
+    padding: 5px;
+    font: 12px;
+    background: white;
+    -webkit-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
+    -moz-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
+    visibility: hidden;
+}

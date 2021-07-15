@@ -1,0 +1,28 @@
+{
+  "require": {
+    "phpseclib/phpseclib": "~2.0",
+    "phpunit/phpunit": "^4.8",
+    "phpunit/dbunit": "^2.0",
+    "robmorgan/phinx": "^0.9.2",
+    "codeception/codeception": "2.*",
+    "jonnyw/php-phantomjs" : "4.*",
+    "jakoch/phantomjs-installer": "2.1.1"
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "PhantomInstaller\\Installer::installPhantomJS"
+    ],
+    "post-update-cmd": [
+      "PhantomInstaller\\Installer::installPhantomJS"
+    ],
+    "coverage": [
+      "php -dextension=xdebug.so ./vendor/bin/phpunit --coverage-html=tests/coverage_dir"
+    ],
+    "test": [
+      "./vendor/bin/phpunit --testsuite PloService",
+      "./vendor/bin/phpunit --testsuite service",
+      "./vendor/bin/phpunit --testsuite models",
+      "./vendor/bin/phpunit --testsuite controllers"
+    ]
+  }
+}

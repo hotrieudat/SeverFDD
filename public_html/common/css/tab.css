@@ -1,0 +1,42 @@
+@charset "utf-8";
+
+.wrapTabs {
+    width:100%;
+    overflow: hidden;
+    /*border: 1px solid #ccc;*/
+    border: none;
+    border-left: solid 1px #ccc;
+    background-color: #fff;
+}
+
+.wrapTabs button {
+    display: inline-block;
+    float: left;
+    background-color: #ddd;
+    border-top: solid 1px #ccc;
+    border-right: solid 1px #ccc;
+    border-bottom: none;
+    border-left: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+    color: #555;
+}
+
+.wrapTabs button:hover {
+    background-color: #ddd;
+}
+
+.wrapTabs button.active {
+    background-color: #fff;
+    color: #000;
+}
+
+.tabContent {
+    margin-top: -1px;
+    display: none;
+    padding: 20px 0 0 0;
+    border: 1px solid #ccc;
+}

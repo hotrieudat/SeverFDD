@@ -1,0 +1,525 @@
+openapi: '3.0.3'
+info:
+  version: 1.4.6
+  title: UserLicenseController
+  description: |
+    <h2>Manage user license and using terminals.</h2>
+
+servers:
+  - url: http://localhost:8084
+    description: For real server
+
+tags:
+  - name: Processes
+    description: |
+      <div>When calling with ajax, the request is "POST", except for legacy browsers.</div>
+  - name: Pages
+    description: (and modal pages). Almost 'GET' requests.
+
+paths:
+
+  /license/index:
+    get:
+      tags: ["Pages"]
+      description: Index.
+      responses:
+        '200':
+          description: Successful response
+
+  /license/list:
+    post:
+      tags: ["Processes"]
+      description: Get list of user license for index page.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                page:
+                  description: |
+                    <div>Page number.</div>
+                  type: integer
+                  example: 0
+      responses:
+        '200':
+          $ref: '#/components/responses/success_xml_list'
+
+  /license/searchdialog:
+    get:
+      tags: ["Pages"]
+      description: modal | Dialog for search.
+      responses:
+        '200':
+          description: Successful response
+
+  /license/search:
+    post:
+      tags: ["Processes"]
+      description: |
+        <div>Set search parameters for Application license page.</div>
+        <div>The parameters sent will be registered in the session.</div>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                search[master][company_name][ilike]:
+                  description: Company name.
+                  type: string
+                  example: 'PLOTT'
+                search[master][user_name][ilike]:
+                  description: User name.
+                  type: string
+                  example: ''
+                search[master][login_code][ilike]:
+                  description: Login code.
+                  type: string
+                  example: ""
+                search[master][auth_id]:
+                  description: Auth id.
+                  type: string
+                  example: ''
+                search[master][has_license]:
+                  description: Has license flag.
+                  type: string
+                  example: '1'
+                search[master][is_revoked]:
+                  description: Is revoked flag.
+                  type: string
+                  example: "0"
+        required: false
+      responses:
+        '200':
+          $ref: '#/components/responses/success_json'
+
+  /license/sort:
+    post:
+      tags: ["Processes"]
+      description: Reload after set sort parameters.
+      requestBody:
+        description: |
+          <div>In to ajax parameters:data.</div>
+          <div>This method changes the sort target according to the contents of the parameters.</div>
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                order:
+                  description: Target column.
+                  type: string
+                  example: company_name
+                direction:
+                  description: direction to sort. asc | desc
+                  type: string
+                  example: 'asc'
+                parent_code:
+                  description: |
+                    <div>Parent code.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: ''
+      responses:
+        '200':
+          $ref: '#/components/responses/success_json'
+
+  /license/exec-register-has-license/:
+    post:
+      tags: ["Processes"]
+      description: |
+        <div>Execute grant license.</div>
+        <div>Update has_license to 1 on target user.</div>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                codes: 
+                  description: |
+                    <div>Multiple user id, joined by ','.</div>
+                    <div>However, if only single data then only value.</div>
+                  type: string
+                  example: '006677'
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "登録が完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /license/release-has-license/:
+    post:
+      tags: ["Processes"]
+      description: |
+        <div>Deprive the license.</div>
+        <div>Update has_license to 0 on target user.</div>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                userIds: 
+                  description: |
+                    <div>Multiple user id, joined by ','.</div>
+                    <div>However, if only single data then only value.</div>
+                  type: string
+                  example: '006677'
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "ライセンスユーザーを削除しました"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /license/release-device-license/:
+    post:
+      tags: ["Processes"]
+      description: |
+        <div>Cancel the registration of the granted licensed user terminal.</div>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                codes: 
+                  description: |
+                    <div>Multiple 'user id * license number', joined by ','.</div>
+                    <div>However, if only single data then only value.</div>
+                  type: string
+                  example: '006677*0002,006677*0003'
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "端末解除しました"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /license/is-exists-devices-row/:
+    post:
+      tags: ["Processes"]
+      description: |
+        <div>Check is exists granted licensed user terminal.</div>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                codes: 
+                  description: |
+                    <div>Multiple user id, joined by ','.</div>
+                    <div>However, if only single data then only value.</div>
+                  type: string
+                  example: '006677'
+      responses:
+        '200':
+          description: Result.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: ""
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /license/devices/codes/{UserId}:
+    get:
+      tags: ["Pages"]
+      description: modal | Dialog for using terminals list.
+      responses:
+        '200':
+          description: Successful response
+    parameters:
+    - $ref: "#/components/parameters/UserId"
+
+  /license/get-list-for-devices/codes/{UserId}/page/0:
+    post:
+      tags: ["Processes"]
+      description: |
+        <h3>Get list of granted licensed user terminal.</h3>
+        <div>Page parameter is 0, because reset display grid after search.</div>
+      responses:
+        '200':
+          $ref: '#/components/responses/success_xml_list_terminals'
+    parameters:
+    - $ref: "#/components/parameters/UserId"
+
+components:
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+
+    xmllist_rows_inner:
+      items:
+        type: object
+        properties:
+          row:
+            type: object
+            properties:
+              id:
+                type: string
+                example: "000001"
+                xml:
+                  attribute: true
+              check_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+              company_name: # mean name
+                type: string
+                example: システム管理企業
+                xml:
+                  name: cell
+              user_name: # mean name
+                type: string
+                example: システム管理者
+                xml:
+                  name: cell
+              login_code: # mean name
+                type: string
+                example: admin
+                xml:
+                  name: cell
+              authority_group_name: # mean name
+                type: string
+                example: システム管理者用権限
+                xml:
+                  name: cell
+              number_of_terminals_used: # mean name
+                type: string
+                example: '3'
+                xml:
+                  name: cell
+              spacer_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+      xml:
+        name: rows
+
+    xmllist_rows_inner_terminals:
+      items:
+        type: object
+        properties:
+          row:
+            type: object
+            properties:
+              id:
+                type: string
+                example: "006677*0001"
+                xml:
+                  attribute: true
+              check_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+              user_name: # mean name
+                type: string
+                example: test20200923
+                xml:
+                  name: cell
+              mac_address: # mean name
+                type: string
+                example: 00:09:0F:AA:00:01
+                xml:
+                  name: cell
+              host_machine_name: # mean name
+                type: string
+                example: KT-DW0970
+                xml:
+                  name: cell
+              os_version: # mean name
+                type: string
+                example: Windows 10 Pro x64
+                xml:
+                  name: cell
+              log_on_user_name: # mean name
+                type: string
+                example: y-yamada
+                xml:
+                  name: cell
+              registered_date: # mean name
+                type: string
+                example: 2020/09/09 10:44:29
+                xml:
+                  name: cell
+              spacer_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+      xml:
+        name: rows
+
+  responses:
+
+    success_json:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              custom_data:
+                type: object
+                properties:
+                  error_code:
+                    description: If the registration failed, the error code is given here. If succeeded, this is empty string.
+                    type: string
+                    example: ''
+                  debug_messages:
+                    type: object
+                  error_messages:
+                    type: object
+                  messages:
+                    description: Message for the success of the registration.
+                    type: string
+                    example: ''
+                  status:
+                    description: Whether the request succeeded or not.
+                    type: boolean
+                    example: true
+
+    success_xml_list:
+      description: Result xml.
+      content:
+        application/xml:
+          schema:
+            type: object
+            xml:
+              name: return_data # <<<
+            properties:
+              rows:
+                type: array
+                items:
+                $ref: "#/components/schemas/xmllist_rows_inner"
+              message:
+                type: string
+                example: ""
+              debug:
+                type: string
+                example: ""
+              status:
+                type: integer
+                example: 1
+              page:
+                type: integer
+                example: 0
+              max:
+                type: integer
+                example: 13
+              limit:
+                type: integer
+                example: 50
+
+    success_xml_list_terminals:
+      description: Result xml.
+      content:
+        application/xml:
+          schema:
+            type: object
+            xml:
+              name: return_data # <<<
+            properties:
+              rows:
+                type: array
+                items:
+                $ref: "#/components/schemas/xmllist_rows_inner_terminals"
+              message:
+                type: string
+                example: ""
+              debug:
+                type: string
+                example: ""
+              status:
+                type: integer
+                example: 1
+              page:
+                type: integer
+                example: 0
+              max:
+                type: integer
+                example: 3
+              limit:
+                type: integer
+                example: 50
+
+  parameters:
+
+    UserId:
+      name: UserId
+      in: path
+      required: true
+      description: Column user_id
+      schema:
+        type: string
+        example: '006677'
+
+security:
+- basicAuth: []

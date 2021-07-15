@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="https://cdn.rawgit.com/andyferra/2554919/raw/2e66cabdafe1c9a7f354aa2ebf5bc38265e638e5/github.css">
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<h1 id="urlの命名規則について">URLの命名規則について</h1>
+<h2 id="ルール草案">ルール草案</h2>
+<ul>
+<li>PHPのAction名に関してはcamelCalseを利用する　⇒　実際のURLに関してはchain-caseとなる</li>
+<li>既存のPFWで用意されているアクションは、そのまま利用する</li>
+<li>index 一覧、TOPページ</li>
+<li>regist 新規登録ページ</li>
+<li>udpate 更新登録ページ</li>
+<li>delete 削除処理</li>
+<li>list 一覧取得</li>
+<li>search 検索方法のセッション登録</li>
+<li>login ログイン処理</li>
+<li>新たにURLを作成する場合は、「動詞」＋「目的語」となるように作成する</li>
+<li>searchXXXX　→ 検索を目的とした</li>
+<li>registerXXXXX → Insertをベースとした処理</li>
+<li>updateXXXX → Updateをベースとした処理</li>
+<li>クライアントソフトからの通信に関してはAPI/xxxxとするようにする</li>
+<li>URLはフロントコントローラーにてAPIという文字列を削除し各種コントローラーに振り分ける想定
+<ul>
+<li>https://filekey/API/User/register-xxxxx/ の場合、UserコントローラーのregisterXXXXXというアクションに振り分けられる。</li>
+</ul></li>
+</ul>
+</body>
+</html>

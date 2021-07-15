@@ -1,0 +1,96 @@
+openapi: '3.0.3'
+info:
+  version: 1.4.6
+  title: ProjectsUserGroupsMemberController
+  description: |
+    <h2>Manage users participating in the project as members of the user group.</h2>
+    <div>This controller has not action method of pages.</div>
+    <div>Only called and processing from right grid of project detail user tab content.</div>
+
+servers:
+  - url: http://localhost:8084
+    description: For real server
+
+paths:
+
+  /projects-user-groups-member/execdelete-users-on-user-groups:
+    post:
+      tags: ["Processes"]
+      description: Execute delete users participating in the project as members of the user group.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                codes:
+                  description: |
+                    <div>Multiple user groups id, joined by ','.</div>
+                    <div>However, if only single data then only value.</div>
+                  type: string
+                  example: '000001'
+                parent_code:
+                  description: |
+                    <div>Parent code.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: '000001'
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "削除を完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+components:
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  # $ref: '#/components/responses/success_json'
+  responses:
+    success_json:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              custom_data:
+                type: object
+                properties:
+                  error_code:
+                    description: If the registration failed, the error code is given here. If succeeded, this is empty string.
+                    type: string
+                    example: ''
+                  debug_messages:
+                    type: object
+                  error_messages:
+                    type: object
+                  messages:
+                    description: Message for the success of the registration.
+                    type: string
+                    example: ''
+                  status:
+                    description: Whether the request succeeded or not.
+                    type: boolean
+                    example: true
+
+security:
+- basicAuth: []

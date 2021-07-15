@@ -1,0 +1,231 @@
+openapi: '3.0.3'
+info:
+  version: 1.4.6
+  title: ProjectsMemberController
+  description: |
+    <div>This controller doesn't have some pages, </div>
+    <div>the methods found on other controller work instead.</div>
+    <dl>
+      <dt>Register(Participate):</dt>
+      <dd>/projects-participant/～</dd>
+      <dt>Delete(Secession):</dt>
+      <dd>/projects-Secession/～</dd>
+    </dl>
+    <div>And only called and processing from project detail or project secession.</div>
+    <div>&nbsp;</div>
+    <div>The table to be processing changes depending on how the user participates in the project.</div>
+    <h3>user type:</h3>
+    <ol>
+      <li>projects_authority_groups_projects_users</li>
+      <li>projects_authority_groups_user_groups_users</li>
+      <li><ul>
+        <li>projects_authority_groups_projects_users</li>
+        <li>projects_authority_groups_user_groups_users</li>
+      </ul></li>
+    </ol>
+
+servers:
+  - url: http://localhost:8084
+    description: For real server
+
+tags:
+  - name: Processes
+    description: |
+      <div>When calling with ajax, the request is "POST", except for legacy browsers.</div>
+  - name: Pages
+    description: (and modal pages). Almost 'GET' requests.
+
+paths:
+
+  /projects-member/execdelete:
+    post:
+      tags: ["Processes"]
+      description: |
+        <h3>Delete participant user in project.</h3>
+        <div>If target user type is 2 then can't delete it</div>
+        <div> and, if type is 3 then delete only direct participant data.</div>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                parent_code:
+                  description: |
+                    <div>Parent code.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: '000001'
+                code:
+                  description: Project id and User id.
+                  type: string
+                  example: '000001*006681'
+                user_type: 
+                  description: Explained in the opening 'user types'.
+                  type: string
+                  example: '1'
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "削除を完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /projects-member/update-setting/code/{ProjectId}*{UserId}*{IsManager}*{UserType}/user_type/{CanUpdate}:
+    get:
+      tags: ["Pages"]
+      description: modal | Update 'administrator flag' on selected user.
+      responses:
+        '200':
+          description: Successful response
+    parameters:
+    - $ref: "#/components/parameters/ProjectId"
+    - $ref: "#/components/parameters/UserId"
+    - $ref: "#/components/parameters/IsManager"
+    - $ref: "#/components/parameters/UserType"
+    - $ref: "#/components/parameters/CanUpdate"
+
+  /projects-member/exec-update-setting:
+    post:
+      tags: ["Processes"]
+      description: Update 'Is manager flag'.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                form[is_manager]: 
+                  description: Is manager flag.
+                  type: string
+                  example: '0'
+                code:
+                  description: ProjectId * UserId * IsManager * UserType
+                  type: string
+                  example: '000001*006582*0*3'
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "更新を完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+components:
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+  # $ref: '#/components/responses/success_json'
+  responses:
+    success_json:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              custom_data:
+                type: object
+                properties:
+                  error_code:
+                    description: If the registration failed, the error code is given here. If succeeded, this is empty string.
+                    type: string
+                    example: ''
+                  debug_messages:
+                    type: object
+                  error_messages:
+                    type: object
+                  messages:
+                    description: Message for the success of the registration.
+                    type: string
+                    example: ''
+                  status:
+                    description: Whether the request succeeded or not.
+                    type: boolean
+                    example: true
+
+  parameters:
+
+    ProjectId:
+      name: ProjectId
+      in: path
+      required: true
+      description: Column projects.project_id / projects_files.project_id
+      schema:
+        type: string
+        example: '000001'
+
+    UserId:
+      name: UserId
+      in: path
+      required: true
+      description: Column user_id
+      schema:
+        type: string
+        example: '006582'
+
+    IsManager:
+      name: IsManager
+      in: path
+      required: true
+      description: Is manager flag.
+      schema:
+        type: string
+        example: '0'
+
+    UserType:
+      name: UserType
+      in: path
+      required: true
+      description: Explained in the opening 'user types'.
+      schema:
+        type: string
+        example: '3'
+
+    CanUpdate:
+      name: CanUpdate
+      in: path
+      required: true
+      description: |
+        <h4>Is user type that can update records.</h4>
+        <dl>
+          <dt>0:</dt>
+          <dd>Can't update. (User type equal 2)</dd>
+          <dt>1:</dt>
+          <dd>Can update. (User types equals 1 or 3)</dd>
+        </dl>
+      schema:
+        type: string
+        example: '1'
+
+security:
+- basicAuth: []

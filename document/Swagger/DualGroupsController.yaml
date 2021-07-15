@@ -1,0 +1,235 @@
+openapi: '3.0.3'
+info:
+  version: 1.4.6
+  title: DualGroupsController
+  description: |
+    <h2>This index is call by button "Join the team" of page "Project details" user tab left grid toggle menu.</h2>
+    <div>And, "registration process" is in the projectsAuthorityMember controller.</div>
+    <dl>
+      <dt>Rgesiter(Participate):</dt>
+      <dd>/projects-authority-member/register-member-multiple-groups/</dd>
+    </dl>
+    <h3>user type:</h3>
+    <ol>
+      <li>projects_authority_groups_projects_users</li>
+      <li>projects_authority_groups_user_groups_users</li>
+      <li><ul>
+        <li>projects_authority_groups_projects_users</li>
+        <li>projects_authority_groups_user_groups_users</li>
+      </ul></li>
+    </ol>
+
+servers:
+  - url: http://localhost:8084
+    description: For real server
+
+tags:
+  - name: Processes
+    description: |
+      <div>When calling with ajax, the request is "POST", except for legacy browsers.</div>
+  - name: Pages
+    description: (and modal pages). Almost 'GET' requests.
+
+paths:
+
+  /dual-groups/index/parent_code/{ProjectId}/projectsUsers/{ProjectId}*{UserId}*{IsManager}*{UserType}/:
+    get:
+      tags: ["Pages"]
+      description: Index.
+      responses:
+        '200':
+          description: Successful response
+    parameters:
+    - $ref: "#/components/parameters/ProjectId"
+    - $ref: "#/components/parameters/UserId"
+    - $ref: "#/components/parameters/IsManager"
+    - $ref: "#/components/parameters/UserType"
+
+  /dual-groups/list:
+    post:
+      tags: ["Processes"]
+      description: Get list for index page.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                page:
+                  description: |
+                    <div>Page number.</div>
+                  type: integer
+                  example: 0
+                parent_code:
+                  description: |
+                    <div>Parent code.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: '900001'
+      responses:
+        '200':
+          $ref: '#/components/responses/success_xml_list_for_list'
+
+components:
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+
+    xmllist_rows_inner_for_list:
+      items:
+        type: object
+        properties:
+          row:
+            type: object
+            properties:
+              id:
+                type: string
+                example: "000001*000003*1"
+                xml:
+                  attribute: true
+              check_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+              team_name: # mean name
+                type: string
+                example: 'チーム名'
+                xml:
+                  name: cell
+              comment: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+              spacer_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+      xml:
+        name: rows
+
+  # $ref: '#/components/responses/success_json'
+  responses:
+
+    success_json:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              custom_data:
+                type: object
+                properties:
+                  error_code:
+                    description: If the registration failed, the error code is given here. If succeeded, this is empty string.
+                    type: string
+                    example: ''
+                  debug_messages:
+                    type: object
+                  error_messages:
+                    type: object
+                  messages:
+                    description: Message for the success of the registration.
+                    type: string
+                    example: ''
+                  status:
+                    description: Whether the request succeeded or not.
+                    type: boolean
+                    example: true
+
+    success_xml_list_for_list:
+      description: Result xml.
+      content:
+        application/xml:
+          schema:
+            type: object
+            xml:
+              name: return_data # <<<
+            properties:
+              rows:
+                type: array
+                items:
+                $ref: "#/components/schemas/xmllist_rows_inner_for_list"
+              message:
+                type: string
+                example: ""
+              debug:
+                type: string
+                example: ""
+              status:
+                type: integer
+                example: 1
+              page:
+                type: integer
+                example: 0
+              max:
+                type: integer
+                example: 3
+              limit:
+                type: integer
+                example: 50
+
+  parameters:
+
+    ProjectId:
+      name: ProjectId
+      in: path
+      required: true
+      description: Column projects.project_id
+      schema:
+        type: string
+        example: '900001'
+
+    UserId:
+      name: UserId
+      in: path
+      required: true
+      description: Column user_id
+      schema:
+        type: string
+        example: '000001'
+
+    IsManager:
+      name: IsManager
+      in: path
+      required: true
+      description: Is manager flag.
+      schema:
+        type: string
+        example: '0'
+
+    UserType:
+      name: UserType
+      in: path
+      required: true
+      description: Explained in the opening 'user types'.
+      schema:
+        type: string
+        example: '1'
+
+    # CanUpdate:
+    #   name: CanUpdate
+    #   in: path
+    #   required: true
+    #   description: |
+    #     <h4>Is user type that can update records.</h4>
+    #     <dl>
+    #       <dt>0:</dt>
+    #       <dd>Can't update. (User type equal 2)</dd>
+    #       <dt>1:</dt>
+    #       <dd>Can update. (User types equals 1 or 3)</dd>
+    #     </dl>
+    #   schema:
+    #     type: string
+    #     example: '1'
+
+security:
+- basicAuth: []

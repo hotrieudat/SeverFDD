@@ -1,0 +1,21 @@
+version: "3"
+services:
+
+  swagger-ui:
+    image: swaggerapi/swagger-ui:latest
+    container_name: "swagger-ui"
+    ports:
+      - "28082:8080"
+    volumes:
+      - ./:/usr/share/nginx/html/
+    networks:
+      - swagger_link
+    environment:
+      # API_URL: "UserController.yaml"
+      http.cors.enabled: "true"
+      http.cors.allow-origin: "*"
+      http.cors.allow-headers: "*"
+
+networks:
+  swagger_link:
+    external: true

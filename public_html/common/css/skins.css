@@ -1,0 +1,193 @@
+@CHARSET "UTF-8";
+
+/* フォームなど全般的な色の設定 */
+
+/* ----------------------------------------------------------------------------------------------------------------------------
+    font color
+----------------------------------------------------------------------------------------------------------------------------*/
+
+.font_white {
+    color: #FFFFFF;
+}
+
+.font_black {
+    color: #000000;
+}
+
+.font_red {
+    color: #FF0000;
+}
+
+.font_gray {
+    color: #333333;
+}
+
+.font_link {
+    color: #0E73BB;
+}
+
+/* ----------------------------------------------------------------------------------------------------------------------------
+    background-color
+----------------------------------------------------------------------------------------------------------------------------*/
+
+.main_theme_skin {
+    background-color: #1D9BB4;
+}
+
+.skin_white {
+    background-color: #FFFFFF;
+}
+
+.skin_darkgreen {
+    background-color: #1D8395;
+}
+
+.skin_gray {
+    background-color: #EBEBEB;
+}
+
+/* FIXME: 命名を直す */
+.grayback_cell_skin {
+    border-color: #FFFFFF;
+    background-color: #EBEBEB;
+    color:#000;
+}
+
+.skin_grayback_cell_top {
+    border-top-color: #EBEBEB;
+    background-color: #EBEBEB;
+    color: #000000;
+}
+
+/* FIXME: 命名を直す */
+.skin_grayback_cell_bottom {
+    border-bottom-color: #EBEBEB;
+    background-color: #EBEBEB;
+    color: #000000;
+}
+
+/* FIXME: 命名を直す */
+.whiteback_cell_skin {
+    border-color: #DDDDDD;
+    background-color:#FFFFFF;
+    color: #000000;
+}
+
+/* ----------------------------------------------------------------------------------------------------------------------------
+    border
+----------------------------------------------------------------------------------------------------------------------------*/
+
+.border_gray {
+    border-color: #DCDCDC;
+}
+
+.border_left_gray {
+    border-left: 3px solid #1D8395;
+}
+
+.border_bottom_gray {
+    border-bottom: 1px solid #dcdcdc;
+}
+
+/* ----------------------------------------------------------------------------------------------------------------------------
+    shadow color
+----------------------------------------------------------------------------------------------------------------------------*/
+
+.shadow-right {
+    box-shadow: 7px 0 6px -3px #D3D3D3;
+}
+
+.shadow-bottom {
+    box-shadow: 0 5px 6px -3px #D3D3D3;
+}
+
+/* ----------------------------------------------------------------------------------------------------------------------------
+    pulldown color
+----------------------------------------------------------------------------------------------------------------------------*/
+
+.pulldown_skin {
+    border-color: #C5C5C5;
+    background-color: #FFFFFF;
+    color: #262626;
+    cursor: pointer;
+}
+
+.pulldown_skin:hover {
+    background-color: #E2F3FB;
+    color:#1D9BB4;
+}
+
+.pulldown_item:hover {
+    color: #1D9BB4;
+}
+
+.pulldown_skin_no_link {
+    border-color: #C5C5C5;
+    background-color: #FFFFFF;
+    color: #262626;
+    cursor: default;
+}
+
+/* ----------------------------------------------------------------------------------------------------------------------------
+    button color
+----------------------------------------------------------------------------------------------------------------------------*/
+
+input.submit_button {
+    border-style: none;
+    background-color: #1D9BB4;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+/* TODO: 下の.dark_gray_buttonと被りで、dark_gray_buttonに統一したほうが良い */
+input.cancel_button {
+    border-style: none;
+    background-color: #8C8C8C;
+    color: #FFFFFF;
+    cursor: pointer!important;
+}
+
+.button_green {
+    color: #FFFFFF;
+    background-color: #1D9BB4;
+}
+
+.button_green:hover {
+    background-color: #1D9BB4;
+}
+
+/* FIXME: 命名修正と、フォントサイズをここで指定しない */
+.blue_button {
+    font-size: 16px;
+    color: #FFFFFF;
+    background-color: #1D9BB4;
+}
+
+.button_gray {
+    color: #333333;
+    background-color: #EBEBEB;
+}
+
+/* FIXME: 命名修正と、フォントサイズをここで指定しない */
+.dark_gray_button {
+    font-size: 16px;
+    color: #FFFFFF;
+    background-color: #8C8C8C;
+}
+
+.button_dark_gray {
+    color: #FFFFFF;
+    background-color: #8C8C8C;
+}
+
+/* モーダル内のボタン */
+input#register, input#update, input#delete, input#search,
+input#wrapSearchFileBtn, input#wrapResetFileBtn, input#wrapClearFileBtn,
+input#searchTree, input#resetTree, input#clearTree,
+input#reset, input#clear, input#btnReset {
+    background: url('/common/image/arrow_bt.png') 10px 50% no-repeat;
+    background-color: #8C8C8C;
+}
+input#register, input#search, input#delete, input#wrapSearchFileBtn, input#searchTree {
+    background-color: #1D9BB4;
+}

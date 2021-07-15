@@ -1,0 +1,143 @@
+@CHARSET "UTF-8";
+
+.tree_wrapper{
+    width:215px;
+    height:80%;
+    height:calc(100% - 126px);
+    float:left;
+    border-right-style:solid;
+    border-right-width:1px;
+    position:relative;
+    top:-8px;
+    right:10px;
+    box-shadow:5px 0 6px -3px #d3d3d3;
+    overflow:hidden;
+    z-index: -20;
+}
+.tree_top{
+    height:45px;
+    border-bottom-style:solid;
+    border-bottom-width:1px;
+    position:relative;
+    background-color:#f9f9f9;
+}
+.tree_header{
+    display:inline-block;
+    height:45px;
+    line-height:45px;
+    font-size:12pt;
+    font-weight:600;
+    overflow:hidden;
+    position:absolute;
+    left:25px;
+    right:20px;
+
+}
+.tree_closer{
+    position:absolute;
+    top:0;
+    right:0;
+    padding-top:15px;
+    padding-right:12px;
+    cursor:pointer;
+    text-align:right;
+}
+.tree_middle{
+    height:30px;
+    border-bottom-style:solid;
+    border-bottom-width:1px;
+}
+.tree_menu{
+    width:38px;
+    height:25px;
+    display:inline-block;
+    border-right-style:solid;
+    border-right-width:1px;
+    padding-top:5px;
+    padding-left:7px;
+    cursor:pointer;
+}
+
+.middle_image{
+    vertical-align:middle;
+}
+.tree_main{
+    position:relative;
+    overflow-y:auto;
+    height:80%; /* IE8,9 用fallback*/
+    height:calc(100% - 77px);
+    background-color:#f9f9f9;
+    padding:10px 35px 0 8px;
+    box-sizing: border-box;
+
+}
+.tree_pulldown{
+    display:none;
+    position:absolute;
+    top:0;
+    left:-10px;
+    box-shadow: 2px 2px 3px 3px #e6e6e6 inset;
+    z-index:10;
+}
+
+.tree_pulldown_item{
+    height:35px;
+    width:150px;
+    line-height:35px;
+    border-bottom-style:solid;
+    border-bottom-width:1px;
+    padding-left:40px;
+    background-repeat:no-repeat;
+    background-position:8px 5px;
+    font-size:12px;
+}
+div#trash_button{
+    height:30px;
+    line-height:30px;
+    background-color:#DB9090;
+    text-align:center;
+}
+
+
+/*以下アイコン設定*/
+.tree_pulldown_mkdir{
+    background-image:url("/image/tree_pulldown/mkdir_off.png");
+}
+
+.tree_pulldown_mkdir:hover{
+    background-image:url("/image/tree_pulldown/mkdir_on.png");
+}
+
+.tree_pulldown_download{
+    background-image:url("/image/tree_pulldown/download_off.png");
+}
+.tree_pulldown_download:hover{
+    background-image:url("/image/tree_pulldown/download_on.png");
+}
+.tree_pulldown_auth{
+    background-image:url("/image/tree_pulldown/auth_off.png");
+}
+.tree_pulldown_auth:hover{
+    background-image:url("/image/tree_pulldown/auth_on.png");
+}
+.tree_pulldown_rename{
+    background-image:url("/image/tree_pulldown/rename_off.png");
+}
+.tree_pulldown_rename:hover{
+    background-image:url("/image/tree_pulldown/rename_on.png");
+}
+.tree_pulldown_remove{
+    background-image:url("/image/tree_pulldown/remove_off.png");
+}
+.tree_pulldown_remove:hover{
+    background-image:url("/image/tree_pulldown/remove_on.png");
+}
+
+.containerTableStyle{
+    overflow-x:hidden!important;
+}
+
+/*各アイテムの幅を強引に詰める*/
+.containerTableStyle table{
+    margin-top:-1px!important;
+}

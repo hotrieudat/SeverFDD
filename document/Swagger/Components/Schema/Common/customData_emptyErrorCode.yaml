@@ -1,0 +1,6 @@
+      type: object
+      properties:
+        error_code:
+          description: If the registration failed, the error code is given here. If succeeded, this is empty string.
+          type: string
+          example: ''

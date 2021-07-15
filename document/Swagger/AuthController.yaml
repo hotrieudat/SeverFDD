@@ -1,0 +1,648 @@
+openapi: '3.0.3'
+info:
+  version: 1.4.6
+  title: AuthController
+  description: |
+    <h2>Manage authority levels.</h2>
+    <div>If you want to use this class, please follow the steps of create, update, and delete.</div>
+
+servers:
+  - url: http://localhost:8084
+    description: For real server
+
+tags:
+  - name: Processes
+    description: |
+      <div>When calling with ajax, the request is "POST", except for legacy browsers.</div>
+  - name: Pages
+    description: (and modal pages). Almost 'GET' requests.
+
+
+paths:
+
+  /auth/index:
+    get:
+      tags: ["Pages"]
+      description: Index.
+      responses:
+        '200':
+          description: Successful response
+
+  /auth/list:
+    post:
+      tags: ["Processes"]
+      description: Get list of authority levels for index page.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                page:
+                  description: Page number.
+                  type: integer
+                  example: '0'
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/success_xml_list'
+
+  /auth/sort:
+    post:
+      tags: ["Processes"]
+      description: Reload after set sort parameters.
+      requestBody:
+        description: |
+          <div>In to ajax parameters:data.</div>
+          <div>This method changes the sort target according to the contents of the parameters.</div>
+          <h3>Attention: If call by left grid then remove isSortRight param.</h3>
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                order:
+                  description: Target column.
+                  type: string
+                  example: auth_name
+                direction:
+                  description: direction to sort. asc | desc
+                  type: string
+                  example: 'asc'
+                parent_code:
+                  description: |
+                    <div>Parent code.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: ''
+      responses:
+        '200':
+          $ref: '#/components/responses/success_json'
+
+  /auth/execvalidation:
+    post:
+      tags: ["Processes"]
+      description: |
+        <div>Create authority level for host company.</div>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                form[is_host_company]: 
+                  description: Is host company flag.
+                  type: string
+                  example: '1'
+                form[auth_name]: 
+                  description: Authority level name.
+                  type: string
+                  example: dummy
+                form[level]: 
+                  description: Level (upper is small)
+                  type: string
+                  example: '4'
+                form[can_set_system]: 
+                  description: Can set system flag.
+                  type: string
+                  example: '1'
+                form[can_set_user]: 
+                  description: Can set user flag.
+                  type: string
+                  example: '1'
+                form[can_set_user_group]: 
+                  description: Can set user group flag.
+                  type: string
+                  example: '1'
+                form[can_set_project]: 
+                  description: Can set project flag.
+                  type: string
+                  example: '1'
+                form[can_browse_file_log]: 
+                  description: Can browse file log flag.
+                  type: string
+                  example: '1'
+                form[can_browse_browser_log]: 
+                  description: Can browse browser log flag.
+                  type: string
+                  example: '1'
+                isUpdate: 
+                  description: Is update flag.
+                  type: string
+                  example: '1'
+                successMessage: 
+                  description: Confirm messsage.
+                  type: string
+                  example: 本当に登録しますか？
+      responses:
+        '200':
+          description: Successful status and more.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "本当に登録しますか？"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /auth/register-company-auth/:
+    get:
+      tags: ["Pages"]
+      description: |
+        <div>Create authority level for host company.</div>
+      responses:
+        '200':
+          description: Successful response
+
+  /auth/exec-register-company-auth:
+    post:
+      tags: ["Processes"]
+      description: |
+        <div>Execute create authority level for host company.</div>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                form[is_host_company]: 
+                  description: Is host company flag.
+                  type: string
+                  example: '1'
+                form[auth_name]: 
+                  description: Authority level name.
+                  type: string
+                  example: dummy
+                form[level]: 
+                  description: Level (upper is small)
+                  type: string
+                  example: '4'
+                form[can_set_system]: 
+                  description: Can set system flag.
+                  type: string
+                  example: '1'
+                form[can_set_user]: 
+                  description: Can set user flag.
+                  type: string
+                  example: '1'
+                form[can_set_user_group]: 
+                  description: Can set user group flag.
+                  type: string
+                  example: '1'
+                form[can_set_project]: 
+                  description: Can set project flag.
+                  type: string
+                  example: '1'
+                form[can_browse_file_log]: 
+                  description: Can browse file log flag.
+                  type: string
+                  example: '1'
+                form[can_browse_browser_log]: 
+                  description: Can browse browser log flag.
+                  type: string
+                  example: '1'
+                isUpdate: 
+                  description: Is update flag.
+                  type: string
+                  example: '1'
+                successMessage: 
+                  description: Confirm messsage.
+                  type: string
+                  example: 本当に登録しますか？
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "登録が完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /auth/register-guest-auth:
+    get:
+      tags: ["Pages"]
+      description: |
+        <div>Create authority level for guest company.</div>
+      responses:
+        '200':
+          description: Successful response
+
+  /auth/exec-register-guest-auth:
+    post:
+      tags: ["Processes"]
+      description: |
+        <div>Execute create authority level for guest company.</div>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                form[is_host_company]: 
+                  description: Is host company flag.
+                  type: string
+                  example: '0'
+                form[auth_name]: 
+                  description: Authority level name.
+                  type: string
+                  example: dummy
+                form[level]: 
+                  description: Level (upper is small)
+                  type: string
+                  example: '4'
+                form[can_set_system]: 
+                  description: Can set system flag.
+                  type: string
+                  example: '1'
+                form[can_set_user]: 
+                  description: Can set user flag.
+                  type: string
+                  example: '1'
+                form[can_set_user_group]: 
+                  description: Can set user group flag.
+                  type: string
+                  example: '1'
+                form[can_set_project]: 
+                  description: Can set project flag.
+                  type: string
+                  example: '1'
+                form[can_browse_file_log]: 
+                  description: Can browse file log flag.
+                  type: string
+                  example: '1'
+                form[can_browse_browser_log]: 
+                  description: Can browse browser log flag.
+                  type: string
+                  example: '1'
+                isUpdate: 
+                  description: Is update flag.
+                  type: string
+                  example: '1'
+                successMessage: 
+                  description: Confirm messsage.
+                  type: string
+                  example: 本当に登録しますか？
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "登録が完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /auth/update-company-auth/code/{AuthId}/:
+    get:
+      tags: ["Pages"]
+      description: Update authority level for host company.
+      responses:
+        '200':
+          description: Successful response
+    parameters:
+    - $ref: "#/components/parameters/AuthId"
+
+  /auth/exec-update-company-auth/code/{AuthId}/:
+    post:
+      tags: ["Processes"]
+      description:  |
+        <div>Execute update authority level for host company.</div>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                form[is_host_company]: 
+                  description: Is host company flag.
+                  type: string
+                  example: '1'
+                form[auth_name]: 
+                  description: Authority level name.
+                  type: string
+                  example: dummy
+                form[level]: 
+                  description: Level (upper is small)
+                  type: string
+                  example: '4'
+                form[can_set_system]: 
+                  description: Can set system flag.
+                  type: string
+                  example: '1'
+                form[can_set_user]: 
+                  description: Can set user flag.
+                  type: string
+                  example: '1'
+                form[can_set_user_group]: 
+                  description: Can set user group flag.
+                  type: string
+                  example: '1'
+                form[can_set_project]: 
+                  description: Can set project flag.
+                  type: string
+                  example: '1'
+                form[can_browse_file_log]: 
+                  description: Can browse file log flag.
+                  type: string
+                  example: '1'
+                form[can_browse_browser_log]: 
+                  description: Can browse browser log flag.
+                  type: string
+                  example: '1'
+                isUpdate: 
+                  description: Is update flag.
+                  type: string
+                  example: '1'
+                successMessage: 
+                  description: Confirm messsage.
+                  type: string
+                  example: 登録情報を更新しますか？
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "更新を完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+    parameters:
+    - $ref: "#/components/parameters/AuthId"
+
+  /auth/update-guest-auth/code/{AuthId}:
+    get:
+      tags: ["Pages"]
+      description: Update authority level for guest company.
+      responses:
+        '200':
+          description: Successful response
+    parameters:
+    - $ref: "#/components/parameters/AuthId"
+
+  /auth/exec-update-guest-auth/code/{AuthId}:
+    post:
+      tags: ["Processes"]
+      description:  |
+        <div>Execute update authority level for guest company.</div>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                form[is_host_company]: 
+                  description: Is host company flag.
+                  type: string
+                  example: '0'
+                form[auth_name]: 
+                  description: Authority level name.
+                  type: string
+                  example: dummy
+                form[level]: 
+                  description: Level (upper is small)
+                  type: string
+                  example: '4'
+                form[can_set_system]: 
+                  description: Can set system flag.
+                  type: string
+                  example: '1'
+                form[can_set_user]: 
+                  description: Can set user flag.
+                  type: string
+                  example: '1'
+                form[can_set_user_group]: 
+                  description: Can set user group flag.
+                  type: string
+                  example: '1'
+                form[can_set_project]: 
+                  description: Can set project flag.
+                  type: string
+                  example: '1'
+                form[can_browse_file_log]: 
+                  description: Can browse file log flag.
+                  type: string
+                  example: '1'
+                form[can_browse_browser_log]: 
+                  description: Can browse browser log flag.
+                  type: string
+                  example: '1'
+                isUpdate: 
+                  description: Is update flag.
+                  type: string
+                  example: '1'
+                successMessage: 
+                  description: Confirm messsage.
+                  type: string
+                  example: 登録情報を更新しますか？
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "更新を完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+    parameters:
+    - $ref: "#/components/parameters/AuthId"
+
+  /auth/execdelete/code/{AuthId}:
+    post:
+      tags: ["Processes"]
+      description: |
+        <div>Execute logical delete.</div>
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "削除を完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+    parameters:
+    - $ref: "#/components/parameters/AuthId"
+
+components:
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+
+    xmllist_rows_inner:
+      items:
+        type: object
+        properties:
+          row:
+            type: object
+            properties:
+              id:
+                type: string
+                example: "001"
+                xml:
+                  attribute: true
+              check_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+              authority_group_name: # mean name
+                type: string
+                example: システム管理者用権限
+                xml:
+                  name: cell
+              authority_level: # mean name
+                type: string
+                example: 2
+                xml:
+                  name: cell
+              spacer_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+      xml:
+        name: rows
+
+  responses:
+
+    success_json:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              custom_data:
+                type: object
+                properties:
+                  error_code:
+                    description: If the registration failed, the error code is given here. If succeeded, this is empty string.
+                    type: string
+                    example: ''
+                  debug_messages:
+                    type: object
+                  error_messages:
+                    type: object
+                  messages:
+                    description: Message for the success of the registration.
+                    type: string
+                    example: ''
+                  status:
+                    description: Whether the request succeeded or not.
+                    type: boolean
+                    example: true
+
+    success_xml_list:
+      description: Result xml.
+      content:
+        application/xml:
+          schema:
+            type: object
+            xml:
+              name: return_data # <<<
+            properties:
+              rows:
+                type: array
+                items:
+                $ref: "#/components/schemas/xmllist_rows_inner"
+              message:
+                type: string
+                example: ""
+              debug:
+                type: string
+                example: ""
+              status:
+                type: integer
+                example: 1
+              page:
+                type: integer
+                example: 0
+              max:
+                type: integer
+                example: 7
+              limit:
+                type: integer
+                example: 50
+
+  parameters:
+    AuthId:
+      name: AuthId
+      in: path
+      required: true
+      description: Column auth.auth_id
+      schema:
+        type: string
+        example: '012'
+
+security:
+- basicAuth: []

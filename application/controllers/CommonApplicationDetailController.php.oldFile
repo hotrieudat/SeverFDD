@@ -1,0 +1,198 @@
+<?php
+/**
+ * 共通ホワイトリスト設定コントローラー
+ *
+ * @package   controller
+ * @since     2018/04/17
+ * @copyright Plott Corporation.
+ * @version   1.2.0
+ * @author    Tomoaki Kimura
+ */
+
+class CommonApplicationDetailController extends ExtController
+{
+    protected $local_session;
+    private   $model_name = 'CommonWhiteList';
+    protected $search_param = [];
+    protected $form_param = [];
+    protected $sequence;
+    protected $order;
+    protected $model;
+    protected $next_controller = [];
+
+    /**
+     * 初期化
+     */
+    public function init()
+    {
+        $this->model = new CommonWhiteList();
+        $this->local_session = new Zend_Session_Namespace($this->model_name);
+        parent::init();
+        // 初期設定
+        $this->sequence = $this->model->getSequenceField();
+        $this->login_user_id = $this->session->login->user_id;
+        $this->regist_user_id = $this->model->getRegistUserId();
+        $this->update_user_id = $this->model->getUpdateUserId();
+        $this->search_param = $this->model->getSearchParam();
+        $this->form_param = $this->model->getFormParam();
+        $this->order = $this->model->getDefaultOrder();
+        // サイドメニューの設定
+        $this->view->assign('subheader_icon', 'ico_heading_appli');
+        $this->view->assign("selected_menu", "application-control");
+    }
+
+    /**
+     * 一覧/検索画面
+     */
+    public function indexAction() {
+        parent::indexAction();
+        $this->view->assign('common_title', PloWord::getMessage("##P_COMMONAPPLICATIONDETAIL_005##"));
+        $this->view->assign('htmlTitle', PloWord::getMessage("##P_COMMONAPPLICATIONDETAIL_005##"));
+    }
+
+    /**
+     * 一覧取得
+     */
+    public function listAction() {
+        $this->targetGridModel = $this->model;
+        parent::listAction();
+    }
+
+    /**
+     * 検索条件設定
+     */
+    public function searchAction() {
+        parent::searchAction();
+    }
+
+    /**
+     * ソート設定
+     */
+    public function sortAction() {
+        $this->sortTargetControllerName = $this->_request->getControllerName();
+        parent::sortAction();
+    }
+
+    /**
+     * 登録画面
+     */
+    public function registAction() {
+        parent::registAction();
+        $this->view->assign('common_title', PloWord::getMessage("##P_COMMONAPPLICATIONDETAIL_001##"));
+        $this->view->assign('htmlTitle', PloWord::getMessage("##P_COMMONAPPLICATIONDETAIL_001##"));
+    }
+
+    /**
+     * 登録実行
+     *  POSTデータがすべてからの場合はエラーとする
+     *  注意：拡張子のピリオドを登録するタイミングで付与しております
+     */
+    public function execregistAction() {
+        $status = 1;
+        $message = PloWord::GetWordUnit("##COMMON_COMPLETE_INSERT##");
+        $param = $this->_getParams();
+        $parent_id = "";
+        if (isset($param['parent_code'])) {
+            $parent_id = $param['parent_code'] . $this->config->code_splitter;
+            $parent_codes = $this->model->SplitParentCode($param['parent_code']);
+            $param['form'] = array_merge( $param['form'] , $parent_codes);
+        }
+        if ($this->model->IsSequence()) {
+            $new_id = $this->model->GetNewSequence();
+            $param['form'][$this->sequence] = $new_id;
+            $id = $parent_id . $new_id;
+        } else {
+            $id = $parent_id . $param['form'][$this->sequence];
+        }
+        $validate = $this->model->setOneValidate($id, $param['form'], 1);
+        if (isset($this->regist_user_id)) {
+            $param['form'][$this->regist_user_id] = $this->login_user_id ;
+        }
+        if (isset($this->regist_user_id)) {
+            $param['form'][$this->update_user_id] = $this->login_user_id ;
+        }
+        if (!PloError::IsError()) {
+            $this->model->begin();
+            $this->model->RegistData($param['form']);
+        }
+        if (PloError::IsError()) {
+            $this->model->rollback();
+            $status = 0;
+            $message = PloError::GetErrorMessage();
+        } else {
+            $this->model->commit();
+            // ホワイトリストの情報がログで確認されると抜け穴を作られる可能性があるためログは記録しない
+        }
+        $this->_putXml($message, $status);
+    }
+
+    /**
+     * 更新画面
+     *  注意：拡張子のピリオドをテンプレートで削除しております
+     */
+    public function updateAction() {
+        parent::updateAction();
+        $this->view->assign('common_title', PloWord::getMessage("##P_COMMONAPPLICATIONDETAIL_002##"));
+        $this->view->assign('htmlTitle', PloWord::getMessage("##P_COMMONAPPLICATIONDETAIL_002##"));
+    }
+
+    /**
+     * 更新実行
+     *  注意：拡張子のピリオドを登録するタイミングで付与しております
+     */
+    public function execupdateAction() {
+        $status   = 1;
+        $message  = PloWord::GetWordUnit("##COMMON_COMPLETE_UPDATE##");
+        $param = $this->_getParams();
+        $validate = $this->model->validate($param['form'], 1);
+        if (!PloError::IsError()) {
+            $this->model->begin();
+            $this->model->UpdateOne($param['form']);
+        }
+        if (PloError::IsError()) {
+            $this->model->rollback();
+            $status = 0;
+            $message = PloError::GetErrorMessage();
+        } else {
+            $this->model->commit();
+            // ホワイトリストの情報がログで確認されると抜け穴を作られる可能性があるためログは記録しない
+        }
+        $this->_putXml($message, $status);
+    }
+
+    /**
+     * 削除実行
+     */
+    public function execdeleteAction() {
+        $status = 1;
+        $message = PloWord::GetWordUnit("##COMMON_COMPLETE_DELETE##");
+        $param = $this->_getParams();
+        $arrCodes = $this->_generateArrayBySeparateCharacterFromString($param['code'], ',');
+        $arrFileNames = [];
+        $this->model->begin();
+        foreach ($arrCodes as $code) {
+            $this->model->setOne($code);
+            if (PloError::IsError()) {
+                $this->model->rollback();
+                $status = 0;
+                $message = PloError::GetErrorMessage();
+                break;
+            }
+            $whiteListDatum = $this->model->getOne();
+            array_push($arrFileNames, $whiteListDatum['file_name']);
+            $this->model->DeleteOne();
+        }
+        if (!PloError::IsError()) {
+            $this->model->commit();
+            // ホワイトリストの情報がログで確認されると抜け穴を作られる可能性があるためログは記録しない
+        }
+        $this->_putXml($message, $status);
+    }
+
+//    /**
+//     * アイコン
+//     */
+//    public function iconAction() {
+//        parent::iconAction();
+//    }
+}

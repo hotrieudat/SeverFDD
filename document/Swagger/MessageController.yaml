@@ -1,0 +1,139 @@
+openapi: '3.0.3'
+info:
+  version: 1.4.6
+  title: MessageController
+  description: |
+    <h2>Manage login page message.</h2>
+    <div>This class has not delete.</div>
+    <div></div>
+
+servers:
+  - url: http://localhost:8084
+    description: For real server
+
+tags:
+  - name: Processes
+    description: |
+      <div>When calling with ajax, the request is "POST", except for legacy browsers.</div>
+  - name: Pages
+    description: (and modal pages). Almost 'GET' requests.
+
+paths:
+
+  /message/index:
+    get:
+      tags: ["Pages"]
+      description: Index.
+      responses:
+        '200':
+          description: Successful response
+  
+  /message/execvalidation:
+    post:
+      tags: ["Processes"]
+      description: Validate before insert/update.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                form[language_id]:
+                  description: |
+                    <div>Display Message's language_id.</div>
+                    <div>01 or 02 etcetc...</div>
+                  type: string
+                  example: 01
+                word[TOP_MESSAGE]:
+                  description: Message sentence for login page.
+                  type: string
+                  example: '00009'
+                isUpdate:
+                  description: ''
+                  type: string
+                  example: '0'
+                successMessage:
+                  description: ''
+                  type: string
+                  example: '本当に登録しますか？'
+        required: false
+      responses:
+        '200':
+          description: Successful status and more.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "本当に登録しますか？"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /message/execregist:
+    post:
+      tags: ["Processes"]
+      description: Update message sentence for login page.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                form[language_id]:
+                  description: |
+                    <div>Select Language id.</div>
+                    <div>But not selectable elements just now, and this value is fixed '01: Japanese'.</div>
+                  type: string
+                  example: '01'
+                word[TOP_MESSAGE]:
+                  description: Message sentence for login page.
+                  type: string
+                  example: '00009'
+                isUpdate:
+                  description: ''
+                  type: string
+                  example: '0'
+                successMessage:
+                  description: ''
+                  type: string
+                  example: '本当に登録しますか？'
+        required: false
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "更新を完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+components:
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+security:
+- basicAuth: []

@@ -1,0 +1,70 @@
+version: "3"
+services:
+
+  db:
+    networks:
+    - swagger_link
+    build: ./database/
+    ports:
+    - 28081:5432
+    environment:
+      POSTGRES_DB: filedefender
+      http.cors.enabled: "true"
+      http.cors.allow-origin: "*"
+      http.cors.allow-method: "*"
+      http.cors.allow-headers: "*"
+
+  web:
+    container_name: web
+    build: ./
+    volumes:
+    - ./application:/var/www/application
+    - ./public_html:/var/www/public_html
+    - ./tests:/var/www/tests
+    - /var/www/application/log
+    expose:
+    - "28080"
+    ports:
+    - 28080:80
+    networks:
+    - swagger_link
+    environment:
+      DB_SERVER_NAME: db
+      http.cors.enabled: "true"
+      http.cors.allow-origin: "http://localhost:8084"
+      http.cors.allow-method: "*"
+      http.cors.allow-headers: "*"
+
+  swagger-nginx:
+    container_name: "swagger-nginx"
+    image: nginx:mainline-alpine
+    # For use lua.
+    # image: banian/nginx-extras
+
+    # command: apt-get update && apt-get install nginx-plus-module-cookie-flag
+    # #  && apk add nginx-plus-module-cookie-flag
+    expose:
+    - "8084"
+    ports:
+    - "8084:8084"
+    volumes:
+    - ./document/Swagger/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+    - swagger_link
+    environment:
+      http.cors.enabled: "true"
+      # {{- if eq .Values.USE_HTTP_PROXY "true" }}
+      # {{- else }}
+      # {{- end }}
+      http.cors.allow-origin: "*"
+      http.cors.allow-method: "*"
+      http.cors.allow-headers: "*"
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+    - "8025:8025"
+
+networks:
+  swagger_link:
+    external: true

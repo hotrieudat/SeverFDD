@@ -1,0 +1,59 @@
+@CHARSET "UTF-8";
+/* オプション・システム設定のレイアウトを記述 */
+.contents{
+    background-color: #ececec;
+    box-shadow: 0px 3px 3px #CCCCCC inset;
+}
+
+/* オプション一覧画面における要素のスキンは共通 文字色だけ異なるので個別で設定する */
+.option_skin{
+    border-color: #d0d0d0;
+    background-color: #fff;
+}
+
+.option_categorybox{
+    padding: 0px 16px 10px;
+    border: 1px #d0d0d0 solid;
+    background-color: white;
+    margin-bottom: 20px;
+    min-width: 200px;
+}
+
+.option_categoryheader{
+    font-size: 16px;
+    color: #333333;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    padding-top: 12px;
+    padding-bottom: 2px;
+    font-weight: bold;
+}
+
+.option_category_description{
+    display: table-cell;
+    font-size: 13px;
+    color: #262626;
+    vertical-align: middle;
+    height: 43px;
+}
+
+.option_menuitem{
+    height: 45px;
+    width: 143px;
+    float: left;
+    border-width: 1px;
+    border-style:solid;
+    margin-right: 12px;
+    margin-bottom: 6px;
+}
+
+.option_menuitem_inner{
+    height: 47px;
+    width: 145px;
+    padding: 0 10px 0 22px ;
+    display: table-cell;
+    vertical-align: middle;
+    background: url('/common/image/ico_setting.png') no-repeat 10px;
+    cursor: pointer;
+}
+

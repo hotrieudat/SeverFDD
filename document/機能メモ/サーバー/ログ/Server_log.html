@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+  <link rel="stylesheet" href="https://cdn.rawgit.com/andyferra/2554919/raw/2e66cabdafe1c9a7f354aa2ebf5bc38265e638e5/github.css">
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<h1 id="ユーザー周りの仕様書仮">ユーザー周りの仕様書（仮）</h1>
+<h2 id="要件定義の内容">要件定義の内容</h2>
+<ul>
+<li>検索機能</li>
+<li>IPアドレスから場所の逆算機能</li>
+<li>検索時の表示件数制限</li>
+</ul>
+<h1 id="section">=========================================================</h1>
+<h1 id="dbカラム構成">DBカラム構成</h1>
+<h2 id="ログ">ログ</h2>
+<ul>
+<li>ログID</li>
+<li>ファイル操作時刻</li>
+<li>ユーザーID</li>
+<li>ユーザー名</li>
+<li>ユーザーフリガナ</li>
+<li>ファイルID</li>
+<li>ファイル名</li>
+<li>IPアドレス</li>
+<li>場所（IPアドレスからの逆算機能）</li>
+<li>端末のログイン情報</li>
+</ul>
+<blockquote>
+<p>登録者・更新者・登録日・更新日に関しては、下記URLを参照</p>
+<p><a href="https://192.168.12.200/admin/">PlottGenerator リンク</a></p>
+<p>ID/PW plott/plott</p>
+<p>※カラム情報はリンクより確認してください</p>
+</blockquote>
+<h1 id="section-1">=================================================</h1>
+<h1 id="機能概要">機能概要</h1>
+<h3 id="csv出力に関してはプロットフレームワークの仕様に従う">CSV出力に関してはプロットフレームワークの仕様に従う</h3>
+<h3 id="別途作成が必要な機能について">別途作成が必要な機能について</h3>
+<ul>
+<li><a href="#anchor1">ログのメンテナンス機能</a></li>
+<li><a href="#anchor2">IPアドレスから場所を取得する処理</a></li>
+<li><a href="#anchor3">IPアドレスの逆探知用のDataメンテナンス機能</a></li>
+<li><a href="#anchor4">検索時の件数制御</a></li>
+</ul>
+<p><a id="anchor1"></a></p>
+<h4 id="ログのメンテナンス機能"><a href="#anchor1">ログのメンテナンス機能</a></h4>
+<ul>
+<li>概要
+<ul>
+<li>システム設定により、指定された期間よりも古いログをCSVファイルに吐き出す</li>
+<li>CSVファイルとして吐き出したファイルはZipにて圧縮する <a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></li>
+<li>上記CSVファイルが正常に吐き出されたときに吐き出した分のDBのカラムを削除する機能</li>
+</ul></li>
+</ul>
+<p><a id="anchor2"></a></p>
+<h4 id="ipアドレスから場所を取得する処理"><a href="#anchor2">IPアドレスから場所を取得する処理</a></h4>
+<ul>
+<li>概要
+<ul>
+<li>IPアドレスから場所を国名を取得する処理</li>
+<li>IPの逆引きに関しては、<a href="https://github.com/maxmind/geoip-api-php">GeoIP Legacy PHP API</a>とMaxmindのDB情報を利用する想定</li>
+<li><a href="#anchor3">IPのデータを定期的に調整する必要あり</a>
+<ul>
+<li>CeoIP Legacy PHP APIのライセンス <a href="https://github.com/maxmind/geoip-api-php/blob/master/LICENSE">LGPL-2.1</a></li>
+<li>MaxmindのIP情報のライセンス <a href="http://dev.maxmind.com/geoip/legacy/geolite/">Creative Commons Attribution-ShareAlike 4.0 International License.</a></li>
+</ul></li>
+<li><p>以下「GeoIP Legacy PHP API」の環境構築用のメモ</p>
+<ul>
+<li><p>IPのデータを取得</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="bu">cd</span> /usr/share/GeoIP/
+<span class="fu">wget</span> http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
+<span class="fu">wget</span> http://geolite.maxmind.com/download/geoip/database/GeoLiteCityv6-beta/GeoLiteCityv6.dat.gz
+<span class="fu">gunzip</span> GeoLiteCityv6.dat.gz
+<span class="fu">gunzip</span> GeoLiteCity.dat.gz</code></pre></div></li>
+<li><p>サンプルプログラムを動かす(以下3ファイルを<a href="https://github.com/maxmind/geoip-api-php">GitHub</a>よりダウンロード</p></li>
+</ul>
+<blockquote>
+<p>geoip.inc geoipcity.inc geoipregionvars.php</p>
+</blockquote>
+<ul>
+<li>下記ソースコードで東京の場所まで取得できることを確認（検証用にプロットの東京のIPを使用）</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php">    <span class="co">//必要なライブラリーの利用</span>
+    <span class="kw">include</span><span class="ot">(</span><span class="st">&quot;./geoipcity.inc&quot;</span><span class="ot">);</span>
+    <span class="kw">include</span><span class="ot">(</span><span class="st">&quot;./geoipregionvars.php&quot;</span><span class="ot">);</span>
+
+    <span class="co">//ipの設定</span>
+    <span class="kw">$ip</span> = <span class="st">&quot;61.126.189.39&quot;</span><span class="ot">;</span>
+
+    <span class="co">//ip4,ip6判定処理</span>
+    <span class="kw">if</span><span class="ot">((</span><span class="fu">strpos</span><span class="ot">(</span><span class="kw">$ip</span><span class="ot">,</span> <span class="st">&quot;:&quot;</span><span class="ot">)</span> === <span class="kw">false</span><span class="ot">))</span> {
+        <span class="co">//ipv4</span>
+        <span class="kw">$gi</span> = geoip_open<span class="ot">(</span><span class="st">&quot;/usr/share/GeoIP/GeoLiteCity.dat&quot;</span><span class="ot">,</span><span class="kw">GEOIP_STANDARD</span><span class="ot">);</span>
+        <span class="kw">$record</span> = GeoIP_record_by_addr<span class="ot">(</span><span class="kw">$gi</span><span class="ot">,</span> <span class="kw">$ip</span><span class="ot">);</span>
+    }
+    <span class="kw">else</span> {
+        <span class="co">//ipv6</span>
+        <span class="kw">$gi</span> = geoip_open<span class="ot">(</span><span class="st">&quot;/usr/share/GeoIP/GeoLiteCityv6.dat&quot;</span><span class="ot">,</span><span class="kw">GEOIP_STANDARD</span><span class="ot">);</span>
+        <span class="kw">$record</span> = GeoIP_record_by_addr_v6<span class="ot">(</span><span class="kw">$gi</span><span class="ot">,</span> <span class="kw">$ip</span><span class="ot">);</span>
+    }
+
+    <span class="co">//情報取得処理</span>
+    <span class="fu">print</span> <span class="kw">$record</span>-&gt;country_code . <span class="st">&quot; &quot;</span> . <span class="kw">$record</span>-&gt;country_code3 . <span class="st">&quot; &quot;</span> . <span class="kw">$record</span>-&gt;country_name . <span class="st">&quot;</span><span class="kw">\n</span><span class="st">&quot;</span><span class="ot">;</span>
+    <span class="fu">print</span> <span class="kw">$record</span>-&gt;region . <span class="st">&quot; &quot;</span> . <span class="kw">$GEOIP_REGION_NAME</span><span class="ot">[</span><span class="kw">$record</span>-&gt;country_code<span class="ot">][</span><span class="kw">$record</span>-&gt;region<span class="ot">]</span> . <span class="st">&quot;</span><span class="kw">\n</span><span class="st">&quot;</span><span class="ot">;</span>
+    <span class="fu">print</span> <span class="kw">$record</span>-&gt;city . <span class="st">&quot;</span><span class="kw">\n</span><span class="st">&quot;</span><span class="ot">;</span>
+    <span class="fu">print</span> <span class="kw">$record</span>-&gt;postal_code . <span class="st">&quot;</span><span class="kw">\n</span><span class="st">&quot;</span><span class="ot">;</span>
+    <span class="fu">print</span> <span class="kw">$record</span>-&gt;latitude . <span class="st">&quot;</span><span class="kw">\n</span><span class="st">&quot;</span><span class="ot">;</span>
+    <span class="fu">print</span> <span class="kw">$record</span>-&gt;longitude . <span class="st">&quot;</span><span class="kw">\n</span><span class="st">&quot;</span><span class="ot">;</span>
+    <span class="fu">print</span> <span class="kw">$record</span>-&gt;metro_code . <span class="st">&quot;</span><span class="kw">\n</span><span class="st">&quot;</span><span class="ot">;</span>
+    <span class="fu">print</span> <span class="kw">$record</span>-&gt;area_code . <span class="st">&quot;</span><span class="kw">\n</span><span class="st">&quot;</span><span class="ot">;</span>
+    <span class="fu">print</span> <span class="kw">$record</span>-&gt;continent_code . <span class="st">&quot;</span><span class="kw">\n</span><span class="st">&quot;</span><span class="ot">;</span>
+    geoip_close<span class="ot">(</span><span class="kw">$gi</span><span class="ot">);</span></code></pre></div></li>
+</ul></li>
+<li>メモ
+<ul>
+<li>当初、peclでセットアップができる<a href="http://php.net/manual/ja/book.geoip.php">Geo IP</a>を利用しようとしていたが<br />
+IP6の処理ができないことが分かり、概要に記載したライブラリーを使用する想定</li>
+<li>以下環境構築用の参考記事 <a href="http://blog.araishi.com/geoip-php-install/">参考記事 1 インストール</a> <a href="https://blog.trippyboy.com/2011/centos/serversmanvps-configure-error-no-acceptable-c-compiler-found-in-path/">参考記事 2 エラー解決</a></li>
+</ul></li>
+</ul>
+<p><a id="anchor3"></a></p>
+<h4 id="ipアドレスの逆探知用のdataメンテナンス機能"><a href="#anchor3">IPアドレスの逆探知用のDataメンテナンス機能</a></h4>
+<ul>
+<li>概要
+<ul>
+<li>定期的にIPアドレスの逆探知用のデータをメンテナスする処理</li>
+<li>1ヵ月に一回Cronでたたく想定（※頻度に関しては調査・検証を行う必要がある）</li>
+<li>実装方法に関しては2通り存在する。
+<ol type="1">
+<li>今回利用するデータの提供元が提供しているUpload用プログラム <a href="http://dev.maxmind.com/geoip/geoipupdate/">参考URL</a></li>
+<li>セットアップに記載した通り、プロット側で独自にWegetするコマンドを作成する方法</li>
+</ol></li>
+<li>FileKeyでは、独自にwegetを利用する方法で対応したいと考える。</li>
+<li>理由としては、Upload用プログラムがGUNライセンスである。手動で作成してもそれほど苦ではないから</li>
+<li>ただ、1点懸念点がある。IPｖ6のデータベースがBetaとなっており、将来的にBetaが外れURLが変わるのではないかという問題が懸念される。</li>
+</ul></li>
+</ul>
+<p><a id="anchor4"></a></p>
+<h4 id="検索時の件数制御"><a href="#anchor4">検索時の件数制御</a></h4>
+<ul>
+<li>概要
+<ul>
+<li>データの取得件数を制御する処理</li>
+</ul></li>
+</ul>
+<p><a id="anchor5"></a></p>
+<section class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>/application/data/log_csv/「作成日時.zip」で吐き出す想定<a href="#fnref1">↩</a></p></li>
+</ol>
+</section>
+</body>
+</html>

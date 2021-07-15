@@ -1,0 +1,3 @@
+      description: Message for the success of the registration.
+      type: string
+      example: ''

@@ -1,0 +1,53 @@
+<?php
+$I = new AcceptanceApplicationControlTester($scenario);
+$I->wantTo('ホワイトリスト画面試験');
+
+$I->construct();
+
+$I->clickApplicationControl_onLeftMenu();
+
+$I->searchForApplications($I->searchParams['applicationControl']);
+
+$_params = [
+    'gridName' => 'grid 選択',
+    'gridSelector' => '//html/body/div[2]/div[2]/div[2]/div/div[1]/div[2]/table/tbody/tr[2]/td[1]/img',
+    'name' => 'ホワイトリスト',
+    'buttonSelector' => '.log_detail_menu',
+    'afterTheTransition' => '/application-detail/index/parent_code/90002',
+    'nextName' => 'ホワイトリスト'
+];
+$I->writeSubjectComment($_params['gridName'] . ' → ' . $_params['name'] . ' クリック → 画面遷移');
+$I->selectGridRow($_params);
+$I->checkClickToScreenTransition($_params);
+
+
+$I->searchForApplications($I->searchParams['applicationDetail']);
+
+
+$I->openAndClickToggleMenu_forApplication(
+    [
+        'subject' => 'grid 選択',
+        'selector' => '//html/body/div[2]/div[2]/div[2]/div/div[1]/div[2]/table/tbody/tr[2]/td[1]/img'
+    ],
+    [
+        'subject' => 'ホワイトリスト編集',
+        'selector' => 'span.edit_icon'
+    ],
+    'applicationDetail'
+);
+$I->checkDisplayError_andClickOk('プリセットデータは更新できません。');
+
+$I->writeSubjectComment('ホワイトリスト削除 クリック → エラー出力');
+$I->writeChildSubjectComment('ホワイトリスト削除 クリック');
+$I->mouseOver_andSeeApplicationDetailMenu();
+$I->click('span.delete_icon');
+$I->wait($I->waitNum);
+$I->checkDisplayError_andClickOk('プリセットデータは削除できません。');
+
+$I->checkClickBackButtonToReturnPage('#cancel', '/application-control/', false);
+
+$I->amOnPage('/application-control/');
+
+$I->before_destruct();
+$I->destruct('/application-control/');
+// End.

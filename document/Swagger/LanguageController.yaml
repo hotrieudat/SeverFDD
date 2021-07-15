@@ -1,0 +1,99 @@
+openapi: '3.0.3'
+info:
+  version: 1.4.6
+  title: LanguageController
+  description: Using multiple languages ​​with FD.
+
+servers:
+  - url: http://localhost:8084
+    description: For real server
+
+tags:
+  - name: Processes
+    description: |
+      <div>When calling with ajax, the request is "POST", except for legacy browsers.</div>
+  - name: Pages
+    description: (and modal pages). Almost 'GET' requests.
+
+paths:
+
+  /language/get-language:
+    post:
+      tags: ["Processes"]
+      description: Get language list for select tag.
+      responses:
+        '200':
+          $ref: '#/components/responses/success_xml_get_language'
+
+  /language/change:
+    post:
+      tags: ["Processes"]
+      description: Set language of selected option from select tag.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                language_id:
+                  description: |
+                    <div>Language id, you want to use.</div>
+                    <div>'01': 日本語</div>
+                    <div>'02': English</div>
+                  type: string
+                  example: '01'
+        required: false
+      responses:
+        '200':
+          $ref: '#/components/responses/success_xml_change'
+
+components:
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  responses:
+
+    success_xml_get_language:
+      description: Result xml.
+      content:
+        application/xml:
+          schema:
+            type: object
+            xml:
+              name: result # <<<
+            properties:
+              message:
+                type: string
+                example: '[{"language_name":"\u65e5\u672c\u8a9e","language_id":"01"},{"language_name":"english","language_id":"02"}]'
+              debug:
+                type: string
+                example: ""
+              status:
+                type: integer
+                example: 1
+
+    success_xml_change:
+      description: Result xml.
+      content:
+        application/xml:
+          schema:
+            type: object
+            xml:
+              name: result # <<<
+            properties:
+              message:
+                type: string
+                example: '言語を切り替えました。'
+              debug:
+                type: string
+                example: ""
+              status:
+                type: integer
+                example: 1
+
+security:
+- basicAuth: []

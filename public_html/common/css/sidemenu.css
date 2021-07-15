@@ -1,0 +1,122 @@
+@CHARSET "UTF-8";
+
+/* ----------------------------------------------------------------------------------------------------------------------------
+    side menu
+----------------------------------------------------------------------------------------------------------------------------*/
+
+.sidemenu {
+    overflow: hidden;
+    width: 135px;
+}
+
+.sidemenu_btn {
+    height: 60px;
+    border-color: #aeccd4;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+
+.size_toggle_btn
+{
+    display: block\9; /* IE8,9,10 */
+    padding-bottom: 15px\9; /* IE8,9,10 */
+}
+.size_toggle_btn .menu_link
+{
+    display: inline-block\9; /* IE8,9,10 */
+}
+.menu_link {
+    box-sizing: border-box;
+    padding-left: 58px;
+    padding-right: 10px;
+    background-repeat: no-repeat;
+    background-position: 0 center;
+    height: 100%;
+    display: block;
+    color: #ffffff;
+}
+
+a.menu_link {
+    display: flex;
+    display: inline-block\9; /* IE8,9,10 */
+    height: 45px\9; /* IE8,9,10 */
+    padding-top: 15px\9; /* IE8,9,10 */
+    align-items: center;
+    width: 158px
+}
+
+.sidemenu_btn:first-of-type {
+    border-top-width: 1px;
+    border-top-style: solid;
+}
+
+.darkgreen {
+    background-color: #000000;
+}
+
+.darkgreen_border {
+    border-color: #1d9bb4 !important;
+}
+
+.btn_unselected {
+    background-color: #1D8395;
+}
+
+.btn_unselected:hover {
+    background-color: #1D9BB4;
+}
+
+.btn_selected {
+    background-color: #1D9BB4;
+}
+
+#scroller:hover {
+    background-color: #000000;
+}
+
+.scroller_btn:hover {
+    background-color: #1D9BB4;
+}
+
+
+.size_toggle_btn {
+    height: 30px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* ----------------------------------------------------------------------------------------------------------------------------
+    <--> icon
+----------------------------------------------------------------------------------------------------------------------------*/
+
+.icon_toggle {
+    background-image: url("/common/image/sidemenu/toggle_icon.png");
+}
+
+/* ----------------------------------------------------------------------------------------------------------------------------
+    updown scroller
+----------------------------------------------------------------------------------------------------------------------------*/
+
+#scroller {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 30px;
+}
+
+#scroller:hover {
+    background-color: #0a6eb9;
+}
+
+.scroller_btn {
+    color: white;
+    display: inline-block;
+    line-height: 30px;
+    text-align: center;
+}
+
+.scroller_btn:hover {
+    background-color: #0094e2
+}

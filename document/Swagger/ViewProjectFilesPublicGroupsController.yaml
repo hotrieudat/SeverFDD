@@ -1,0 +1,592 @@
+openapi: '3.0.3'
+info:
+  version: 1.4.6
+  title: ViewProjectFilesPublicGroupsController
+  description: |
+    <h2>Manage teams and groups to which the file will be published.</h2>
+    <div>This page has two grid.</div>
+    <div>If the groups information is output to one of the left and right, it is not output to the other.</div>
+
+servers:
+  - url: http://localhost:8084
+    description: For real server
+
+tags:
+    - name: Processes
+      description: |
+        <div>When calling with ajax, the request is "POST", except for legacy browsers.</div>
+    - name: Pages
+      description: (and modal pages). Almost 'GET' requests.
+    - name: OnLeftGrid
+      description: ''
+    - name: OnRightGrid
+      description: ''
+
+paths:
+  
+  /view-project-files-public-groups/sort:
+    post:
+      tags: ["Processes", "OnLeftGrid", "OnRightGrid"]
+      description: Reload after set sort parameters.
+      requestBody:
+        description: |
+          <div>In to ajax parameters:data.</div>
+          <div>This method changes the sort target according to the contents of the parameters.</div>
+          <h3>Attention: If call by left grid then remove isSortRight param.</h3>
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                order:
+                  description: Target column.
+                  type: string
+                  example: type_converted
+                direction:
+                  description: direction to sort. asc | desc
+                  type: string
+                  example: 'asc'
+                isSortRight:
+                  description: |
+                    <div>Is right sort. false:0 | true:1</div>
+                    <h4>Attention: If call by left grid then remove isSortRight param.</h4>
+                  type: string
+                  example: '0'
+                parent_code:
+                  description: |
+                    <div>project id * file id.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: '000001*0000000005'
+      responses:
+        '200':
+          description: Result.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: ""
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /view-project-files-public-groups/index/parent_code/{ProjectId}*{FileId}:
+    get:
+      tags: ["Pages"]
+      description: Index.
+      responses:
+        '200':
+          description: Successful response
+    parameters:
+    - $ref: "#/components/parameters/ProjectId"
+    - $ref: "#/components/parameters/FileId"
+
+  /view-project-files-public-groups/list:
+    post:
+      tags: ["Processes", "OnLeftGrid"]
+      description: Get list of teams and groups to which the file will be published.
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              page:
+                description: Page number.
+                type: integer
+                example: 0
+      responses:
+        '200':
+          $ref: '#/components/responses/success_xml_list_for_list'
+
+  /view-project-files-public-groups/searchdialog/parent_code/{ProjectId}*{FileId}/:
+    get:
+      tags: ["Pages", "OnLeftGrid"]
+      description: modal | Search teams and groups to which the file will be published.
+      responses:
+        '200':
+          description: Successful response
+    parameters:
+    - $ref: "#/components/parameters/ProjectId"
+    - $ref: "#/components/parameters/FileId"
+
+  /view-project-files-public-groups/search/parent_code/{ProjectId}*{FileId}/:
+    post:
+      tags: ["Processes", "OnLeftGrid"]
+      description: Execute search teams and groups to which the file will be published.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                search[master][type]:
+                  description: |
+                    <h4>auth.auth_id</h4>
+                    <dl>
+                      <dt>{empty}</dt>
+                      <dd>全て</dd>
+                      <dt>1</dt>
+                      <dd>グループ</dd>
+                      <dt>2</dt>
+                      <dd>ユーザーグループ</dd>
+                    </dl>
+                  type: string
+                  example: ''
+                search[master][name][ilike]: 
+                  description: team or group name.
+                  type: string
+                  example: 'testTeam'
+                parent_code:
+                  description: |
+                    <div>user id * project id * file id.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: hidden
+                  example: '000001*0000000005'
+      responses:
+        '200':
+          description: Result.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: ""
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+    parameters:
+    - $ref: "#/components/parameters/ProjectId"
+    - $ref: "#/components/parameters/FileId"
+
+  /view-project-files-public-groups/public-groups-list/parent_code/{ProjectId}*{FileId}/page/0:
+    post:
+      tags: ["Processes", "OnRightGrid"]
+      description: |
+        <div>Get list of teams and groups that have not been set to publish files.</div>
+        <div>Page parameter is 0, because reset display grid after search.</div>
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                page: 
+                  description: Page number.
+                  type: integer
+                  example: 0
+                parent_code:
+                  description: |
+                    <div>Parent_code.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: '000001'
+      responses:
+        '200':
+          $ref: '#/components/responses/success_xml_list_for_user_list'
+    parameters:
+    - $ref: "#/components/parameters/ProjectId"
+    - $ref: "#/components/parameters/FileId"
+
+  /view-project-files-public-groups/search-public-groups/parent_code/{ProjectId}*{FileId}:
+    get:
+      tags: ["Pages", "OnRightGrid"]
+      description: modal | Search teams and groups that have not been set to publish files.
+      responses:
+        '200':
+          description: Successful response
+    parameters:
+    - $ref: "#/components/parameters/ProjectId"
+    - $ref: "#/components/parameters/FileId"
+
+  /view-project-files-public-groups/exec-search-public-groups:
+    post:
+      tags: ["Processes", "OnRightGrid"]
+      description: Execute search teams and groups that have not been set to publish files.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                search[master][type]:
+                  description: |
+                    <h4>auth.auth_id</h4>
+                    <dl>
+                      <dt>{empty}</dt>
+                      <dd>全て</dd>
+                      <dt>1</dt>
+                      <dd>グループ</dd>
+                      <dt>2</dt>
+                      <dd>ユーザーグループ</dd>
+                    </dl>
+                  type: string
+                  example: ''
+                search[master][name][ilike]: 
+                  description: team or group name.
+                  type: string
+                  example: 'testTeam'
+                parent_code:
+                  description: |
+                    <div>project id * file id.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: hidden
+                  example: '000001*0000000005'
+      responses:
+        '200':
+          description: Result.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: ""
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /view-project-files-public-groups/register-public-group:
+    post:
+      tags: ["Processes", "OnRightGrid"]
+      description: Set the publication destination of the file.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                target: 
+                  description: Project id * File id * id.
+                  type: string
+                  example: '000001*0000000005*000001*1'
+                parent_code:
+                  description: |
+                    <div>project id * file id.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: '000001*0000000005'
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "登録が完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /view-project-files-public-groups/remove-public-group/:
+    post:
+      tags: ["Processes", "OnLeftGrid"]
+      description: Unpublish the team or group to which the file is published.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/ajax:
+            schema:
+              type: object
+              properties:
+                target: 
+                  description: Project id * File id * id.
+                  type: string
+                  example: '000001*0000000005*000001*1'
+                code: 
+                  description: Project id * File id * id.
+                  type: string
+                  example: '000001*0000000005*000001*1'
+                parent_code:
+                  description: |
+                    <div>project id * file id.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: '000001*0000000005'
+      responses:
+        '200':
+          description: Result xml.
+          content:
+            application/xml:
+              schema:
+                type: object
+                xml:
+                  name: result # <<<
+                properties:
+                  message:
+                    type: string
+                    example: "削除を完了しました。"
+                  debug:
+                    type: string
+                    example: ""
+                  status:
+                    type: integer
+                    example: 1
+
+  /view-project-files-public-groups/show-assign-member/parent_code/{ProjectId}*{FileId}/target/{ProjectId}*{EitherGroupsId}*{GroupType}/group_type/{GroupType}:
+    get:
+      tags: ["Pages", "OnRightGrid"]
+      description: modal | Put participate user of team or user groups on display.
+      responses:
+        '200':
+          description: Successful response
+    parameters:
+    - $ref: "#/components/parameters/ProjectId"
+    - $ref: "#/components/parameters/FileId"
+    - $ref: "#/components/parameters/EitherGroupsId"
+    - $ref: "#/components/parameters/GroupType"
+
+components:
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+
+    xmllist_rows_inner_for_list:
+      items:
+        type: object
+        properties:
+          row:
+            type: object
+            properties:
+              id:
+                type: string
+                example: "000001*0000000005*000001*1"
+                xml:
+                  attribute: true
+              check_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+              participate_type: # mean name
+                type: string
+                example: 'チーム'
+                xml:
+                  name: cell
+              participate_team_or_user_groups_name: # mean name
+                type: string
+                example: 'testTeam'
+                xml:
+                  name: cell
+              operation_authority_icons: # mean name
+                type: string
+                example: '&lt;img src=&quot;/common/image/projects/statuses/can_edit__small_on.png&quot; class=&quot;js-balloon&quot; alt=&quot;編集可&quot; title=&quot;編集可&quot; style=&quot;display:inline-block; max-height:27px;&quot;&gt;&amp;nbsp;&lt;img src=&quot;/common/image/projects/statuses/can_clipboard__small_on.png&quot; class=&quot;js-balloon&quot; alt=&quot;コピー可&quot; title=&quot;コピー可&quot; style=&quot;display:inline-block; max-height:27px;&quot;&gt;&amp;nbsp;&lt;img src=&quot;/common/image/projects/statuses/can_print__small_on.png&quot; class=&quot;js-balloon&quot; alt=&quot;印刷可&quot; title=&quot;印刷可&quot; style=&quot;display:inline-block; max-height:27px;&quot;&gt;&amp;nbsp;&lt;img src=&quot;/common/image/projects/statuses/can_screenshot__small_on.png&quot; class=&quot;js-balloon&quot; alt=&quot;スクリーンショット可&quot; title=&quot;スクリーンショット可&quot; style=&quot;display:inline-block; max-height:27px;&quot;&gt;'
+                xml:
+                  name: cell
+              spacer_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+      xml:
+        name: rows
+
+    xmllist_rows_inner_for_user_list:
+      items:
+        type: object
+        properties:
+          row:
+            type: object
+            properties:
+              id:
+                type: string
+                example: "000001*000002*1"
+                xml:
+                  attribute: true
+              check_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+              participate_type: # mean name
+                type: string
+                example: 'チーム'
+                xml:
+                  name: cell
+              participate_team_or_user_groups_name: # mean name
+                type: string
+                example: 'team2'
+                xml:
+                  name: cell
+              operation_authority_icons: # mean name
+                type: string
+                example: '&lt;img src=&quot;/common/image/projects/statuses/can_edit__small_on.png&quot; class=&quot;js-balloon&quot; alt=&quot;編集可&quot; title=&quot;編集可&quot; style=&quot;display:inline-block; max-height:27px;&quot;&gt;&amp;nbsp;&lt;img src=&quot;/common/image/projects/statuses/can_clipboard__small_on.png&quot; class=&quot;js-balloon&quot; alt=&quot;コピー可&quot; title=&quot;コピー可&quot; style=&quot;display:inline-block; max-height:27px;&quot;&gt;&amp;nbsp;&lt;img src=&quot;/common/image/projects/statuses/can_print__small_off.png&quot; class=&quot;js-balloon&quot; alt=&quot;印刷不可&quot; title=&quot;印刷不可&quot; style=&quot;display:inline-block; max-height:27px;&quot;&gt;&amp;nbsp;&lt;img src=&quot;/common/image/projects/statuses/can_screenshot__small_off.png&quot; class=&quot;js-balloon&quot; alt=&quot;スクリーンショット不可&quot; title=&quot;スクリーンショット不可&quot; style=&quot;display:inline-block; max-height:27px;&quot;&gt;'
+                xml:
+                  name: cell
+              spacer_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+      xml:
+        name: rows
+
+  # $ref: '#/components/responses/success_json'
+  responses:
+    success_json:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              custom_data:
+                type: object
+                properties:
+                  error_code:
+                    description: If the registration failed, the error code is given here. If succeeded, this is empty string.
+                    type: string
+                    example: ''
+                  debug_messages:
+                    type: object
+                  error_messages:
+                    type: object
+                  messages:
+                    description: Message for the success of the registration.
+                    type: string
+                    example: ''
+                  status:
+                    description: Whether the request succeeded or not.
+                    type: boolean
+                    example: true
+
+    success_xml_list_for_list:
+      description: Result xml.
+      content:
+        application/xml:
+          schema:
+            type: object
+            xml:
+              name: return_data # <<<
+            properties:
+              rows:
+                type: array
+                items:
+                $ref: "#/components/schemas/xmllist_rows_inner_for_list"
+              message:
+                type: string
+                example: ""
+              debug:
+                type: string
+                example: ""
+              status:
+                type: integer
+                example: 1
+              page:
+                type: integer
+                example: 0
+              max:
+                type: integer
+                example: 1
+              limit:
+                type: integer
+                example: 50
+
+    success_xml_list_for_user_list:
+      description: Result xml.
+      content:
+        application/xml:
+          schema:
+            type: object
+            xml:
+              name: return_data # <<<
+            properties:
+              rows:
+                type: array
+                items:
+                $ref: "#/components/schemas/xmllist_rows_inner_for_user_list"
+              message:
+                type: string
+                example: ""
+              debug:
+                type: string
+                example: ""
+              status:
+                type: integer
+                example: 1
+              page:
+                type: integer
+                example: 0
+              max:
+                type: integer
+                example: 5
+              limit:
+                type: integer
+                example: 50
+
+  parameters:
+
+    ProjectId:
+      name: ProjectId
+      in: path
+      required: true
+      description: Column projects.project_id
+      schema:
+        type: string
+        example: '000001'
+
+    FileId:
+      name: FileId
+      in: path
+      required: true
+      description: Column projects_files.file_id
+      schema:
+        type: string
+        example: '0000000008'
+
+    EitherGroupsId:
+      name: EitherGroupsId
+      in: path
+      required: true
+      description: user_groups_id or authority_groups_id
+      schema:
+        type: string
+        example: '000002'
+
+    GroupType:
+      name: GroupType
+      in: path
+      required: true
+      description: Group types.
+      schema:
+        type: string
+        example: '1'
+
+security:
+- basicAuth: []

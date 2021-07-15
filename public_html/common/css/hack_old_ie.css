@@ -1,0 +1,27 @@
+
+/**
+  ログイン中のユーザー表示
+ */
+.userMenu_oldie {
+    position:absolute;
+    top:20%;
+    bottom:20%;
+}
+/**
+  ヘッダーメニューのアイテム調整
+ */
+.userMenuItem_oldie {
+    height: 24px;
+    padding-top: 11px;
+}
+/**
+  メール設定画面における、各種メールの登録ボタンを中央配置するCSS
+ */
+.button_wrapper_oldie {
+    position: absolute;
+    top: 30px;
+    left:0;
+    right:0;
+    bottom:0;
+    margin:auto;
+}

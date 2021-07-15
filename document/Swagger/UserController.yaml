@@ -1,0 +1,920 @@
+openapi: '3.0.3'
+info:
+  version: 1.4.6
+  title: UserController
+
+servers:
+  - url: http://localhost:8084
+    description: For real server
+
+tags:
+  - name: Processes
+    description: |
+      <div>When calling with ajax, the request is "POST", except for legacy browsers.</div>
+  - name: Pages
+    description: (and modal pages). Almost 'GET' requests.
+
+paths:
+
+  /user/index:
+    get:
+      tags: ["Pages"]
+      description: Index page.
+      responses:
+        '200':
+          description: Successful response
+
+  /user/list:
+    post:
+      tags: ["Processes"]
+      description: Get list of users for index page.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                page:
+                  description: |
+                    <div>Page number.</div>
+                  type: integer
+                  example: 0
+      responses:
+        '200':
+          $ref: '#/components/responses/success_xml_list'
+
+  /user/search:
+     post:
+       tags: ["Processes"]
+       description: |
+         <div>Set search parameters for user page.</div>
+         <div>The parameters sent will be registered in the session.</div>
+       requestBody:
+         description: In to ajax parameters:data.
+         content:
+           application/x-www-form-urlencoded:
+             schema:
+               type: object
+               properties:
+                 search[master][company_name][ilike]:
+                   description: company_name.
+                   type: string
+                   example: ''
+                 search[master][user_name][ilike]:
+                   description: user_name.
+                   type: string
+                   example: ''
+                 search[master][has_license]:
+                   description: |
+                     <div>has_license flag</div>
+                     <div>'' Both | 全て</div>
+                     <div>'0' Don't have a license. | なし</div>
+                     <div>'1' Have a license. | あり</div>
+                   type: string
+                   example: ''
+                 search[master][auth_id]:
+                   description: |
+                     <div>'' 選択してください。</div>
+                     <div>'001' システム管理者用権限</div>
+                     <div>'003' 機能管理者</div>
+                     <div>'004' プロジェクト管理者</div>
+                     <div>'005' 一般ユーザー</div>
+                     <div>'006' 監視ユーザー</div>
+                   type: string
+                   example: ''
+                 search[master][is_locked]:
+                   description: |
+                     <div>is_locked flag</div>
+                     <div>'' Both | 全て</div>
+                     <div>'0' Unlimited login | なし</div>
+                     <div>'1' Login restricted | あり</div>
+                   type: string
+                   example: ''
+                 search[master][is_host_company]:
+                   description: Is host company flag. This element is hidden.
+                   type: string
+                   example: '1'
+         required: false
+       responses:
+         '200':
+           $ref: '#/components/responses/success_json'
+
+  /user/sort:
+    post:
+      tags: ["Processes"]
+      description: Reload after set sort parameters.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          # application/ajax:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                order: 
+                  description: Target column.
+                  type: string
+                  example: 'company_name'
+                direction:
+                  description: direction to sort. asc | desc
+                  type: string
+                  example: 'asc'
+                parent_code:
+                  description: |
+                    <div>Parent code.</div>
+                    <div>If has not parent, then you must set empty value for this paramter.</div>
+                  type: string
+                  example: ''
+      responses:
+        '200':
+          $ref: '#/components/responses/success_json'
+
+  /user/regist:
+     get:
+       tags: ["Pages"]
+       description: Create user.
+       responses:
+         '200':
+           description: Successful response
+
+  /user/execregist:
+     post:
+       tags: ["Processes"]
+       description: |
+         Execute create user, with insert to ip_white_list, user_license_rec(Trigger).
+         And send mail to entered email-address.
+       responses:
+         '200':
+           description: Result xml.
+           content:
+             application/xml:
+               schema:
+                 type: object
+                 xml:
+                   name: result # <<<
+                 properties:
+                   message:
+                     type: string
+                     example: "登録が完了しました。"
+                   debug:
+                     type: string
+                     example: ""
+                   status:
+                     type: integer
+                     example: 1
+
+  /user/update/code/{UserId}/:
+     get:
+       tags: ["Pages"]
+       description: Update user.
+       responses:
+         '200':
+           description: Successful response
+     parameters:
+     - $ref: "#/components/parameters/UserId"
+
+  /user/execupdate:
+     post:
+       tags: ["Processes"]
+       description: Execute update user. Cannot be updated, initial user.
+       responses:
+         '200':
+           description: Result xml.
+           content:
+             application/xml:
+               schema:
+                 type: object
+                 xml:
+                   name: result # <<<
+                 properties:
+                   message:
+                     type: string
+                     example: "更新を完了しました。"
+                   debug:
+                     type: string
+                     example: ""
+                   status:
+                     type: integer
+                     example: 1
+     parameters:
+     - $ref: "#/components/parameters/UserId"
+
+  /user/can-delete-ok:
+     post:
+       tags: ["Processes"]
+       description: Returns the result of checking if it can be delete user.
+       requestBody:
+         description: In to ajax parameters:data.
+         content:
+           application/x-www-form-urlencoded:
+             schema:
+               type: object
+               properties:
+                 targetUserId:
+                   description: Target user_id for delete.
+                   type: string
+                   example: '006640'
+       responses:
+         '200':
+           description: Result.
+           content:
+             application/xml:
+               schema:
+                 type: object
+                 xml:
+                   name: result # <<<
+                 properties:
+                   message:
+                     type: string
+                     example: ""
+                   debug:
+                     type: string
+                     example: ""
+                   status:
+                     type: integer
+                     example: 1
+
+  /user/execdelete:
+     post:
+       tags: ["Processes"]
+       description: |
+         Execute delete user and user_group_users, projects_users.
+         And Cascade Delete ip_whitelist_mst。
+         （同じような設定しているから↑の処理わざわざ書かなくてもいいと思うのですが。どうして作ったんだろう。）
+       requestBody:
+         description: In to ajax parameters:data.
+         content:
+           application/x-www-form-urlencoded:
+             schema:
+               type: object
+               properties:
+                 targetUserId:
+                   description: Target user_id for delete.
+                   type: string
+                   example: '006640'
+       responses:
+         '200':
+           description: Result xml.
+           content:
+             application/xml:
+               schema:
+                 type: object
+                 xml:
+                   name: result # <<<
+                 properties:
+                   message:
+                     type: string
+                     example: "削除を完了しました。"
+                   debug:
+                     type: string
+                     example: ""
+                   status:
+                     type: integer
+                     example: 1
+
+  /user/execlogin-json:
+    post:
+      tags: ["Processes"]
+      description: Check login and do login.
+      requestBody:
+        description: In to ajax parameters:data.
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                client:
+                  description: is request from client.
+                  type: string
+                  example: 'false'
+                login_code:
+                  description: login_code.
+                  type: string
+                  example: 'admin'
+                password:
+                  description: registerd end date.
+                  type: string
+                  example: 'admin'
+                ldap_id:
+                  description: ldap_id
+                  type: string
+                  example: ''
+                language_id:
+                  description: Language_id. If request by client then set this parameter.
+                  type: string
+                  example: '01'
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/success_json_execlogin_json'
+
+  /user/execlogout:
+     get:
+       tags: ["Processes"]
+       description: Logout. Processing execution only.
+       responses:
+         '200':
+           description: Successful response is nothing.
+
+  /user/password-update/code/{UserId}/:
+     get:
+       tags: ["Pages"]
+       description: Password update.
+       responses:
+         '200':
+           description: Successful response
+     parameters:
+     - $ref: "#/components/parameters/UserId"
+
+  /user/exec-validation-password-update:
+     post:
+       tags: ["Processes"]
+       description: Execute change password.
+       requestBody:
+         description: In to ajax parameters:data.
+         content:
+           application/x-www-form-urlencoded:
+             schema:
+               type: object
+               properties:
+                 form[password]:
+                   description: Current password.
+                   type: string
+                   example: 'admin'
+                 extra[current_user_password]:
+                   description: New password.
+                   type: string
+                   example: 'admin'
+                 extra[password_confirmation]:
+                   description: New password confirmation.
+                   type: string
+                   example: 'admin'
+         required: true
+       responses:
+         '200':
+           description: Result.
+           content:
+             application/xml:
+               schema:
+                 type: object
+                 xml:
+                   name: result # <<<
+                 properties:
+                   message:
+                     type: string
+                     example: ""
+                   debug:
+                     type: string
+                     example: ""
+                   status:
+                     type: integer
+                     example: 1
+
+  /user/exec-password-update/:
+     post:
+       tags: ["Processes"]
+       description: Execute change password.
+       requestBody:
+         description: In to ajax parameters:data.
+         content:
+           application/x-www-form-urlencoded:
+             schema:
+               type: object
+               properties:
+                 form[password]:
+                   description: Current password.
+                   type: string
+                   example: 'admin'
+                 extra[current_user_password]:
+                   description: New password.
+                   type: string
+                   example: 'admin'
+                 extra[password_confirmation]:
+                   description: New password confirmation.
+                   type: string
+                   example: 'admin'
+         required: true
+       responses:
+         '200':
+           description: Result xml.
+           content:
+             application/xml:
+               schema:
+                 type: object
+                 xml:
+                   name: result # <<<
+                 properties:
+                   message:
+                     type: string
+                     example: "登録が完了しました。"
+                   debug:
+                     type: string
+                     example: ""
+                   status:
+                     type: integer
+                     example: 1
+
+  /user/password-reapplication:
+    get:
+      description: Reissue password.
+      responses:
+        '200':
+          description: Successful response
+
+  /user/send-reissue-password-mail:
+     post:
+       tags: ["Processes"]
+       description: Send mail of URL for reissue password.
+       requestBody:
+         description: In to ajax parameters:data.
+         content:
+           application/x-www-form-urlencoded:
+             schema:
+               type: object
+               properties:
+                 login_code:
+                   description: code.
+                   type: string
+                   example: 'admin'
+         required: true
+       responses:
+         '200':
+           $ref: '#/components/responses/success_ajax_send_reissue_password_mail'
+
+  /user/reissue-password/access/{hash}:
+     get:
+     # @TODO check Method type
+       tags: ["Processes"]
+       description: Execute reissue password and send mail.
+       responses:
+         '200':
+           description: Successful response
+     parameters:
+     - $ref: "#/components/parameters/hash"
+
+  /user/user-lock:
+     post:
+       tags: ["Processes"]
+       description: Lock login restrictions.
+       requestBody:
+         description: In to ajax parameters:data.
+         content:
+           application/x-www-form-urlencoded:
+             schema:
+               type: object
+               properties:
+                 code:
+                   description: code.
+                   type: string
+                   example: '006582'
+         required: true
+       responses:
+         '200':
+           $ref: '#/components/responses/success_json_user_lock'
+
+  /user/user-unlock:
+     post:
+       tags: ["Processes"]
+       description: Unlock login restrictions.
+       requestBody:
+         description: In to ajax parameters:data.
+         content:
+           application/x-www-form-urlencoded:
+             schema:
+               type: object
+               properties:
+                 code:
+                   description: code.
+                   type: string
+                   example: '006582'
+         required: true
+       responses:
+         '200':
+           $ref: '#components/responses/success_json_user_unlock'
+
+  /user/import:
+     get:
+       tags: ["Pages"]
+       description: Import User list.
+       responses:
+         '200':
+           description: Successful response
+
+  /user/import-user:
+     post:
+       tags: ["Processes"]
+       description: Execute import user list. When insert, then insert for user_license_rec too.
+       requestBody:
+         description: In to ajax parameters:data.
+         content:
+           multipart/form-data:
+             schema:
+               type: object
+               properties:
+                 import_file_user:
+                   description: import_file_user.
+                   type: 'file'
+                   example: ''
+       responses:
+         '200':
+           $ref: '#/components/responses/success_json'
+
+  /user/user-report:
+     post:
+       tags: ["Processes"]
+       description: Put result of import user.
+       responses:
+         '200':
+           description: OK
+           content:
+             application/octet-stream:
+               schema:
+                 type: string
+                 example: |
+                   @todo 出力テキストファイルの内容をコピペする
+
+  /user/export-user/tab/{isHostCompany}/:
+     get:
+       tags: ["Processes"]
+       description: Export user list.
+       responses:
+         '200':
+           description: OK
+           content:
+             text/csv:
+               schema:
+                 type: string
+                 example: |
+                   削除フラグ[0:削除しない_or_1:削除する],ユーザー種別[0:ゲスト企業ユーザー_or_1:契約企業ユーザー],企業名,ユーザー名,ユーザー名(フリガナ),メールアドレス,ID,パスワード(空固定)(※新規登録のみ),権限グループ,ライセンス[0:与えない_or_1:与える],ユーザーグループ名,IP制限[0:使用しない_or_1:使用する],IP制限_IPアドレス
+                   0,1,システム管理企業,システム管理者,システムカンリシャ,plott_dummy@example.com,admin,,システム管理者用権限,1,,0,
+     parameters:
+     - $ref: "#/components/parameters/isHostCompany"
+
+  /user/change-password:
+     get:
+       tags: ["Pages"]
+       description: Change password at login.
+       responses:
+         '200':
+           description: Successful response
+
+  /user/update-password-on-login:
+     post:
+       tags: ["Processes"]
+       description: Password change at login.
+       requestBody:
+         description: In to ajax parameters:data.
+         content:
+           application/x-www-form-urlencoded:
+             schema:
+               type: object
+               properties:
+                 extra[current_user_password]:
+                   description: Current password.
+                   type: password
+                   example: 'admin'
+                 form[password]:
+                   description: New password.
+                   type: password
+                   example: 'admin'
+                 extra[password_confirmation]:
+                   description: New password confirmation.
+                   type: password
+                   example: 'admin'
+         required: true
+       responses:
+         '200':
+           description: Result xml.
+           content:
+             application/xml:
+               schema:
+                 type: object
+                 xml:
+                   name: result # <<<
+                 properties:
+                   message:
+                     type: string
+                     example: "登録が完了しました。"
+                   debug:
+                     type: string
+                     example: ""
+                   status:
+                     type: integer
+                     example: 1
+
+  /user/get-latest-search/is_host_company/{isHostCompany}:
+     get:
+       tags: ["Processes"]
+       description: |
+         <div>By click tab change to "user of guest company".</div>
+         <div>Attention: Request type is conflicted.</div>
+       # requestBody:
+       #   description: In to ajax parameters:data.
+       #   content:
+       #     application/x-www-form-urlencoded:
+       #       schema:
+       #         type: object
+       #         properties:
+       #           is_host_company:
+       #             description: 1:host company, 0:guest company.
+       #             type: string
+       #             example: '1'
+       #   required: true
+       responses:
+         '200':
+           $ref: '#/components/responses/sucess_xml_get_latest_search'
+     parameters:
+     - $ref: "#/components/parameters/isHostCompany"
+
+components:
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+
+    debug_messages:
+      type: object
+    error_messages:
+      type: object
+    messages:
+      type: object
+    status:
+      description: Whether the request succeeded or not.
+      type: boolean
+      example: true
+    custom_data_execlogin_json:
+      type: object
+      properties:
+        move_url:
+          example: user
+        show_terms:
+          example: false
+
+    xmllist_rows_inner:
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+            example: "006582"
+            xml:
+              attribute: true
+          row:
+            type: object
+            properties:
+              company_name: # mean name
+                type: string
+                example: PLOTT
+                xml:
+                  name: cell
+              user_name: # mean name
+                type: string
+                example: ASEANフロント1
+                xml:
+                  name: cell
+              login_code: # mean name
+                type: string
+                example: a-front1@plott.local
+                xml:
+                  name: cell
+              authority_group: # mean name
+                type: string
+                example: システム管理者用権限
+                xml:
+                  name: cell
+              login_restrictions: # mean name
+                type: string
+                example: 無効
+                xml:
+                  name: cell
+              authentication_destination: # mean name
+                type: string
+                example:  PLOTT
+                xml:
+                  name: cell
+              record_date: # mean name
+                type: string
+                example: 2020/10/15 14:45:05
+                xml:
+                  name: cell
+              spacer_cell: # mean name
+                type: string
+                example: ''
+                xml:
+                  name: cell
+      xml:
+        name: rows
+
+  # $ref: '#/components/responses/success_json'
+  responses:
+    success_json:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              custom_data:
+                type: object
+                properties:
+                  error_code:
+                    description: If the registration failed, the error code is given here. If succeeded, this is empty string.
+                    type: string
+                    example: ''
+                  debug_messages:
+                    type: object
+                  error_messages:
+                    type: object
+                  messages:
+                    description: Message for the success of the registration.
+                    type: string
+                    example: ''
+                  status:
+                    description: Whether the request succeeded or not.
+                    type: boolean
+                    example: true
+
+    success_json_execlogin_json:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              custom_data:
+                $ref: "#/components/schemas/custom_data_execlogin_json"
+              debug_messages:
+                type: object
+              error_messages:
+                type: object
+              messages:
+                type: object
+              status:
+                type: object
+
+    success_ajax_send_reissue_password_mail:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              custom_data:
+                type: object
+                properties:
+                  error_code:
+                    description: If the registration failed, the error code is given here. If succeeded, this is empty string.
+                    type: string
+                    example: ''
+                  debug_messages:
+                    type: object
+                  error_messages:
+                    type: object
+                  messages:
+                    description: Message for the success of the registration.
+                    type: array
+                    items:
+                      type: string
+                      example: 'パスワードの再発行申請を行いました。登録されたメールアドレス宛にお知らせメールが届かない場合はIDをご確認の上、再度申請を行なってください。'
+                  status:
+                    type: object
+
+    success_json_user_lock:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              custom_data:
+                type: object
+                properties:
+                  error_code:
+                    description: If the registration failed, the error code is given here. If succeeded, this is empty string.
+                    type: string
+                    example: ''
+                  debug_messages:
+                    type: object
+                  error_messages:
+                    type: object
+                  messages:
+                    description: Message for the success of the registration.
+                    type: array
+                    items:
+                      type: string
+                      example: 'ログイン制限が完了しました。'
+                  status:
+                    type: object
+
+    success_json_user_unlock:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              custom_data:
+                type: object
+                properties:
+                  error_code:
+                    description: If the registration failed, the error code is given here. If succeeded, this is empty string.
+                    type: string
+                    example: ''
+              debug_messages:
+                type: object
+              error_messages:
+                type: object
+              messages:
+                description: Message for the success of the registration.
+                type: array
+                items:
+                  type: string
+                  example: 'ログイン制限の解除が完了しました。'
+              status:
+                type: object
+
+    success_xml_list:
+      description: Result xml.
+      content:
+        application/xml:
+          schema:
+            type: object
+            xml:
+              name: return_data # <<<
+            properties:
+              rows:
+                type: array
+                items:
+                $ref: "#/components/schemas/xmllist_rows_inner"
+              message:
+                type: string
+                example: ""
+              debug:
+                type: string
+                example: ""
+              status:
+                type: integer
+                example: 1
+              page:
+                type: integer
+                example: 0
+              max:
+                type: integer
+                example: 253
+              limit:
+                type: integer
+                example: 50
+
+    sucess_xml_get_latest_search:
+      description: Result xml.
+      content:
+        application/xml:
+          schema:
+            type: object
+            xml:
+              name: result # <<<
+            properties:
+              message:
+                type: string
+                example: '{"is_host_company":"0"}'
+              debug:
+                type: string
+                example: ""
+              status:
+                type: integer
+                example: 1
+  parameters:
+
+    UserId:
+      name: UserId
+      in: path
+      required: true
+      description: Column user_mst.user_id
+      schema:
+        type: string
+        example: '000001'
+
+    isHostCompany:
+      name: isHostCompany
+      in: path
+      required: true
+      description: Column user_mst.is_host_company
+      schema:
+        type: string
+        example: '1'
+
+    hash:
+      name: hash
+      in: path
+      required: true
+      description: Given hash by caller.
+      schema:
+        type: string
+        example: ce5004f7d4a28fd5b222859a5edc6c46e314ad5c421f08962119d100b37501e4
+
+security:
+- basicAuth: []

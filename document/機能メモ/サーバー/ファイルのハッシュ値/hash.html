@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="https://cdn.rawgit.com/andyferra/2554919/raw/2e66cabdafe1c9a7f354aa2ebf5bc38265e638e5/github.css">
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<h1 id="ハッシュ値の管理マスタ仕様メモ仮">ハッシュ値の管理マスタ仕様メモ（仮）</h1>
+<h2 id="要件定義の内容">要件定義の内容</h2>
+<h1 id="section">=========================================================</h1>
+<h1 id="dbカラム構成">DBカラム構成</h1>
+<h2 id="カラム情報">カラム情報</h2>
+<ul>
+<li>ファイルID</li>
+<li>ハッシュ値</li>
+</ul>
+<blockquote>
+<p>登録者・更新者・登録日・更新日に関しては、下記URLを参照</p>
+<p><a href="https://192.168.12.200/admin/">PlottGenerator リンク</a></p>
+<p>ID/PW plott/plott</p>
+<p>※カラム情報はリンクより確認してください</p>
+</blockquote>
+<h1 id="section-1">=================================================</h1>
+<h1 id="機能概要">機能概要</h1>
+<h3 id="新規登録編集削除検索csv出力に関してはプロットフレームワークの仕様に従う">新規登録・編集・削除・検索・CSV出力に関してはプロットフレームワークの仕様に従う</h3>
+<h3 id="別途作成が必要な機能について">別途作成が必要な機能について</h3>
+<h3 id="クライアントより送付されたハッシュ値から紐づくファイルのパスワードをログイン中のユーザーの公開鍵にて暗号化しクライアントに返す処理">クライアントより送付されたハッシュ値から、紐づくファイルのパスワードをログイン中のユーザーの公開鍵にて暗号化しクライアントに返す処理</h3>
+<ul>
+<li>概要</li>
+<li>クライアントより、下記リクエストを受け取り受け取ったハッシュからファイルIDを取得する。
+<ul>
+<li>{hash: ファイルのsha256ハッシュ, user_id: ユーザーID}</li>
+</ul></li>
+<li>受け取ったユーザーIDの公開鍵で前述のファイルIDに紐づくパスワードを暗号化しクライアントに渡す。
+<ul>
+<li>{password: 暗号化の値}</li>
+</ul></li>
+</ul>
+</body>
+</html>
